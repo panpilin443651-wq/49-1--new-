@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ระบบคุมค่าใช้จ่าย 49(1)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#FDF8F0; --cream2:#F8F1E6; --card:#FFFCF8; --lav:#F3EEFB; --lav2:#EAE0F8;
+  --purple:#7C5CBF; --purple-d:#5E43A0; --pastel:#B9A3E3; --border:#E9E0F4;
+  --text:#3A3350; --muted:#8B819F;
+  --green:#5AA17F; --yellow:#E0B252; --orange:#DE8F4E; --red:#D46A6A;
+  --line:#F2ECF9; --hover:#FBF7FF; --row2:#FBF8FE; --input:#FFFFFF; --delhover:#FDEDED;
+  --sidebg:linear-gradient(180deg,#F7F1FD,#F1EAFB); --navhover:rgba(255,255,255,.6);
+  --c1:#7C5CBF; --c2:#4E9C7F; --c3:#D98B45; --c4:#4A86C5; --c5:#C0679B; --c6:#8C8F3F;
+  --r:14px; --sh:0 2px 10px rgba(124,92,191,.08); --sh2:0 6px 24px rgba(124,92,191,.16);
+  color-scheme:light;
+}
+/* ---------- โหมดมืด ---------- */
+body.dark{
+  --cream:#1E1929; --cream2:#252032; --card:#292234; --lav:#332B45; --lav2:#3E3455;
+  --purple:#9E80D6; --purple-d:#C6B2EF; --pastel:#7A62A8; --border:#3B3253;
+  --text:#EBE5F7; --muted:#A79BC2;
+  --green:#6FBF9A; --yellow:#DEBB72; --orange:#DE9B69; --red:#DE8585;
+  --line:#332C46; --hover:#332B45; --row2:#2F2841; --input:#211C2E; --delhover:#40262E;
+  --sidebg:linear-gradient(180deg,#241E31,#201A2C); --navhover:rgba(255,255,255,.07);
+  --c1:#A98CE0; --c2:#6FBF9A; --c3:#E3A468; --c4:#78ADE4; --c5:#DC90BC; --c6:#B6BA63;
+  --sh:0 2px 10px rgba(0,0,0,.3); --sh2:0 8px 26px rgba(0,0,0,.45);
+  color-scheme:dark;
+}
+body.dark .chip.g{background:#28402F;color:#8FD3B0} body.dark .chip.y{background:#40372A;color:#E5C57F}
+body.dark .chip.o{background:#43332A;color:#E7AC7C} body.dark .chip.r{background:#432C2E;color:#EC9C9C}
+body.dark .chip.mut{background:#332C46;color:var(--muted)}
+body.dark .chip{background:#332C46;color:var(--purple-d)}
+body.dark .warnbox{background:#3B2E24;border-color:#5A452F;color:#F2DFC9}
+body.dark .okbox{background:#25382F;border-color:#3A5747;color:#D5EADF}
+body.dark .toast{background:#4A3C6E;color:#F3EDFF}
+body.dark .toast.err{background:#7E3B3B}
+body.dark .btn.ghost{background:var(--lav)}
+body.dark .ovl{background:rgba(10,7,16,.6)}
+html,body{height:100%}
+body{background:var(--cream);color:var(--text);line-height:1.55;
+  font-family:'Sarabun','Noto Sans Thai','Leelawadee UI',Tahoma,-apple-system,sans-serif;font-size:15px;
+  -webkit-text-size-adjust:100%}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+a{color:var(--purple-d)}
+.num{font-variant-numeric:tabular-nums}
+
+.app{display:flex;min-height:100vh}
+.side{width:236px;flex:none;background:var(--sidebg);
+  border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 10px 16px}
+.brand .logo{width:38px;height:38px;border-radius:12px;flex:none;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--purple),var(--pastel));color:#fff;font-weight:700;font-size:13px;
+  box-shadow:var(--sh)}
+.brand b{display:block;font-size:15px;line-height:1.2}
+.brand span{font-size:11.5px;color:var(--muted)}
+.nav{display:flex;flex-direction:column;gap:3px}
+.nav button{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;
+  color:var(--text);font-size:14.5px;text-align:left;width:100%;transition:.15s;position:relative}
+.nav button .ico{font-size:17px;width:22px;text-align:center;flex:none}
+.nav button:hover{background:var(--navhover)}
+.nav button.on{background:linear-gradient(135deg,var(--purple),#8E6FCC);color:#fff;box-shadow:var(--sh)}
+.nav .dot{margin-left:auto;background:var(--red);color:#fff;font-size:11px;min-width:19px;height:19px;
+  border-radius:10px;display:grid;place-items:center;padding:0 5px}
+.nav button.on .dot{background:#fff;color:var(--red)}
+.main{flex:1;min-width:0;padding:20px 22px 40px}
+.wrap{max-width:1180px;margin:0 auto}
+
+.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.topbar h1{font-size:21px;font-weight:700;letter-spacing:-.2px}
+.topbar .sub{font-size:12.5px;color:var(--muted);margin-top:-2px}
+.spacer{flex:1}
+.fybox{display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--border);
+  border-radius:11px;padding:6px 10px;box-shadow:var(--sh)}
+.fybox label{font-size:12.5px;color:var(--muted)}
+.fybox select{border:none;background:none;font-weight:700;color:var(--purple-d);outline:none;width:auto;padding:0}
+
+.btn{background:linear-gradient(135deg,var(--purple),#8E6FCC);color:#fff;padding:9px 15px;border-radius:11px;
+  font-weight:600;font-size:14px;box-shadow:var(--sh);transition:.15s;display:inline-flex;align-items:center;gap:7px}
+.btn:hover{filter:brightness(1.06);box-shadow:var(--sh2)}
+.btn.ghost{background:var(--card);color:var(--purple-d);border:1px solid var(--border);box-shadow:none}
+.btn.ghost:hover{background:var(--lav)}
+.btn.sm{padding:6px 11px;font-size:13px;border-radius:9px}
+.btn.danger{background:linear-gradient(135deg,#D46A6A,#C25858)}
+input[type=text],input[type=number],input[type=date],select,textarea{
+  width:100%;background:var(--input);border:1px solid var(--border);border-radius:10px;padding:8px 11px;outline:none;transition:.15s}
+input:focus,select:focus,textarea:focus{border-color:var(--pastel);box-shadow:0 0 0 3px rgba(185,163,227,.25)}
+input[type=number]{text-align:right;font-variant-numeric:tabular-nums}
+label.f{display:block;font-size:12.5px;color:var(--muted);margin:0 0 4px 2px}
+.field{margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);padding:16px}
+.card+.card{margin-top:14px}
+.card h2{font-size:16px;font-weight:700;margin-bottom:2px}
+.card .hint{font-size:12.5px;color:var(--muted)}
+.chead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.split{display:grid;grid-template-columns:minmax(320px,400px) minmax(0,1fr);gap:14px;align-items:start}
+.split>.card{margin-top:0}
+.rightcol{min-width:0}
+.newexp{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px}
+.newexp .field{margin-bottom:0}
+.newexp .wide{grid-column:1/-1}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 15px;
+  box-shadow:var(--sh);position:relative;overflow:hidden}
+.kpi:before{content:"";position:absolute;top:0;bottom:0;left:0;width:4px;background:var(--pastel)}
+.kpi.k2:before{background:var(--purple)} .kpi.k3:before{background:var(--green)} .kpi.k4:before{background:var(--yellow)}
+.kpi .lab{font-size:12.5px;color:var(--muted)}
+.kpi .val{font-size:22px;font-weight:700;letter-spacing:-.5px;font-variant-numeric:tabular-nums;margin-top:2px}
+.kpi .val small{font-size:13px;font-weight:500;color:var(--muted)}
+.kpi .foot{font-size:12px;color:var(--muted);margin-top:3px}
+
+.pbar{height:9px;border-radius:6px;background:var(--lav2);overflow:hidden;margin-top:7px}
+.pbar>i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--pastel),var(--purple));transition:width .4s}
+.pbar.g>i{background:linear-gradient(90deg,#7EC2A2,var(--green))}
+.pbar.y>i{background:linear-gradient(90deg,#EFCB84,var(--yellow))}
+.pbar.o>i{background:linear-gradient(90deg,#EFB183,var(--orange))}
+.pbar.r>i{background:linear-gradient(90deg,#E79A9A,var(--red))}
+.catrow{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:9px 0;border-bottom:1px dashed var(--border)}
+.catrow:last-child{border-bottom:none}
+.catrow .nm{font-size:14px}
+.catrow .amt{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.catrow .pbar{grid-column:1/-1}
+.grouphead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:16px 0 6px;
+  padding:7px 11px;background:var(--lav);border-radius:10px;font-weight:700;font-size:14px}
+.grouphead span{font-weight:600;font-size:13px;color:var(--purple-d);font-variant-numeric:tabular-nums}
+
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12.5px;color:var(--muted);font-weight:600;padding:8px 10px;
+  border-bottom:1px solid var(--border);white-space:nowrap;background:var(--card)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:hover{background:var(--hover)}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.acts{white-space:nowrap;text-align:right}
+td.acts button{padding:4px 8px;border-radius:8px;font-size:13px;color:var(--purple-d)}
+td.acts button:hover{background:var(--lav)}
+td.acts button.del{color:var(--red)}
+td.acts button.del:hover{background:var(--delhover)}
+tfoot td{font-weight:700;border-top:2px solid var(--border);border-bottom:none;background:var(--row2)}
+.tbl-in{width:100%;border:1px solid transparent;background:var(--input);border-radius:8px;padding:5px 8px;text-align:right;
+  font-variant-numeric:tabular-nums;min-width:88px}
+.tbl-in:hover{border-color:var(--border)}
+.tbl-in:focus{border-color:var(--pastel)}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card)}
+.seg button{padding:6px 12px;font-size:13px;color:var(--muted);border-right:1px solid var(--border)}
+.seg button:last-child{border-right:none}
+.seg button:hover{background:var(--lav)}
+.seg button.on{background:linear-gradient(135deg,var(--purple),#8E6FCC);color:#fff;font-weight:600}
+.up{color:var(--red)} .down{color:var(--green)}
+.mcell{font-variant-numeric:tabular-nums;color:var(--purple-d);padding:3px 7px;border-radius:7px;
+  border:1px solid transparent;font-size:13.5px;transition:.12s}
+.mcell:hover{background:var(--lav);border-color:var(--border);text-decoration:underline;text-underline-offset:2px}
+.empty{text-align:center;color:var(--muted);padding:34px 10px;font-size:14px}
+.empty .big{font-size:32px;display:block;margin-bottom:6px;opacity:.65}
+
+.chip{display:inline-block;background:var(--lav);color:var(--purple-d);font-size:12px;padding:2px 9px;
+  border-radius:20px;white-space:nowrap}
+.chip.g{background:#E6F4EE;color:#3E7D63} .chip.y{background:#FBF1DC;color:#96702A}
+.chip.o{background:#FBEBDD;color:#9A5A26} .chip.r{background:#FBE7E7;color:#A94848}
+.chip.mut{background:#F1EEF5;color:var(--muted)}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:11px;margin-bottom:8px;
+  font-size:13.5px;border:1px solid}
+.alert .ic{font-size:16px;line-height:1.3}
+.alert.r{background:#FDEFEF;border-color:#F3D5D5} .alert.o{background:#FDF2E9;border-color:#F5DFC9}
+.alert.y{background:#FCF6E7;border-color:#F1E4C4} .alert.i{background:var(--lav);border-color:var(--border)}
+.alert .amt{margin-left:auto;white-space:nowrap;font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted)}
+
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+
+.ovl{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(58,51,80,.42);z-index:100;
+  display:none;align-items:center;justify-content:center;padding:16px}
+.ovl.on{display:flex}
+.modal{background:var(--cream);border-radius:18px;box-shadow:var(--sh2);width:100%;max-width:620px;
+  max-height:92vh;display:flex;flex-direction:column;overflow:hidden}
+.modal header{padding:15px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--card)}
+.modal header h3{font-size:16.5px;font-weight:700}
+.modal header button.x{margin-left:auto;font-size:20px;color:var(--muted);width:32px;height:32px;border-radius:9px}
+.modal header button.x:hover{background:var(--lav)}
+.modal .body{padding:16px 18px;overflow:auto}
+.modal footer{padding:12px 18px;border-top:1px solid var(--border);display:flex;gap:9px;justify-content:flex-end;background:var(--card)}
+.warnbox{background:#FDF2E9;border:1px solid #F5DFC9;border-radius:11px;padding:10px 12px;font-size:13.5px;margin-bottom:12px}
+.okbox{background:#EAF5F0;border:1px solid #CFE7DC;border-radius:11px;padding:10px 12px;font-size:13.5px;margin-bottom:12px}
+
+.toasts{position:fixed;bottom:18px;right:18px;z-index:200;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.toast{background:var(--purple-d);color:#fff;padding:10px 15px;border-radius:11px;box-shadow:var(--sh2);
+  font-size:13.5px;max-width:min(84vw,360px)}
+.toast.err{background:#B95151}
+
+.svgwrap{width:100%;overflow-x:auto}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.donutbox{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.dlab{font-size:12.5px;color:var(--muted)}
+.dlab b{display:block;font-size:15px;color:var(--text)}
+
+/* ปุ่มซ่อน/แสดงแถบเมนู */
+.navbtn{width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--card);
+  color:var(--purple-d);font-size:16px;line-height:1;flex:none;box-shadow:var(--sh)}
+.navbtn:hover{background:var(--lav)}
+.side .navbtn{margin-left:auto;box-shadow:none}
+body.navhide .side{display:none}
+
+@media(max-width:1200px){ .split{grid-template-columns:1fr} }
+@media(max-width:980px){ .kpis{grid-template-columns:1fr 1fr} }
+@media(max-width:860px){
+  .app{display:block}
+  .side{position:fixed;bottom:0;left:0;right:0;top:auto;width:auto;height:auto;z-index:60;
+    display:flex;gap:2px;overflow-x:auto;padding:6px 8px calc(6px + env(safe-area-inset-bottom));
+    border-right:none;border-top:1px solid var(--border);box-shadow:0 -3px 14px rgba(124,92,191,.10)}
+  .brand{display:none}
+  .nav{flex-direction:row;gap:2px}
+  .nav button{flex-direction:column;gap:2px;padding:6px 10px;font-size:10.5px;border-radius:12px;
+    min-width:62px;text-align:center;align-items:center}
+  .nav button .ico{font-size:18px;width:auto}
+  .nav .dot{position:absolute;top:2px;right:5px;margin:0;font-size:10px;min-width:16px;height:16px}
+  .main{padding:14px 13px 100px}
+  .topbar h1{font-size:19px}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .modal{max-width:none;border-radius:16px}
+  .toasts{right:10px;left:10px;bottom:88px;align-items:stretch}
+}
+@media(max-width:560px){
+  .kpis{grid-template-columns:1fr 1fr;gap:9px}
+  .kpi{padding:11px 12px} .kpi .val{font-size:18px}
+  table.rt,table.rt tbody,table.rt tr,table.rt td,table.rt tfoot{display:block;width:100%}
+  table.rt thead{display:none}
+  table.rt tr{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:9px 11px;
+    margin-bottom:9px;box-shadow:var(--sh)}
+  table.rt td{border:none;padding:3px 0;display:flex;justify-content:space-between;gap:12px;text-align:right}
+  table.rt td:before{content:attr(data-l);color:var(--muted);font-size:12.5px;text-align:left;flex:none}
+  table.rt td.acts{justify-content:flex-end;padding-top:7px;border-top:1px dashed var(--border);margin-top:5px}
+  table.rt td.acts:before{content:""}
+  table.rt tfoot td{background:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="logo">49(1)</div>
+      <div><b>คุมค่าใช้จ่าย</b><span>งบ 49(1) ฝศย.</span></div>
+      <button class="navbtn" id="navHide" title="ซ่อนแถบเมนู">«</button>
+    </div>
+    <nav class="nav" id="nav"></nav>
+  </aside>
+  <main class="main"><div class="wrap" id="view"></div></main>
+</div>
+<div class="ovl" id="ovl"><div class="modal" id="modal"></div></div>
+<div class="toasts" id="toasts"></div>
+<script>
+/* ============================================================
+   ระบบคุมค่าใช้จ่าย 49(1) — ไฟล์เดียว ทำงานออฟไลน์
+   ============================================================ */
+"use strict";
+
+/* ---------- หมวดหมู่ (รหัสคงที่ ห้ามแก้ id) ---------- */
+/* ---------- หมวดรายจ่ายเริ่มต้น (แก้ไข/เพิ่ม/ลบได้ในหน้า "หมวดรายจ่าย") ---------- */
+const DEFAULT_CATS = [
+  {id:"A",     parent:"",    name:"หมวดค่าตอบแทนใช้สอยและวัสดุ"},
+  {id:"A01",   parent:"A",   name:"ค่าใช้จ่ายเดินทาง"},
+  {id:"A02",   parent:"A",   name:"ค่าใช้จ่ายเครื่องถ่ายเอกสาร/ปริ้น"},
+  {id:"A03",   parent:"A",   name:"ค่าจ้างเหมาบริการ"},
+  {id:"A03-1", parent:"A03", name:"ค่าจ้างเหมาบริการรักษาความปลอดภัย"},
+  {id:"A03-2", parent:"A03", name:"ค่าจ้างเหมาบริการตัดหญ้า"},
+  {id:"A03-3", parent:"A03", name:"ค่าจ้างเหมาบริการกำจัดปลวก"},
+  {id:"A03-4", parent:"A03", name:"ค่าจ้างเหมากำจัดสิ่งปฏิกูล"},
+  {id:"A03-5", parent:"A03", name:"ค่าจ้างเหมาตัดแต่งกิ่งไม้"},
+  {id:"A03-6", parent:"A03", name:"ค่าจ้างเหมาตำแหน่งพนักงานบริการ ฝศย."},
+  {id:"A03-7", parent:"A03", name:"ค่าจ้างเหมาเก็บขยะมูลฝอย"},
+  {id:"A03-8", parent:"A03", name:"ค่าจ้างเหมาบริการบำรุงรักษาแอร์"},
+  {id:"A03-9", parent:"A03", name:"ค่าจ้างเหมาทำความสะอาดรอบอาคาร"},
+  {id:"A04",   parent:"A",   name:"ค่าซ่อมแซมครุภัณฑ์"},
+  {id:"A05",   parent:"A",   name:"ค่าซ่อมแซมเครื่องปรับอากาศ"},
+  {id:"A06",   parent:"A",   name:"ค่าซ่อมแซมสิ่งก่อสร้าง"},
+  {id:"A07",   parent:"A",   name:"ค่าวัสดุเชื้อเพลิง"},
+  {id:"A08",   parent:"A",   name:"ค่าวัสดุซ่อมแซมยานพาหนะ"},
+  {id:"A09",   parent:"A",   name:"ค่าวัสดุสำนักงาน"},
+  {id:"A10",   parent:"A",   name:"ค่าวัสดุไฟฟ้า"},
+  {id:"A11",   parent:"A",   name:"ค่าวัสดุงานบ้านและงานครัว"},
+  {id:"A12",   parent:"A",   name:"ค่าเบี้ยประกันภัยต่างๆ"},
+  {id:"A13",   parent:"A",   name:"ค่าพิธีการและพวงมาลา"},
+  {id:"A14",   parent:"A",   name:"ค่าภาษีรถยนต์และรถจักรยานยนต์"},
+  {id:"A15",   parent:"A",   name:"ค่าภาษีโรงเรือนและที่ดิน"},
+  {id:"A16",   parent:"A",   name:"ค่าเช่าที่ดิน/ที่ราชพัสดุ"},
+  {id:"A17",   parent:"A",   name:"ค่ารับรอง"},
+  {id:"B",     parent:"",    name:"หมวดค่าสาธารณูปโภค"},
+  {id:"B01",   parent:"B",   name:"ค่าไฟฟ้า"},
+  {id:"B02",   parent:"B",   name:"ค่าประปา"},
+  {id:"B03",   parent:"B",   name:"ค่าไปรษณีย์"},
+  {id:"B04",   parent:"B",   name:"ค่าโทรศัพท์และโทรสาร"}
+];
+
+/* ดัชนีหมวด — สร้างใหม่ทุกครั้งที่มีการแก้ไขหมวด
+   CATFLAT = ทุกโหนดเรียงตามลำดับแสดงผล, LEAF = หมวดที่บันทึกเงินได้, GROUPS = หมวดใหญ่ */
+let CATFLAT=[], LEAF=[], GROUPS=[], LEAF_IDS=[], CATMAP={}, CAT_LOOKUP={};
+function buildCats(){
+  CATMAP={}; CATFLAT=[]; LEAF=[]; GROUPS=[];
+  const kids={};
+  DB.cats.forEach(c=>{ const p=c.parent||""; (kids[p]=kids[p]||[]).push(c); });
+  (function walk(pid, depth, group){
+    (kids[pid]||[]).forEach(c=>{
+      const ch = kids[c.id] || [];
+      const rec = {id:c.id, name:c.name, depth:depth, group:(depth===0? c.id : group),
+                   parent:c.parent||"", isLeaf:!ch.length, kids:ch.map(x=>x.id)};
+      CATMAP[c.id]=rec; CATFLAT.push(rec);
+      if(depth===0) GROUPS.push(rec);
+      if(ch.length) walk(c.id, depth+1, rec.group); else LEAF.push(rec);
+    });
+  })("", 0, "");
+  CATFLAT.forEach(c=>{ c.groupName = CATMAP[c.group]? CATMAP[c.group].name : ""; });
+  LEAF_IDS = LEAF.map(c=>c.id);
+  CAT_LOOKUP = {};
+  LEAF.forEach(c=>{ CAT_LOOKUP[normalize(c.id)]=c.id; CAT_LOOKUP[normalize(c.name)]=c.id; });
+}
+function leavesOf(id){
+  const n = CATMAP[id]; if(!n) return [];
+  if(n.isLeaf) return [id];
+  let out=[]; n.kids.forEach(k=>{ out = out.concat(leavesOf(k)); }); return out;
+}
+function subtreeIds(id){
+  const n = CATMAP[id]; if(!n) return [];
+  let out=[id]; n.kids.forEach(k=>{ out = out.concat(subtreeIds(k)); }); return out;
+}
+/* ข้อมูลที่ผูกกับหมวดหนึ่ง (รวมลูกหลาน) — ใช้กันไม่ให้ลบหมวดที่มีข้อมูลอยู่ */
+function catUsage(id){
+  const all = subtreeIds(id);
+  return { expenses: DB.expenses.filter(e=> all.indexOf(e.catId)>=0).length,
+           budgets:  DB.budgets.filter(b=> all.indexOf(b.catId)>=0).length,
+           children: (CATMAP[id]? CATMAP[id].kids.length : 0) };
+}
+
+/* ---------- ปีงบประมาณไทย (ต.ค. -> ก.ย.) ---------- */
+const MONTHS = ["ต.ค.","พ.ย.","ธ.ค.","ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย."];
+const MONTHS_FULL = ["ตุลาคม","พฤศจิกายน","ธันวาคม","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน"];
+function fyOfDate(d){ const m=d.getMonth(), be=d.getFullYear()+543; return m>=9? be+1 : be; }
+function fmOfDate(d){ const m=d.getMonth(); return m>=9? m-9 : m+3; }
+function parseDate(s){ if(!s) return null; const d=new Date(s+"T00:00:00"); return isNaN(d)? null : d; }
+function fyOf(str){ const d=parseDate(str); return d? fyOfDate(d) : null; }
+function fmOf(str){ const d=parseDate(str); return d? fmOfDate(d) : null; }
+const TODAY = new Date();
+const FY_NOW = fyOfDate(TODAY), FM_NOW = fmOfDate(TODAY);
+function thDate(str){
+  const d=parseDate(str); if(!d) return str||"";
+  return d.getDate()+" "+MONTHS[fmOfDate(d)]+" "+String(d.getFullYear()+543).slice(-2);
+}
+
+/* ---------- ตัวช่วยทั่วไป ---------- */
+const $ = (s,r)=> (r||document).querySelector(s);
+const uid = ()=> Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const nf = new Intl.NumberFormat("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2});
+const nf0 = new Intl.NumberFormat("th-TH",{maximumFractionDigits:0});
+const money = n=> nf.format(Math.round((+n||0)*100)/100);
+const short = n=>{ n=+n||0; const a=Math.abs(n);
+  if(a>=1e6) return (n/1e6).toFixed(a>=1e7?1:2)+" ล้าน";
+  if(a>=1e3) return nf0.format(n);
+  return nf0.format(n); };
+const esc = s=> String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pct = (a,b)=> b>0? (a/b*100) : 0;
+const clamp = (n,a,b)=> Math.max(a,Math.min(b,n));
+function toast(msg, err){
+  const t=document.createElement("div"); t.className="toast"+(err?" err":""); t.textContent=msg;
+  $("#toasts").appendChild(t); setTimeout(()=>{ t.style.opacity="0"; t.style.transition=".3s"; setTimeout(()=>t.remove(),320); }, 2600);
+}
+function download(name, text, mime){
+  const blob=new Blob(["﻿"+text],{type:(mime||"text/csv")+";charset=utf-8"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },100);
+}
+
+/* ---------- ฐานข้อมูล ---------- */
+const KEY = "budget491.v1";
+let DB = null;
+/* หน่วยงานในฝ่ายเศรษฐกิจยาง */
+const DEFAULT_ORGS = [
+  {code:"ฝศย.", name:"ฝ่ายเศรษฐกิจยาง"},
+  {code:"กพย.", name:"กพย."},
+  {code:"กรย.", name:"กรย."},
+  {code:"กวย.", name:"กวย."}
+];
+function blankDB(){
+  return { v:2, settings:{ fy:FY_NOW, thresholds:{crit:10, warn:25, watch:50}, seededOrgs:true,
+                           years:[], navHidden:false, dark:false },
+           orgs: DEFAULT_ORGS.map(o=>({id:uid(), code:o.code, name:o.name, note:""})),
+           cats: DEFAULT_CATS.map(c=> Object.assign({}, c)),
+           budgets:[], expenses:[] };
+}
+/* เติมหน่วยงานมาตรฐานให้ข้อมูลเดิมที่ยังไม่มี (ทำครั้งเดียว) */
+function seedOrgs(){
+  if(DB.settings.seededOrgs) return;
+  DEFAULT_ORGS.forEach(d=>{
+    if(!DB.orgs.some(o=> normalize(o.code)===normalize(d.code) || normalize(o.name)===normalize(d.name)))
+      DB.orgs.push({id:uid(), code:d.code, name:d.name, note:""});
+  });
+  DB.settings.seededOrgs = true;
+  save();
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw){ const d=JSON.parse(raw); DB = Object.assign(blankDB(), d);
+      DB.settings = Object.assign({fy:FY_NOW, thresholds:{crit:10,warn:25,watch:50}, years:[], navHidden:false, dark:false}, d.settings||{});
+      DB.settings.thresholds = Object.assign({crit:10,warn:25,watch:50}, (d.settings||{}).thresholds||{});
+      if(!Array.isArray(DB.settings.years)) DB.settings.years=[];
+      ["orgs","budgets","expenses"].forEach(k=>{ if(!Array.isArray(DB[k])) DB[k]=[]; });
+      if(!Array.isArray(DB.cats) || !DB.cats.length) DB.cats = DEFAULT_CATS.map(c=> Object.assign({}, c));
+      buildCats();
+      return;
+    }
+  }catch(e){ console.warn("โหลดข้อมูลไม่สำเร็จ",e); }
+  DB = blankDB(); buildCats(); save();
+}
+let saveTimer=null;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{ localStorage.setItem(KEY, JSON.stringify(DB)); }
+    catch(e){ toast("บันทึกลงเครื่องไม่สำเร็จ: "+e.message, true); }
+  }, 60);
+}
+const FY = ()=> DB.settings.fy;
+function fyList(){
+  const s = new Set([FY_NOW, FY_NOW+1]);
+  DB.expenses.forEach(e=>{ const f=fyOf(e.date); if(f) s.add(f); });
+  DB.budgets.forEach(b=> s.add(+b.fy));
+  (DB.settings.years||[]).forEach(y=> s.add(+y));
+  return [...s].filter(x=>x>2500&&x<2700).sort((a,b)=>a-b);   /* น้อย -> มาก */
+}
+const orgById = id=> DB.orgs.find(o=>o.id===id) || null;
+const orgName = id=>{ const o=orgById(id); if(!o) return "-";
+  return (o.code && o.code!==o.name)? o.code+" "+o.name : (o.name || o.code); };
+const catName = id=> CATMAP[id]? CATMAP[id].name : (id||"-");
+
+/* ---------- การคำนวณ (คำนวณสดทุกครั้ง ไม่เก็บยอดรวม) ---------- */
+function expensesOf(fy){ return DB.expenses.filter(e=> fyOf(e.date)===fy); }
+function budgetOf(fy, catId, orgId){
+  return DB.budgets.reduce((s,b)=> (+b.fy===fy && b.catId===catId && (!orgId || b.orgId===orgId))? s+(+b.amount||0) : s, 0);
+}
+function spentOf(fy, catId, orgId){
+  const ids = catId? leavesOf(catId) : null;
+  return DB.expenses.reduce((s,e)=>{
+    if(fyOf(e.date)!==fy) return s;
+    if(ids && ids.indexOf(e.catId)<0) return s;
+    if(orgId && e.orgId!==orgId) return s;
+    return s+(+e.amount||0);
+  },0);
+}
+function budgetTotal(fy, catId, orgId){
+  const ids = catId? leavesOf(catId) : LEAF_IDS;
+  return ids.reduce((s,id)=> s+budgetOf(fy,id,orgId), 0);
+}
+function actualMonthly(fy, catId, orgId){
+  const ids = catId? leavesOf(catId) : null;
+  const out = new Array(12).fill(0);
+  DB.expenses.forEach(e=>{
+    if(fyOf(e.date)!==fy) return;
+    if(ids && ids.indexOf(e.catId)<0) return;
+    if(orgId && e.orgId!==orgId) return;
+    out[fmOf(e.date)] += (+e.amount||0);
+  });
+  return out;
+}
+const cum = arr=>{ let s=0; return arr.map(v=> s+=v); };
+/* ระดับเตือนจาก % คงเหลือ */
+function levelOf(remainPct){
+  const t = DB.settings.thresholds;
+  if(remainPct < 0) return "over";
+  if(remainPct < t.crit) return "crit";
+  if(remainPct < t.warn) return "warn";
+  if(remainPct < t.watch) return "watch";
+  return "ok";
+}
+const LEVEL_META = {
+  over:{cls:"r", chip:"r", ic:"⛔", txt:"เกินงบ"},
+  crit:{cls:"r", chip:"r", ic:"🔴", txt:"วิกฤต"},
+  warn:{cls:"o", chip:"o", ic:"🟠", txt:"เตือน"},
+  watch:{cls:"y", chip:"y", ic:"🟡", txt:"เฝ้าระวัง"},
+  ok:{cls:"i", chip:"g", ic:"🟢", txt:"ปกติ"}
+};
+const barCls = lv=> lv==="over"||lv==="crit"? "r" : lv==="warn"? "o" : lv==="watch"? "y" : "g";
+
+</script>
+<script>
+/* ============================================================
+   ส่วนติดต่อผู้ใช้
+   ============================================================ */
+const VIEWS = [
+  {id:"dash",    ico:"📊", name:"ภาพรวม",   title:"ภาพรวมงบประมาณ"},
+  {id:"budget",  ico:"💰", name:"งบประมาณ", title:"งบประมาณที่ได้รับจัดสรร"},
+  {id:"monthly", ico:"📅", name:"รายเดือน", title:"การเบิกจ่ายรายเดือน"},
+  {id:"compare", ico:"📈", name:"เทียบปี",  title:"แดชบอร์ดเปรียบเทียบรายปี"},
+  {id:"cat",     ico:"📂", name:"หมวด",     title:"หมวดรายจ่าย"},
+  {id:"org",     ico:"🏢", name:"หน่วยงาน", title:"ข้อมูลหน่วยงาน"},
+  {id:"setting", ico:"⚙️", name:"ตั้งค่า",  title:"ตั้งค่าและข้อมูล"}
+];
+let CUR = "dash";
+const FILT = {q:"", cat:"", org:"", from:"", to:""};
+let BUDGET_ORG = "";   /* หน่วยงานที่กำลังแก้งบ */
+
+function renderNav(){
+  $("#nav").innerHTML = VIEWS.map(v=>
+    '<button data-v="'+v.id+'" class="'+(CUR===v.id?"on":"")+'">'+
+    '<span class="ico">'+v.ico+'</span><span>'+v.name+'</span></button>').join("");
+}
+function go(v){ CUR=v; render(); window.scrollTo(0,0); }
+function scrollToExpenses(){ const el=$("#expSec"); if(el && el.scrollIntoView) el.scrollIntoView({behavior:"smooth", block:"start"}); }
+/* ช่วงวันที่ของเดือนที่ i ในปีงบ fy (0 = ต.ค.) */
+function monthRange(fy, i){
+  const y = i<3? fy-543-1 : fy-543, mo = i<3? i+10 : i-2;
+  const p2 = n=> String(n).padStart(2,"0");
+  return {from: y+"-"+p2(mo)+"-01", to: y+"-"+p2(mo)+"-"+p2(new Date(y,mo,0).getDate())};
+}
+function render(){
+  renderNav();
+  const v = VIEWS.find(x=>x.id===CUR);
+  const fys = fyList(), fy = FY();
+  const head =
+    '<div class="topbar">'+
+    '<button class="navbtn" id="navToggle" title="ซ่อน/แสดงแถบเมนู">☰</button>'+
+    '<div><h1>'+v.title+'</h1><div class="sub">ปีงบประมาณ พ.ศ. '+fy+
+    ' &nbsp;·&nbsp; ต.ค. '+(fy-1)+' – ก.ย. '+fy+'</div></div><div class="spacer"></div>'+
+    '<div class="fybox"><label>ปีงบ</label><select id="fysel">'+
+      fys.map(f=>'<option value="'+f+'"'+(f===fy?" selected":"")+'>'+f+'</option>').join("")+
+    '</select></div>'+
+    '<button class="btn ghost sm" id="fyAdd" title="เพิ่มปีงบประมาณ">+ ปีงบ</button>'+
+    '<button class="btn ghost sm" id="themeBtn" title="'+(DB.settings.dark? "กดเพื่อสลับเป็นโหมดสว่าง":"กดเพื่อสลับเป็นโหมดมืด")+'">'+
+      (DB.settings.dark? "☀️ โหมดสว่าง":"🌙 โหมดมืด")+'</button></div>';
+  $("#view").innerHTML = head + ({
+    dash:viewDash, budget:viewBudget, monthly:viewMonthly, compare:viewCompare,
+    cat:viewCat, org:viewOrg, setting:viewSetting
+  })[CUR]();
+  if(afterRender[CUR]) afterRender[CUR]();
+}
+const afterRender = {};
+
+/* ---------- โมดัล ---------- */
+let modalSubmit = null;
+function openModal(title, bodyHtml, footHtml, onSubmit){
+  $("#modal").innerHTML =
+    '<header><h3>'+title+'</h3><button class="x" data-close="1">✕</button></header>'+
+    '<div class="body">'+bodyHtml+'</div>'+
+    '<footer>'+(footHtml || '<button class="btn ghost" data-close="1">ยกเลิก</button><button class="btn" data-ok="1">บันทึก</button>')+'</footer>';
+  modalSubmit = onSubmit || null;
+  $("#ovl").classList.add("on");
+}
+function closeModal(){ $("#ovl").classList.remove("on"); $("#modal").innerHTML=""; modalSubmit=null; }
+$("#ovl").addEventListener("click", e=>{
+  if(e.target.id==="ovl"){ closeModal(); return; }
+  if(e.target.closest("[data-close]")){ closeModal(); return; }
+  if(e.target.closest("[data-ok]") && modalSubmit){ if(modalSubmit()!==false) closeModal(); }
+});
+function confirmBox(title, msg, okText, cb){
+  openModal(title, '<div class="warnbox">'+msg+'</div>',
+    '<button class="btn ghost" data-close="1">ยกเลิก</button><button class="btn danger" data-ok="1">'+esc(okText)+'</button>',
+    ()=>{ cb(); return true; });
+}
+
+/* ---------- ตัวเลือกในฟอร์ม ---------- */
+function catOptions(sel, allowGroups){
+  let h = '<option value="">— เลือกหมวด —</option>';
+  GROUPS.forEach(g=>{
+    h += '<optgroup label="'+esc(g.name)+'">';
+    CATFLAT.filter(c=>c.group===g.id && c.depth>0).forEach(c=>{
+      if(!c.isLeaf){ if(allowGroups) h+='<option disabled>'+esc("— "+c.name+" —")+'</option>'; else h+='<option disabled>'+esc("— "+c.name+" —")+'</option>'; return; }
+      const pad = c.depth>1? "　• " : "";
+      h += '<option value="'+c.id+'"'+(sel===c.id?" selected":"")+'>'+esc(pad+c.name)+'</option>';
+    });
+    h += '</optgroup>';
+  });
+  return h;
+}
+function orgOptions(sel, anyLabel){
+  return (anyLabel? '<option value="">'+esc(anyLabel)+'</option>' : '') +
+    DB.orgs.map(o=>'<option value="'+o.id+'"'+(sel===o.id?" selected":"")+'>'+esc(orgName(o.id))+'</option>').join("");
+}
+</script>
+<script>
+/* ============================================================
+   1) ภาพรวม (Dashboard)
+   ============================================================ */
+function viewDash(){
+  const fy = FY();
+  const b = budgetTotal(fy), s = spentOf(fy), rem = b-s, p = pct(s,b), rp = pct(rem,b);
+  const lv = b>0? levelOf(rp) : "ok";
+
+  let h = '<div class="kpis">'+
+    '<div class="kpi"><div class="lab">งบประมาณที่ได้รับจัดสรร</div><div class="val">'+money(b)+' <small>บาท</small></div>'+
+      '<div class="foot">'+DB.orgs.length+' หน่วยงาน · '+LEAF.length+' หมวดรายจ่าย</div></div>'+
+    '<div class="kpi k2"><div class="lab">เบิกจ่ายแล้ว</div><div class="val">'+money(s)+' <small>บาท</small></div>'+
+      '<div class="foot">'+expensesOf(fy).length+' รายการ</div></div>'+
+    '<div class="kpi k3"><div class="lab">งบคงเหลือ</div><div class="val" style="color:'+(rem<0?"var(--red)":"inherit")+'">'+money(rem)+' <small>บาท</small></div>'+
+      '<div class="foot">'+(b>0? rp.toFixed(1)+"% ของงบทั้งหมด" : "ยังไม่ได้ตั้งงบ")+'</div></div>'+
+    '<div class="kpi k4"><div class="lab">อัตราการเบิกจ่าย</div><div class="val">'+p.toFixed(1)+' <small>%</small></div>'+
+      '<div class="pbar '+barCls(lv)+'"><i style="width:'+clamp(p,0,100)+'%"></i></div></div></div>';
+
+  /* สองคอลัมน์: ซ้าย = สรุปตามหมวด / ขวา = รายการค่าใช้จ่าย */
+  h += '<div class="split">';
+  h += '<div class="card"><div class="chead"><div><h2>สรุปตามหมวดงบประมาณ</h2>'+
+       '<div class="hint">คำนวณสดจากรายการค่าใช้จ่ายทั้งหมดในปีงบ '+fy+'</div></div>'+
+       '<div class="spacer"></div><button class="btn ghost sm" data-go="budget">แก้ไขงบจัดสรร</button></div>';
+  GROUPS.forEach(g=>{
+    const gb=budgetTotal(fy,g.id), gs=spentOf(fy,g.id);
+    h += '<div class="grouphead">'+esc(g.name)+'<span>'+money(gs)+' / '+money(gb)+' บาท</span></div>';
+    CATFLAT.filter(c=>c.group===g.id&&c.depth>0).forEach(c=>{
+      const cb=budgetTotal(fy,c.id), cs=spentOf(fy,c.id), cr=cb-cs, cp=pct(cs,cb);
+      const clv = cb>0? levelOf(pct(cr,cb)) : (cs>0?"warn":"ok");
+      if(!c.isLeaf){
+        h += '<div class="catrow" style="background:var(--row2);border-radius:9px;padding:8px 9px;margin-top:6px">'+
+             '<div class="nm"><b>'+esc(c.name)+'</b> <span class="chip mut">รวม '+leavesOf(c.id).length+' รายการย่อย</span></div>'+
+             '<div class="amt">'+money(cs)+' / '+money(cb)+'</div>'+
+             '<div class="pbar '+barCls(clv)+'"><i style="width:'+clamp(cp,0,100)+'%"></i></div></div>';
+        return;
+      }
+      if(cb<=0 && cs<=0) return;
+      h += '<div class="catrow"'+(c.depth>1?' style="padding-left:14px"':'')+'>'+
+           '<div class="nm">'+(c.depth>1?'<span style="color:var(--muted)">• </span>':'')+esc(c.name)+
+             (cb>0? ' <span class="chip '+LEVEL_META[clv].chip+'">'+(cr<0? "เกิน "+money(-cr) : "เหลือ "+cp.toFixed(0)+"% ใช้ไป")+'</span>' : ' <span class="chip o">ยังไม่ตั้งงบ</span>')+'</div>'+
+           '<div class="amt">'+money(cs)+' / '+money(cb)+'</div>'+
+           '<div class="pbar '+barCls(clv)+'"><i style="width:'+clamp(cp,0,100)+'%"></i></div></div>';
+    });
+  });
+  h += '</div>';                 /* จบการ์ดสรุปตามหมวด (คอลัมน์ซ้าย) */
+  h += '<div class="rightcol">' + addExpenseCard() + expenseSection() + '</div>';
+  h += '</div>';                 /* จบ .split */
+  return h;
+}
+
+/* ============================================================
+   2) รายการค่าใช้จ่าย
+   ============================================================ */
+function filteredExpenses(){
+  const fy = FY();
+  return DB.expenses.filter(e=>{
+    if(fyOf(e.date)!==fy) return false;
+    if(FILT.cat){ if(leavesOf(FILT.cat).indexOf(e.catId)<0) return false; }
+    if(FILT.org && e.orgId!==FILT.org) return false;
+    if(FILT.from && e.date < FILT.from) return false;
+    if(FILT.to && e.date > FILT.to) return false;
+    if(FILT.q){
+      const q = FILT.q.toLowerCase();
+      const hay = [e.docNo,e.note,catName(e.catId),orgName(e.orgId)].join(" ").toLowerCase();
+      if(hay.indexOf(q)<0) return false;
+    }
+    return true;
+  }).sort((a,b)=> a.date<b.date? 1 : a.date>b.date? -1 : 0);
+}
+const filtersOn = ()=> !!(FILT.q||FILT.cat||FILT.org||FILT.from||FILT.to);
+
+/* ---------- ฟอร์มเพิ่มรายการ (คอลัมน์ขวา ส่วนบน) ---------- */
+const NEWEXP = {date:"", catId:"", orgId:"", amount:"", docNo:"", note:""};
+function addExpenseCard(){
+  if(!NEWEXP.date) NEWEXP.date = new Date().toISOString().slice(0,10);
+  if(!NEWEXP.orgId || !orgById(NEWEXP.orgId)) NEWEXP.orgId = (DB.orgs[0]||{}).id || "";
+  const n = NEWEXP;
+  return '<div class="card"><div class="chead"><div><h2>➕ เพิ่มรายการค่าใช้จ่าย</h2>'+
+    '<div class="hint">กรอกแล้วกดบันทึกได้ทันที รายการจะไปอยู่ในตารางด้านล่าง</div></div></div>'+
+    '<div class="newexp">'+
+      '<div class="field"><label class="f">วันที่ *</label><input type="date" id="n_date" value="'+esc(n.date)+'"></div>'+
+      '<div class="field"><label class="f">จำนวนเงิน (บาท) *</label><input type="number" step="0.01" id="n_amt" value="'+esc(n.amount)+'" placeholder="0.00"></div>'+
+      '<div class="field"><label class="f">หน่วยงาน *</label><select id="n_org">'+orgOptions(n.orgId,"— เลือก —")+'</select></div>'+
+      '<div class="field wide"><label class="f">หมวดรายจ่าย *</label><select id="n_cat">'+catOptions(n.catId)+'</select></div>'+
+      '<div class="field"><label class="f">เลขที่เอกสาร</label><input type="text" id="n_doc" value="'+esc(n.docNo)+'"></div>'+
+      '<div class="field wide"><label class="f">หมายเหตุ</label><input type="text" id="n_note" value="'+esc(n.note)+'"></div>'+
+    '</div>'+
+    '<div id="n_warn" style="margin-top:10px"></div>'+
+    '<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">'+
+      '<button class="btn" id="nSave">บันทึกรายการ</button>'+
+      '<button class="btn ghost" id="nClear">ล้างฟอร์ม</button></div></div>';
+}
+function expenseSection(){
+  const rows = filteredExpenses();
+  const sum = rows.reduce((s,e)=>s+(+e.amount||0),0);
+  let h = '<div class="card" id="expSec"><div class="chead"><div><h2>🧾 รายการค่าใช้จ่าย</h2>'+
+    '<div class="hint">พบ '+rows.length+' รายการ · รวม '+money(sum)+' บาท'+(filtersOn()? ' (กรองอยู่)':'')+'</div></div><div class="spacer"></div>'+
+    (filtersOn()? '<button class="btn ghost sm" id="expClr">ล้างตัวกรอง</button>':'')+
+    '<button class="btn ghost sm" id="expCsv">⬇ ส่งออก CSV</button></div>';
+  h += '<div class="filters">'+
+    '<div><label class="f">ค้นหา</label><input type="text" id="fq" value="'+esc(FILT.q)+'" placeholder="เลขที่เอกสาร / หมายเหตุ"></div>'+
+    '<div><label class="f">หมวด</label><select id="fcat"><option value="">ทุกหมวด</option>'+
+      GROUPS.map(g=>'<optgroup label="'+esc(g.name)+'">'+
+        CATFLAT.filter(c=>c.group===g.id&&c.depth>0).map(c=>
+          '<option value="'+c.id+'"'+(FILT.cat===c.id?" selected":"")+'>'+esc((c.depth>1?"　• ":"")+c.name)+(c.isLeaf?"":" (ทั้งกลุ่ม)")+'</option>').join("")+
+        '</optgroup>').join("")+'</select></div>'+
+    '<div><label class="f">หน่วยงาน</label><select id="forg">'+orgOptions(FILT.org,"ทุกหน่วยงาน")+'</select></div>'+
+    '<div><label class="f">ตั้งแต่วันที่</label><input type="date" id="ffrom" value="'+esc(FILT.from)+'"></div>'+
+    '<div><label class="f">ถึงวันที่</label><input type="date" id="fto" value="'+esc(FILT.to)+'"></div>'+
+    '</div>';
+  if(!rows.length){
+    h += '<div class="empty"><span class="big">🧾</span>ยังไม่มีรายการค่าใช้จ่ายในเงื่อนไขนี้<br>'+
+      '<span style="font-size:13px">'+(filtersOn()? 'ลองล้างตัวกรองด้านบน' : 'กรอกในช่อง “เพิ่มรายการค่าใช้จ่าย” ด้านบนได้เลย')+'</span></div></div>';
+    return h;
+  }
+  h += '<div class="tblwrap"><table class="rt"><thead><tr>'+
+    '<th>วันที่</th><th>หมวด</th><th>หน่วยงาน</th><th>เลขที่เอกสาร</th>'+
+    '<th class="r">จำนวนเงิน</th><th></th></tr></thead><tbody>';
+  rows.forEach(e=>{
+    h += '<tr>'+
+      '<td data-l="วันที่">'+thDate(e.date)+'</td>'+
+      '<td data-l="หมวด">'+esc(catName(e.catId))+'</td>'+
+      '<td data-l="หน่วยงาน">'+esc(orgName(e.orgId))+'</td>'+
+      '<td data-l="เลขที่เอกสาร">'+esc(e.docNo||"-")+'</td>'+
+      '<td class="r" data-l="จำนวนเงิน"><b>'+money(e.amount)+'</b></td>'+
+      '<td class="acts"><button data-edit="'+e.id+'">แก้ไข</button><button class="del" data-del="'+e.id+'">ลบ</button></td></tr>';
+  });
+  h += '</tbody><tfoot><tr><td colspan="4" data-l="รวม">รวมทั้งสิ้น</td><td class="r" data-l="รวม">'+money(sum)+'</td><td></td></tr></tfoot></table></div></div>';
+  return h;
+}
+function expenseForm(ex){
+  const fy = FY();
+  const e = ex || {date:new Date().toISOString().slice(0,10), orgId:(DB.orgs[0]||{}).id||"", catId:"", amount:"", docNo:"", note:""};
+  const body =
+    '<div class="grid2">'+
+      '<div class="field"><label class="f">วันที่ *</label><input type="date" id="e_date" value="'+esc(e.date)+'"></div>'+
+      '<div class="field"><label class="f">จำนวนเงิน (บาท) *</label><input type="number" step="0.01" id="e_amt" value="'+(e.amount!==""?e.amount:"")+'"></div>'+
+    '</div>'+
+    '<div class="field"><label class="f">หมวดรายจ่าย *</label><select id="e_cat">'+catOptions(e.catId)+'</select></div>'+
+    '<div class="field"><label class="f">หน่วยงาน *</label><select id="e_org">'+orgOptions(e.orgId,"— เลือกหน่วยงาน —")+'</select></div>'+
+    '<div class="field"><label class="f">เลขที่เอกสาร</label><input type="text" id="e_doc" value="'+esc(e.docNo)+'"></div>'+
+    '<div class="field"><label class="f">หมายเหตุ</label><textarea id="e_note" rows="2">'+esc(e.note)+'</textarea></div>'+
+    '<div id="e_warn"></div>';
+  openModal(ex? "แก้ไขรายการค่าใช้จ่าย" : "เพิ่มรายการค่าใช้จ่าย", body, null, ()=>{
+    const date=$("#e_date").value, amt=parseFloat($("#e_amt").value), cat=$("#e_cat").value, org=$("#e_org").value;
+    if(!date){ toast("กรุณาเลือกวันที่",1); return false; }
+    if(!(amt>0)){ toast("กรุณากรอกจำนวนเงินมากกว่า 0",1); return false; }
+    if(!cat){ toast("กรุณาเลือกหมวดรายจ่าย",1); return false; }
+    if(!org){ toast("กรุณาเลือกหน่วยงาน",1); return false; }
+    const nfy = fyOf(date);
+    const b = budgetOf(nfy,cat,org), sp = spentOf(nfy,cat,org) - (ex? (fyOf(ex.date)===nfy&&ex.catId===cat&&ex.orgId===org? (+ex.amount||0):0) : 0);
+    if(b>0 && sp+amt > b && !$("#e_warn").dataset.ok){
+      $("#e_warn").innerHTML = '<div class="warnbox"><b>⚠️ เกินงบที่ได้รับจัดสรร</b><br>'+
+        esc(catName(cat))+' · '+esc(orgName(org))+'<br>งบ '+money(b)+' · เบิกแล้ว '+money(sp)+
+        ' · รายการนี้ '+money(amt)+' → <b>เกิน '+money(sp+amt-b)+' บาท</b><br>'+
+        '<span style="color:var(--muted)">กด “บันทึก” อีกครั้งเพื่อยืนยันการบันทึก</span></div>';
+      $("#e_warn").dataset.ok="1"; return false;
+    }
+    const rec = {id: ex? ex.id : uid(), date:date, orgId:org, catId:cat,
+      amount: Math.round(amt*100)/100, docNo:$("#e_doc").value.trim(), note:$("#e_note").value.trim()};
+    if(ex){ const i=DB.expenses.findIndex(x=>x.id===ex.id); DB.expenses[i]=rec; toast("แก้ไขรายการแล้ว"); }
+    else { DB.expenses.push(rec); toast("เพิ่มรายการแล้ว"); }
+    if(nfy!==FY()) DB.settings.fy = nfy;
+    save(); render(); return true;
+  });
+  ["e_cat","e_org","e_amt","e_date"].forEach(id=>{
+    const el=$("#"+id); if(el) el.addEventListener("change", ()=>{ const w=$("#e_warn"); w.innerHTML=""; delete w.dataset.ok; });
+  });
+}
+afterRender.dash = ()=>{
+  const bind = (id, key, ev)=>{ const el=$("#"+id); if(!el) return;
+    el.addEventListener(ev||"change", ()=>{ FILT[key]=el.value; render(); scrollToExpenses(); }); };
+  const q=$("#fq");
+  if(q){ let t=null; q.addEventListener("input",()=>{ clearTimeout(t); t=setTimeout(()=>{ FILT.q=q.value; const p=q.selectionStart; render(); const n=$("#fq"); if(n){n.focus(); n.setSelectionRange(p,p);} },350); }); }
+  bind("fcat","cat"); bind("forg","org"); bind("ffrom","from"); bind("fto","to");
+
+  /* ---- ฟอร์มเพิ่มรายการด้านบน ---- */
+  const F = {n_date:"date", n_cat:"catId", n_org:"orgId", n_amt:"amount", n_doc:"docNo", n_note:"note"};
+  Object.keys(F).forEach(id=>{ const el=$("#"+id); if(!el) return;
+    const sync=()=>{ NEWEXP[F[id]]=el.value; const w=$("#n_warn"); if(w){ w.innerHTML=""; delete w.dataset.ok; } };
+    el.addEventListener("input", sync); el.addEventListener("change", sync);
+  });
+  if($("#nClear")) $("#nClear").onclick=()=>{
+    NEWEXP.catId=""; NEWEXP.amount=""; NEWEXP.docNo=""; NEWEXP.note="";
+    NEWEXP.date=new Date().toISOString().slice(0,10);
+    render(); toast("ล้างฟอร์มแล้ว");
+  };
+  if($("#nSave")) $("#nSave").onclick=()=>{
+    const date=$("#n_date").value, amt=parseFloat($("#n_amt").value), cat=$("#n_cat").value, org=$("#n_org").value;
+    const w=$("#n_warn");
+    if(!date){ toast("กรุณาเลือกวันที่",1); return; }
+    if(!(amt>0)){ toast("กรุณากรอกจำนวนเงินมากกว่า 0",1); return; }
+    if(!cat){ toast("กรุณาเลือกหมวดรายจ่าย",1); return; }
+    if(!org){ toast("กรุณาเลือกหน่วยงาน",1); return; }
+    const nfy = fyOf(date), b = budgetOf(nfy,cat,org), sp = spentOf(nfy,cat,org);
+    if(b>0 && sp+amt > b && !w.dataset.ok){
+      w.innerHTML = '<div class="warnbox"><b>⚠️ เกินงบที่ได้รับจัดสรร</b><br>'+
+        esc(catName(cat))+' · '+esc(orgName(org))+'<br>งบ '+money(b)+' · เบิกแล้ว '+money(sp)+
+        ' · รายการนี้ '+money(amt)+' → <b>เกิน '+money(sp+amt-b)+' บาท</b><br>'+
+        '<span style="color:var(--muted)">กด “บันทึกรายการ” อีกครั้งเพื่อยืนยัน</span></div>';
+      w.dataset.ok="1"; return;
+    }
+    DB.expenses.push({id:uid(), date:date, orgId:org, catId:cat, amount:Math.round(amt*100)/100,
+      docNo:$("#n_doc").value.trim(), note:$("#n_note").value.trim()});
+    NEWEXP.date=date; NEWEXP.orgId=org; NEWEXP.catId=cat;   /* คงไว้ให้คีย์รายการถัดไปเร็วขึ้น */
+    NEWEXP.amount=""; NEWEXP.docNo=""; NEWEXP.note="";
+    if(nfy!==FY()) DB.settings.fy = nfy;
+    save(); render(); toast("เพิ่มรายการแล้ว "+money(amt)+" บาท");
+    const el=$("#n_amt"); if(el && el.focus) el.focus();
+  };
+  if($("#expCsv")) $("#expCsv").onclick=exportExpensesCSV;
+  if($("#expClr")) $("#expClr").onclick=()=>{ FILT.q=FILT.cat=FILT.org=FILT.from=FILT.to=""; render(); scrollToExpenses(); };
+  document.querySelectorAll("[data-edit]").forEach(b=> b.onclick=()=> expenseForm(DB.expenses.find(x=>x.id===b.dataset.edit)));
+  document.querySelectorAll("[data-del]").forEach(b=> b.onclick=()=>{
+    const e = DB.expenses.find(x=>x.id===b.dataset.del); if(!e) return;
+    confirmBox("ยืนยันการลบ", "ลบรายการ <b>"+esc(catName(e.catId))+"</b> วันที่ "+thDate(e.date)+" จำนวน <b>"+money(e.amount)+"</b> บาท?<br>การลบไม่สามารถย้อนกลับได้",
+      "ลบรายการ", ()=>{ DB.expenses = DB.expenses.filter(x=>x.id!==e.id); save(); toast("ลบรายการแล้ว"); render(); });
+  });
+};
+
+/* ============================================================
+   3) งบประมาณที่ได้รับจัดสรร
+   ============================================================ */
+function viewBudget(){
+  const fy = FY();
+  if(!DB.orgs.length) return '<div class="card"><div class="empty"><span class="big">🏢</span>ต้องมีหน่วยงานอย่างน้อย 1 หน่วยงานก่อนตั้งงบ<br>'+
+    '<button class="btn ghost sm" data-go="org" style="margin-top:10px">ไปเพิ่มหน่วยงาน</button></div></div>';
+  if(!BUDGET_ORG || !orgById(BUDGET_ORG)) BUDGET_ORG = DB.orgs[0].id;
+  const org = BUDGET_ORG;
+  const tb = budgetTotal(fy,null,org), ts = spentOf(fy,null,org);
+
+  let h = '<div class="card"><div class="chead"><div><h2>งบประมาณที่ได้รับจัดสรร</h2>'+
+    '<div class="hint">แก้ตัวเลขในตารางได้ทันที · ระบบคำนวณคงเหลือใหม่ทุกครั้ง</div></div><div class="spacer"></div>'+
+    '<div class="fybox"><label>หน่วยงาน</label><select id="bOrg">'+orgOptions(org,null)+'</select></div>'+
+    '<button class="btn ghost sm" id="bCopy">คัดลอกจากปีก่อน</button></div>';
+  h += '<div class="kpis" style="margin-bottom:6px">'+
+    '<div class="kpi"><div class="lab">งบของหน่วยงานนี้</div><div class="val">'+money(tb)+'</div></div>'+
+    '<div class="kpi k2"><div class="lab">เบิกจ่ายแล้ว</div><div class="val">'+money(ts)+'</div></div>'+
+    '<div class="kpi k3"><div class="lab">คงเหลือ</div><div class="val" style="color:'+(tb-ts<0?"var(--red)":"inherit")+'">'+money(tb-ts)+'</div></div>'+
+    '<div class="kpi k4"><div class="lab">เบิกจ่ายแล้ว</div><div class="val">'+pct(ts,tb).toFixed(1)+' <small>%</small></div></div></div>';
+  h += '<div class="tblwrap"><table><thead><tr><th style="min-width:230px">หมวดรายจ่าย</th>'+
+    '<th class="r" style="width:150px">งบจัดสรร (บาท)</th><th class="r">เบิกจ่ายแล้ว</th><th class="r">คงเหลือ</th>'+
+    '<th class="r">%</th><th>สถานะ</th></tr></thead><tbody>';
+  GROUPS.forEach(g=>{
+    const gb=budgetTotal(fy,g.id,org), gs=spentOf(fy,g.id,org);
+    h += '<tr style="background:var(--lav)"><td><b>'+esc(g.name)+'</b></td><td class="r"><b>'+money(gb)+'</b></td>'+
+      '<td class="r"><b>'+money(gs)+'</b></td><td class="r"><b>'+money(gb-gs)+'</b></td>'+
+      '<td class="r"><b>'+pct(gs,gb).toFixed(1)+'%</b></td><td></td></tr>';
+    CATFLAT.filter(c=>c.group===g.id&&c.depth>0).forEach(c=>{
+      if(!c.isLeaf){
+        const sb=budgetTotal(fy,c.id,org), ss=spentOf(fy,c.id,org);
+        h += '<tr style="background:var(--row2)"><td style="padding-left:22px"><b>'+esc(c.name)+'</b> '+
+          '<span class="chip mut">ตั้งงบที่รายการย่อย</span></td><td class="r">'+money(sb)+'</td><td class="r">'+money(ss)+'</td>'+
+          '<td class="r">'+money(sb-ss)+'</td><td class="r">'+pct(ss,sb).toFixed(1)+'%</td><td></td></tr>';
+        return;
+      }
+      const b=budgetOf(fy,c.id,org), s=spentOf(fy,c.id,org), r=b-s, lv=b>0? levelOf(pct(r,b)) : (s>0?"warn":"ok");
+      h += '<tr><td style="padding-left:'+(c.depth>1?38:22)+'px">'+(c.depth>1?'• ':'')+esc(c.name)+'</td>'+
+        '<td class="r"><input class="tbl-in" type="number" step="0.01" data-bud="'+c.id+'" value="'+(b?b:"")+'" placeholder="0.00"></td>'+
+        '<td class="r">'+money(s)+'</td><td class="r"'+(r<0?' style="color:var(--red)"':'')+'>'+money(r)+'</td>'+
+        '<td class="r">'+(b>0? pct(s,b).toFixed(1)+'%':'-')+'</td>'+
+        '<td>'+(b>0? '<span class="chip '+LEVEL_META[lv].chip+'">'+LEVEL_META[lv].txt+'</span>' : (s>0?'<span class="chip o">ยังไม่ตั้งงบ</span>':'<span class="chip mut">—</span>'))+'</td></tr>';
+    });
+  });
+  h += '</tbody><tfoot><tr><td>รวมทั้งสิ้น</td><td class="r">'+money(tb)+'</td><td class="r">'+money(ts)+'</td>'+
+    '<td class="r">'+money(tb-ts)+'</td><td class="r">'+pct(ts,tb).toFixed(1)+'%</td><td></td></tr></tfoot></table></div>';
+  h += '<div class="hint" style="margin-top:10px">💡 ยอดรวมหมวด <b>ค่าจ้างเหมาบริการ</b> มาจากผลรวมของสัญญาย่อยทั้ง 9 รายการ เพื่อไม่ให้ยอดซ้ำซ้อน</div></div>';
+
+  /* สรุปทุกหน่วยงาน */
+  if(DB.orgs.length>1){
+    h += '<div class="card"><h2>รวมทุกหน่วยงาน (ปีงบ '+fy+')</h2><div class="tblwrap" style="margin-top:10px">'+
+      '<table class="rt"><thead><tr><th>หน่วยงาน</th><th class="r">งบจัดสรร</th><th class="r">เบิกจ่าย</th><th class="r">คงเหลือ</th><th class="r">%</th></tr></thead><tbody>'+
+      DB.orgs.map(o=>{ const ob=budgetTotal(fy,null,o.id), os=spentOf(fy,null,o.id);
+        return '<tr><td data-l="หน่วยงาน">'+esc(orgName(o.id))+'</td><td class="r" data-l="งบจัดสรร">'+money(ob)+'</td>'+
+          '<td class="r" data-l="เบิกจ่าย">'+money(os)+'</td><td class="r" data-l="คงเหลือ">'+money(ob-os)+'</td>'+
+          '<td class="r" data-l="%">'+pct(os,ob).toFixed(1)+'%</td></tr>'; }).join("")+
+      '</tbody><tfoot><tr><td data-l="รวม">รวม</td><td class="r" data-l="งบจัดสรร">'+money(budgetTotal(fy))+'</td>'+
+      '<td class="r" data-l="เบิกจ่าย">'+money(spentOf(fy))+'</td><td class="r" data-l="คงเหลือ">'+money(budgetTotal(fy)-spentOf(fy))+'</td>'+
+      '<td class="r" data-l="%">'+pct(spentOf(fy),budgetTotal(fy)).toFixed(1)+'%</td></tr></tfoot></table></div></div>';
+  }
+  return h;
+}
+function setBudget(fy, catId, orgId, amount){
+  const i = DB.budgets.findIndex(b=> +b.fy===fy && b.catId===catId && b.orgId===orgId);
+  if(!(amount>0)){ if(i>=0) DB.budgets.splice(i,1); }
+  else if(i>=0) DB.budgets[i].amount = amount;
+  else DB.budgets.push({id:uid(), fy:fy, orgId:orgId, catId:catId, amount:amount});
+  save();
+}
+afterRender.budget = ()=>{
+  const sel=$("#bOrg"); if(sel) sel.onchange=()=>{ BUDGET_ORG=sel.value; render(); };
+  document.querySelectorAll("[data-bud]").forEach(inp=>{
+    inp.addEventListener("change", ()=>{
+      const v = Math.round((parseFloat(inp.value)||0)*100)/100;
+      setBudget(FY(), inp.dataset.bud, BUDGET_ORG, v);
+      render();
+    });
+  });
+  const cp=$("#bCopy");
+  if(cp) cp.onclick=()=>{
+    const fy=FY(), prev=fy-1;
+    const src = DB.budgets.filter(b=> +b.fy===prev && b.orgId===BUDGET_ORG);
+    if(!src.length){ toast("ไม่พบงบของปี "+prev+" สำหรับหน่วยงานนี้",1); return; }
+    confirmBox("คัดลอกงบจากปี "+prev, "คัดลอกงบจัดสรร "+src.length+" รายการ จากปีงบ <b>"+prev+"</b> มายังปีงบ <b>"+fy+"</b> ของ "+esc(orgName(BUDGET_ORG))+"<br><span style=\"color:var(--muted)\">ตัวเลขเดิมของปี "+fy+" ในหมวดที่ซ้ำกันจะถูกเขียนทับ</span>",
+      "คัดลอก", ()=>{ src.forEach(b=> setBudget(fy,b.catId,BUDGET_ORG,+b.amount||0)); toast("คัดลอกงบแล้ว "+src.length+" รายการ"); render(); });
+  };
+};
+
+/* ============================================================
+   4) แผนการเบิกจ่ายรายเดือน
+   ============================================================ */
+function viewMonthly(){
+  const fy = FY(), org = FILT.org;
+  const tot = actualMonthly(fy, null, org);
+  const grand = tot.reduce((s,v)=>s+v,0);
+  const tb = budgetTotal(fy, null, org);
+  let peak = 0; tot.forEach((v,i)=>{ if(v>tot[peak]) peak=i; });
+  let h = '<div class="card"><div class="chead"><div><h2>การเบิกจ่ายรายเดือน</h2>'+
+    '<div class="hint">ดึงข้อมูลจากรายการค่าใช้จ่ายอัตโนมัติ · คลิกตัวเลขเพื่อดูรายการของเดือนนั้น</div></div>'+
+    '<div class="spacer"></div>'+
+    '<div class="fybox"><label>หน่วยงาน</label><select id="mOrg">'+orgOptions(org,"ทุกหน่วยงาน")+'</select></div>'+
+    '<button class="btn ghost sm" id="mCsv">⬇ ส่งออกตาราง</button></div>';
+  h += '<div class="kpis" style="margin-bottom:6px">'+
+    '<div class="kpi"><div class="lab">งบจัดสรร</div><div class="val">'+money(tb)+'</div></div>'+
+    '<div class="kpi k2"><div class="lab">เบิกจ่ายรวมทั้งปี</div><div class="val">'+money(grand)+'</div></div>'+
+    '<div class="kpi k3"><div class="lab">คงเหลือ</div><div class="val" style="color:'+(tb-grand<0?"var(--red)":"inherit")+'">'+money(tb-grand)+'</div></div>'+
+    '<div class="kpi k4"><div class="lab">เดือนที่เบิกจ่ายสูงสุด</div><div class="val">'+(grand>0? MONTHS[peak]:'-')+
+      '</div><div class="foot">'+(grand>0? money(tot[peak])+' บาท':'ยังไม่มีการเบิกจ่าย')+'</div></div></div>';
+  h += '<div class="tblwrap"><table><thead><tr>'+
+    '<th style="min-width:210px;position:sticky;left:0;background:var(--card);z-index:2">หมวดรายจ่าย</th>'+
+    MONTHS.map(m=>'<th class="r" style="min-width:86px">'+m+'</th>').join("")+
+    '<th class="r">รวมเบิกจ่าย</th><th class="r">งบจัดสรร</th><th class="r">คงเหลือ</th><th class="r">%</th></tr></thead><tbody>';
+  const cell = (v, cid, i)=> v>0
+    ? '<td class="r"><button class="mcell" data-mc="'+cid+'" data-mm="'+i+'">'+money(v)+'</button></td>'
+    : '<td class="r" style="color:var(--muted)">-</td>';
+  GROUPS.forEach(g=>{
+    const gm = actualMonthly(fy,g.id,org), gs = gm.reduce((s,v)=>s+v,0), gb = budgetTotal(fy,g.id,org);
+    h += '<tr style="background:var(--lav)"><td style="position:sticky;left:0;background:var(--lav);z-index:1"><b>'+esc(g.name)+'</b></td>'+
+      gm.map(v=>'<td class="r"><b>'+(v? money(v):"-")+'</b></td>').join("")+
+      '<td class="r"><b>'+money(gs)+'</b></td><td class="r"><b>'+money(gb)+'</b></td>'+
+      '<td class="r"><b>'+money(gb-gs)+'</b></td><td class="r"><b>'+pct(gs,gb).toFixed(1)+'%</b></td></tr>';
+    CATFLAT.filter(c=>c.group===g.id&&c.depth>0).forEach(c=>{
+      const cm = actualMonthly(fy,c.id,org), cs = cm.reduce((s,v)=>s+v,0), cb = budgetTotal(fy,c.id,org);
+      if(!c.isLeaf){
+        h += '<tr style="background:var(--row2)"><td style="position:sticky;left:0;background:var(--row2);z-index:1;padding-left:22px"><b>'+esc(c.name)+'</b></td>'+
+          cm.map(v=>'<td class="r">'+(v? money(v):"-")+'</td>').join("")+
+          '<td class="r"><b>'+money(cs)+'</b></td><td class="r">'+money(cb)+'</td>'+
+          '<td class="r">'+money(cb-cs)+'</td><td class="r">'+pct(cs,cb).toFixed(1)+'%</td></tr>';
+        return;
+      }
+      const r = cb-cs, lv = cb>0? levelOf(pct(r,cb)) : "ok";
+      h += '<tr><td style="position:sticky;left:0;background:var(--card);z-index:1;padding-left:'+(c.depth>1?38:22)+'px">'+
+        (c.depth>1?'• ':'')+esc(c.name)+'</td>'+
+        cm.map((v,i)=>cell(v,c.id,i)).join("")+
+        '<td class="r"><b>'+money(cs)+'</b></td><td class="r">'+money(cb)+'</td>'+
+        '<td class="r"'+(r<0?' style="color:var(--red)"':'')+'>'+money(r)+'</td>'+
+        '<td class="r">'+(cb>0? '<span class="chip '+LEVEL_META[lv].chip+'">'+pct(cs,cb).toFixed(1)+'%</span>' : '-')+'</td></tr>';
+    });
+  });
+  h += '</tbody><tfoot><tr><td style="position:sticky;left:0;background:var(--row2);z-index:1">รวมทุกหมวด</td>'+
+    tot.map(v=>'<td class="r">'+(v? money(v):"-")+'</td>').join("")+
+    '<td class="r">'+money(grand)+'</td><td class="r">'+money(tb)+'</td>'+
+    '<td class="r">'+money(tb-grand)+'</td><td class="r">'+pct(grand,tb).toFixed(1)+'%</td></tr></tfoot></table></div>';
+  h += '<div class="hint" style="margin-top:10px">เดือนเรียงตามปีงบประมาณ ต.ค. '+(fy-1)+' – ก.ย. '+fy+
+       ' · ยอดของ <b>ค่าจ้างเหมาบริการ</b> เป็นผลรวมของสัญญาย่อยทั้ง 9 รายการ</div></div>';
+  return h;
+}
+afterRender.monthly = ()=>{
+  const fy = FY();
+  const sel=$("#mOrg"); if(sel) sel.onchange=()=>{ FILT.org=sel.value; render(); };
+  document.querySelectorAll("[data-mc]").forEach(b=> b.onclick=()=>{
+    const rg = monthRange(fy, +b.dataset.mm);
+    FILT.cat = b.dataset.mc; FILT.from = rg.from; FILT.to = rg.to; FILT.q = "";
+    go("dash"); scrollToExpenses();
+  });
+  if($("#mCsv")) $("#mCsv").onclick=()=>{
+    const org = FILT.org;
+    const out = [csvLine(["รหัสหมวด","หมวดรายจ่าย"].concat(MONTHS).concat(["รวมเบิกจ่าย","งบจัดสรร","คงเหลือ"]))];
+    LEAF.forEach(c=>{
+      const m = actualMonthly(fy,c.id,org), s = m.reduce((x,v)=>x+v,0), b = budgetTotal(fy,c.id,org);
+      if(s===0 && b===0) return;
+      out.push(csvLine([c.id, c.name].concat(m.map(v=>v.toFixed(2))).concat([s.toFixed(2), b.toFixed(2), (b-s).toFixed(2)])));
+    });
+    if(out.length===1){ toast("ยังไม่มีข้อมูลให้ส่งออก",1); return; }
+    download("เบิกจ่ายรายเดือน49(1)_ปีงบ"+fy+(org? "_"+orgName(org):"")+".csv", out.join("\n"));
+    toast("ส่งออกตารางรายเดือนแล้ว");
+  };
+};
+
+/* ============================================================
+   4.5) แดชบอร์ดเปรียบเทียบรายปี
+   ============================================================ */
+const CMP = {mode:"spent"};
+const CMP_MODES = [
+  {id:"spent",  name:"เบิกจ่าย"},
+  {id:"budget", name:"งบจัดสรร"},
+  {id:"remain", name:"คงเหลือ"},
+  {id:"pct",    name:"% เบิกจ่าย"}
+];
+const yColor = i=> "var(--c"+((i%6)+1)+")";
+function cmpValue(fy, catId, org){
+  const b = budgetTotal(fy, catId, org), s = spentOf(fy, catId, org);
+  return CMP.mode==="budget"? b : CMP.mode==="remain"? b-s : CMP.mode==="pct"? pct(s,b) : s;
+}
+const cmpFmt = v=> CMP.mode==="pct"? (v>0? v.toFixed(1)+"%" : "-") : (v? money(v) : "-");
+
+/* กราฟแท่ง: งบจัดสรร vs เบิกจ่าย ของแต่ละปี */
+function barsYearSVG(years, org){
+  const W=720,H=270,L=68,R=16,T=14,B=42, iw=W-L-R, ih=H-T-B;
+  const data = years.map(fy=>({fy:fy, b:budgetTotal(fy,null,org), s:spentOf(fy,null,org)}));
+  const maxV = Math.max(1, ...data.map(d=>Math.max(d.b,d.s)));
+  const y = v=> T+ih-ih*(v/maxV);
+  const slot = iw/Math.max(1,years.length), bw = Math.min(52, slot*0.3);
+  let g="";
+  for(let k=0;k<=4;k++){ const yy=T+ih*k/4;
+    g+='<line x1="'+L+'" y1="'+yy.toFixed(1)+'" x2="'+(W-R)+'" y2="'+yy.toFixed(1)+'" stroke="var(--border)" stroke-width="1"/>'+
+       '<text x="'+(L-8)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end" font-size="10.5" fill="var(--muted)">'+short(maxV*(1-k/4))+'</text>'; }
+  data.forEach((d,i)=>{
+    const cx = L + slot*i + slot/2;
+    const x1 = cx-bw-3, x2 = cx+3;
+    g+='<rect x="'+x1.toFixed(1)+'" y="'+y(d.b).toFixed(1)+'" width="'+bw+'" height="'+(T+ih-y(d.b)).toFixed(1)+'" rx="4" fill="var(--lav2)"><title>ปีงบ '+d.fy+' งบจัดสรร '+money(d.b)+'</title></rect>'+
+       '<rect x="'+x2.toFixed(1)+'" y="'+y(d.s).toFixed(1)+'" width="'+bw+'" height="'+(T+ih-y(d.s)).toFixed(1)+'" rx="4" fill="'+yColor(i)+'"><title>ปีงบ '+d.fy+' เบิกจ่าย '+money(d.s)+'</title></rect>'+
+       '<text x="'+cx.toFixed(1)+'" y="'+(H-22)+'" text-anchor="middle" font-size="12" font-weight="700" fill="var(--text)">'+d.fy+'</text>'+
+       '<text x="'+cx.toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="10.5" fill="var(--muted)">'+pct(d.s,d.b).toFixed(1)+'%</text>';
+  });
+  return '<svg width="100%" height="270" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet" style="min-width:560px">'+g+'</svg>';
+}
+/* กราฟเส้น: เบิกจ่ายสะสมรายเดือน ทุกปีทับกัน */
+function linesYearSVG(years, org){
+  const W=720,H=280,L=68,R=16,T=14,B=34, iw=W-L-R, ih=H-T-B;
+  const series = years.map(fy=> cum(actualMonthly(fy,null,org)));
+  const maxV = Math.max(1, ...series.map(a=>Math.max.apply(null,a)));
+  const x = i=> L+iw*i/11, y = v=> T+ih-ih*(v/maxV);
+  let g="";
+  for(let k=0;k<=4;k++){ const yy=T+ih*k/4;
+    g+='<line x1="'+L+'" y1="'+yy.toFixed(1)+'" x2="'+(W-R)+'" y2="'+yy.toFixed(1)+'" stroke="var(--border)" stroke-width="1"/>'+
+       '<text x="'+(L-8)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end" font-size="10.5" fill="var(--muted)">'+short(maxV*(1-k/4))+'</text>'; }
+  MONTHS.forEach((m,i)=> g+='<text x="'+x(i).toFixed(1)+'" y="'+(H-10)+'" text-anchor="middle" font-size="10.5" fill="var(--muted)">'+m+'</text>');
+  series.forEach((arr,si)=>{
+    const d = arr.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ");
+    g+='<path d="'+d+'" fill="none" stroke="'+yColor(si)+'" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>';
+    arr.forEach((v,i)=>{ if(!v && !i) return;
+      g+='<circle cx="'+x(i).toFixed(1)+'" cy="'+y(v).toFixed(1)+'" r="3" fill="var(--card)" stroke="'+yColor(si)+'" stroke-width="2">'+
+         '<title>ปีงบ '+years[si]+' ถึง'+MONTHS_FULL[i]+' สะสม '+money(v)+'</title></circle>'; });
+  });
+  return '<svg width="100%" height="280" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet" style="min-width:620px">'+g+'</svg>';
+}
+function viewCompare(){
+  const org = FILT.org;
+  const years = fyList().filter(fy=> budgetTotal(fy,null,org)>0 || spentOf(fy,null,org)>0);
+  if(!years.length) return '<div class="card"><div class="empty"><span class="big">📈</span>'+
+    'ยังไม่มีข้อมูลให้เปรียบเทียบ<br><span style="font-size:13px">ตั้งงบประมาณหรือบันทึกค่าใช้จ่ายก่อน</span></div></div>';
+  const last = years[years.length-1], prev = years.length>1? years[years.length-2] : null;
+
+  /* --- การ์ดสรุปรายปี --- */
+  let h = '<div class="card"><div class="chead"><div><h2>ภาพรวมทุกปีงบประมาณ</h2>'+
+    '<div class="hint">'+years.length+' ปีงบ · '+(org? esc(orgName(org)) : 'ทุกหน่วยงาน')+'</div></div>'+
+    '<div class="spacer"></div>'+
+    '<div class="fybox"><label>หน่วยงาน</label><select id="cOrg">'+orgOptions(org,"ทุกหน่วยงาน")+'</select></div></div>';
+  h += '<div class="tblwrap"><table class="rt"><thead><tr><th>ปีงบ</th><th class="r">งบจัดสรร</th><th class="r">เบิกจ่าย</th>'+
+    '<th class="r">คงเหลือ</th><th class="r">% เบิกจ่าย</th><th class="r">รายการ</th><th style="min-width:120px">สัดส่วน</th></tr></thead><tbody>';
+  years.forEach((fy,i)=>{
+    const b=budgetTotal(fy,null,org), s=spentOf(fy,null,org), r=b-s, p=pct(s,b);
+    const n=DB.expenses.filter(e=> fyOf(e.date)===fy && (!org||e.orgId===org)).length;
+    h += '<tr><td data-l="ปีงบ"><b style="color:'+yColor(i)+'">■</b> <b>'+fy+'</b></td>'+
+      '<td class="r" data-l="งบจัดสรร">'+money(b)+'</td><td class="r" data-l="เบิกจ่าย">'+money(s)+'</td>'+
+      '<td class="r" data-l="คงเหลือ"'+(r<0?' style="color:var(--red)"':'')+'>'+money(r)+'</td>'+
+      '<td class="r" data-l="% เบิกจ่าย"><span class="chip '+LEVEL_META[b>0?levelOf(pct(r,b)):"ok"].chip+'">'+p.toFixed(1)+'%</span></td>'+
+      '<td class="r" data-l="รายการ">'+n+'</td>'+
+      '<td data-l="สัดส่วน"><div class="pbar '+barCls(b>0?levelOf(pct(r,b)):"ok")+'"><i style="width:'+clamp(p,0,100)+'%"></i></div></td></tr>';
+  });
+  const tb=years.reduce((s,fy)=>s+budgetTotal(fy,null,org),0), ts=years.reduce((s,fy)=>s+spentOf(fy,null,org),0);
+  h += '</tbody><tfoot><tr><td data-l="รวม">รวมทุกปี</td><td class="r" data-l="งบจัดสรร">'+money(tb)+'</td>'+
+    '<td class="r" data-l="เบิกจ่าย">'+money(ts)+'</td><td class="r" data-l="คงเหลือ">'+money(tb-ts)+'</td>'+
+    '<td class="r" data-l="%">'+pct(ts,tb).toFixed(1)+'%</td><td colspan="2"></td></tr></tfoot></table></div>';
+  h += '<div class="svgwrap" style="margin-top:14px">'+barsYearSVG(years,org)+'</div>'+
+    '<div class="legend"><span><i style="background:var(--lav2)"></i>งบจัดสรร</span>'+
+    years.map((fy,i)=>'<span><i style="background:'+yColor(i)+'"></i>เบิกจ่าย '+fy+'</span>').join("")+'</div></div>';
+
+  /* --- กราฟเส้นสะสม --- */
+  h += '<div class="card"><h2>เบิกจ่ายสะสมรายเดือน เทียบทุกปี</h2>'+
+    '<div class="hint" style="margin-bottom:8px">เรียงตามปีงบประมาณ ต.ค. → ก.ย. ดูได้ว่าปีไหนเบิกจ่ายเร็ว/ช้ากว่ากัน</div>'+
+    '<div class="svgwrap">'+linesYearSVG(years,org)+'</div>'+
+    '<div class="legend">'+years.map((fy,i)=>'<span><i style="background:'+yColor(i)+'"></i>ปีงบ '+fy+'</span>').join("")+'</div></div>';
+
+  /* --- ตารางเทียบรายหมวด --- */
+  h += '<div class="card"><div class="chead"><div><h2>เปรียบเทียบรายหมวด</h2>'+
+    '<div class="hint">'+(prev? 'คอลัมน์ท้ายเทียบปี '+last+' กับปี '+prev : 'มีข้อมูลปีเดียว')+'</div></div>'+
+    '<div class="spacer"></div>'+
+    '<div class="seg">'+CMP_MODES.map(m=>'<button data-cmode="'+m.id+'" class="'+(CMP.mode===m.id?"on":"")+'">'+m.name+'</button>').join("")+'</div>'+
+    '<button class="btn ghost sm" id="cCsv">⬇ ส่งออก</button></div>';
+  h += '<div class="tblwrap"><table><thead><tr>'+
+    '<th style="min-width:220px;position:sticky;left:0;background:var(--card);z-index:2">หมวดรายจ่าย</th>'+
+    years.map(fy=>'<th class="r" style="min-width:110px">'+fy+'</th>').join("")+
+    (prev? '<th class="r" style="min-width:120px">เปลี่ยนแปลง</th>':'')+'</tr></thead><tbody>';
+  const rowFor = (c)=>{
+    const vals = years.map(fy=> cmpValue(fy,c.id,org));
+    if(c.isLeaf && vals.every(v=>!v)) return "";
+    const bg = c.depth===0? 'background:var(--lav)' : (c.isLeaf? '' : 'background:var(--row2)');
+    const stick = c.depth===0? 'var(--lav)' : (c.isLeaf? 'var(--card)' : 'var(--row2)');
+    let s = '<tr style="'+bg+'"><td style="position:sticky;left:0;background:'+stick+';z-index:1;padding-left:'+(10+c.depth*18)+'px">'+
+      (c.depth===0? '<b>'+esc(c.name)+'</b>' : (c.depth>1?'• ':'')+esc(c.name)+(c.isLeaf?'':' <b>(กลุ่ม)</b>'))+'</td>';
+    vals.forEach(v=>{ s += '<td class="r">'+(c.depth===0? '<b>'+cmpFmt(v)+'</b>' : cmpFmt(v))+'</td>'; });
+    if(prev){
+      const a=vals[vals.length-1], b=vals[vals.length-2], d=a-b;
+      s += '<td class="r">'+(Math.abs(d)<0.005? '<span style="color:var(--muted)">—</span>'
+        : '<span class="'+(d>0?"up":"down")+'">'+(d>0?"▲ ":"▼ ")+ (CMP.mode==="pct"? Math.abs(d).toFixed(1)+"%" : money(Math.abs(d)))+
+          (CMP.mode!=="pct" && b>0? ' <span style="color:var(--muted)">('+(d>0?"+":"−")+Math.abs(d/b*100).toFixed(0)+'%)</span>':'')+'</span>')+'</td>';
+    }
+    return s+'</tr>';
+  };
+  CATFLAT.forEach(c=>{ h += rowFor(c); });
+  h += '</tbody><tfoot><tr><td style="position:sticky;left:0;background:var(--row2);z-index:1">รวมทุกหมวด</td>'+
+    years.map(fy=>'<td class="r">'+cmpFmt(cmpValue(fy,null,org))+'</td>').join("")+
+    (prev? '<td class="r"></td>':'')+'</tr></tfoot></table></div>';
+  h += '<div class="hint" style="margin-top:10px">แสดงเฉพาะหมวดที่มีตัวเลขอย่างน้อยหนึ่งปี · ▲ แดง = สูงขึ้นจากปีก่อน, ▼ เขียว = ลดลง</div></div>';
+  return h;
+}
+afterRender.compare = ()=>{
+  const sel=$("#cOrg"); if(sel) sel.onchange=()=>{ FILT.org=sel.value; render(); };
+  document.querySelectorAll("[data-cmode]").forEach(b=> b.onclick=()=>{ CMP.mode=b.dataset.cmode; render(); });
+  if($("#cCsv")) $("#cCsv").onclick=()=>{
+    const org=FILT.org;
+    const years=fyList().filter(fy=> budgetTotal(fy,null,org)>0 || spentOf(fy,null,org)>0);
+    const mode=CMP_MODES.find(m=>m.id===CMP.mode).name;
+    const out=[csvLine(["รหัสหมวด","หมวดรายจ่าย","ระดับ"].concat(years.map(String)))];
+    CATFLAT.forEach(c=>{
+      const vals=years.map(fy=> cmpValue(fy,c.id,org));
+      if(c.isLeaf && vals.every(v=>!v)) return;
+      out.push(csvLine([c.id, c.name, c.depth===0?"หมวดใหญ่":(c.isLeaf?"รายการ":"กลุ่ม")]
+        .concat(vals.map(v=> CMP.mode==="pct"? v.toFixed(2) : v.toFixed(2)))));
+    });
+    out.push(csvLine(["","รวมทุกหมวด",""].concat(years.map(fy=> cmpValue(fy,null,org).toFixed(2)))));
+    download("เทียบรายปี49(1)_"+mode+(org? "_"+orgName(org):"")+".csv", out.join("\n"));
+    toast("ส่งออกตารางเปรียบเทียบแล้ว");
+  };
+};
+
+/* ============================================================
+   5) หมวดรายจ่าย — เพิ่ม / แก้ไข / ลบ / สลับลำดับ
+   ============================================================ */
+function nextCatCode(parentId){
+  const taken = {}; DB.cats.forEach(c=> taken[normalize(c.id)]=1);
+  if(!parentId){
+    for(let i=0;i<26;i++){ const c=String.fromCharCode(65+i); if(!taken[normalize(c)]) return c; }
+    return "G"+Math.floor(Math.random()*900+100);
+  }
+  const p = CATMAP[parentId];
+  if(p && p.depth===0){
+    for(let i=1;i<100;i++){ const c=parentId+String(i).padStart(2,"0"); if(!taken[normalize(c)]) return c; }
+  }
+  for(let i=1;i<200;i++){ const c=parentId+"-"+i; if(!taken[normalize(c)]) return c; }
+  return parentId+"-"+uid();
+}
+function viewCat(){
+  const fy = FY();
+  let h = '<div class="card"><div class="chead"><div><h2>หมวดรายจ่าย</h2>'+
+    '<div class="hint">เพิ่ม แก้ไข ลบ และสลับลำดับได้ · หมวดที่ไม่มีรายการย่อยคือหมวดที่บันทึกเงินได้</div></div>'+
+    '<div class="spacer"></div><button class="btn" id="catAddTop">+ เพิ่มหมวดใหญ่</button></div>';
+  h += '<div class="tblwrap"><table><thead><tr><th style="min-width:250px">ชื่อหมวด</th><th>รหัส</th><th>ประเภท</th>'+
+    '<th class="r">รายการ (ปี '+fy+')</th><th class="r">เบิกจ่าย (ปี '+fy+')</th><th style="width:230px"></th></tr></thead><tbody>';
+  CATFLAT.forEach(c=>{
+    const u = catUsage(c.id);
+    const nExp = DB.expenses.filter(e=> fyOf(e.date)===fy && subtreeIds(c.id).indexOf(e.catId)>=0).length;
+    const sp = spentOf(fy, c.id);
+    const bg = c.depth===0? 'background:var(--lav)' : (c.isLeaf? '' : 'background:var(--row2)');
+    h += '<tr style="'+bg+'"><td style="padding-left:'+(10+c.depth*20)+'px">'+
+      (c.depth===0? '<b>'+esc(c.name)+'</b>' : (c.depth>1? '• ':'')+esc(c.name)+(c.isLeaf?'':' <b>(กลุ่ม)</b>'))+'</td>'+
+      '<td><span class="chip mut">'+esc(c.id)+'</span></td>'+
+      '<td>'+(c.depth===0? 'หมวดใหญ่' : c.isLeaf? '<span class="chip g">บันทึกเงินได้</span>' : 'กลุ่มย่อย')+'</td>'+
+      '<td class="r">'+(nExp||'-')+'</td><td class="r">'+(sp? money(sp):'-')+'</td>'+
+      '<td class="acts">'+
+        '<button data-cup="'+c.id+'" title="เลื่อนขึ้น">▲</button>'+
+        '<button data-cdn="'+c.id+'" title="เลื่อนลง">▼</button>'+
+        (c.depth<2? '<button data-cadd="'+c.id+'" title="เพิ่มรายการย่อยภายใต้หมวดนี้">+ ย่อย</button>':'')+
+        '<button data-cedit="'+c.id+'">แก้ไข</button>'+
+        '<button class="del" data-cdel="'+c.id+'"'+(u.expenses||u.budgets||u.children? ' title="มีข้อมูลผูกอยู่"':'')+'>ลบ</button>'+
+      '</td></tr>';
+  });
+  h += '</tbody></table></div>';
+  h += '<div class="hint" style="margin-top:10px">💡 การเพิ่มรายการย่อยให้หมวดที่บันทึกเงินได้ จะทำให้หมวดนั้นกลายเป็น “กลุ่ม” '+
+       'และยอดของกลุ่มจะมาจากผลรวมของรายการย่อย จึงทำได้เฉพาะหมวดที่ยังไม่มีข้อมูลผูกอยู่</div>'+
+       '<div class="hint">🔒 ลบหมวดได้เฉพาะหมวดที่ไม่มีรายการค่าใช้จ่าย ไม่มีงบจัดสรร และไม่มีรายการย่อย</div></div>';
+  return h;
+}
+function catForm(cat, parentId){
+  const isNew = !cat;
+  const p = isNew? parentId : (cat.parent||"");
+  const c = cat || {id:nextCatCode(p), name:"", parent:p};
+  const where = p? ('อยู่ภายใต้ <b>'+esc(catName(p))+'</b>') : 'เป็นหมวดใหญ่ระดับบนสุด';
+  const body =
+    '<div class="okbox">'+where+'</div>'+
+    '<div class="field"><label class="f">ชื่อหมวด *</label><input type="text" id="c_name" value="'+esc(c.name)+'" placeholder="เช่น ค่าวัสดุคอมพิวเตอร์"></div>'+
+    '<div class="field"><label class="f">รหัสหมวด * <span style="color:var(--muted)">(ใช้อ้างอิงตอนนำเข้า CSV)</span></label>'+
+      '<input type="text" id="c_code" value="'+esc(c.id)+'"></div>'+
+    (isNew? '' : '<div class="hint">การเปลี่ยนรหัสจะปรับรายการค่าใช้จ่ายและงบจัดสรรที่อ้างถึงหมวดนี้ให้อัตโนมัติ</div>');
+  openModal(isNew? "เพิ่มหมวดรายจ่าย" : "แก้ไขหมวดรายจ่าย", body, null, ()=>{
+    const name = $("#c_name").value.trim(), code = $("#c_code").value.trim();
+    if(!name){ toast("กรุณากรอกชื่อหมวด",1); return false; }
+    if(!code){ toast("กรุณากรอกรหัสหมวด",1); return false; }
+    if(/[,"\n]/.test(code)){ toast("รหัสหมวดห้ามมีเครื่องหมาย , หรือ \"",1); return false; }
+    const dup = DB.cats.some(x=> normalize(x.id)===normalize(code) && (isNew || x.id!==cat.id));
+    if(dup){ toast("รหัส "+code+" ถูกใช้แล้ว",1); return false; }
+    if(isNew){
+      DB.cats.push({id:code, parent:p, name:name});
+      toast("เพิ่มหมวดแล้ว");
+    } else {
+      const old = cat.id;
+      const rec = DB.cats.find(x=>x.id===old);
+      rec.name = name;
+      if(code!==old){
+        rec.id = code;
+        DB.cats.forEach(x=>{ if(x.parent===old) x.parent=code; });
+        DB.expenses.forEach(e=>{ if(e.catId===old) e.catId=code; });
+        DB.budgets.forEach(b=>{ if(b.catId===old) b.catId=code; });
+        if(FILT.cat===old) FILT.cat=code;
+      }
+      toast("แก้ไขหมวดแล้ว");
+    }
+    buildCats(); save(); render(); return true;
+  });
+}
+function moveCat(id, dir){
+  const me = DB.cats.find(c=>c.id===id); if(!me) return;
+  const sibs = DB.cats.filter(c=>(c.parent||"")===(me.parent||""));
+  const k = sibs.indexOf(me), t = k+dir;
+  if(t<0 || t>=sibs.length){ toast("อยู่ปลายสุดแล้ว",1); return; }
+  const i = DB.cats.indexOf(me), j = DB.cats.indexOf(sibs[t]);
+  DB.cats[i] = sibs[t]; DB.cats[j] = me;
+  buildCats(); save(); render();
+}
+afterRender.cat = ()=>{
+  if($("#catAddTop")) $("#catAddTop").onclick = ()=> catForm(null, "");
+  document.querySelectorAll("[data-cadd]").forEach(b=> b.onclick=()=>{
+    const id=b.dataset.cadd, u=catUsage(id), node=CATMAP[id];
+    if(node.isLeaf && (u.expenses||u.budgets)){
+      toast("หมวดนี้มีข้อมูลอยู่แล้ว ("+u.expenses+" รายการ / งบ "+u.budgets+" รายการ) จึงเปลี่ยนเป็นกลุ่มไม่ได้",1); return;
+    }
+    catForm(null, id);
+  });
+  document.querySelectorAll("[data-cedit]").forEach(b=> b.onclick=()=>
+    catForm(DB.cats.find(c=>c.id===b.dataset.cedit), null));
+  document.querySelectorAll("[data-cup]").forEach(b=> b.onclick=()=> moveCat(b.dataset.cup,-1));
+  document.querySelectorAll("[data-cdn]").forEach(b=> b.onclick=()=> moveCat(b.dataset.cdn,1));
+  document.querySelectorAll("[data-cdel]").forEach(b=> b.onclick=()=>{
+    const id=b.dataset.cdel, u=catUsage(id);
+    if(u.children){ toast("ลบไม่ได้ — มีรายการย่อย "+u.children+" รายการ ให้ลบรายการย่อยก่อน",1); return; }
+    if(u.expenses || u.budgets){
+      toast("ลบไม่ได้ — มีค่าใช้จ่าย "+u.expenses+" รายการ และงบจัดสรร "+u.budgets+" รายการผูกอยู่",1); return;
+    }
+    confirmBox("ยืนยันการลบหมวด","ลบหมวด <b>"+esc(catName(id))+"</b> (รหัส "+esc(id)+")?","ลบหมวด",()=>{
+      DB.cats = DB.cats.filter(c=>c.id!==id);
+      if(FILT.cat===id) FILT.cat="";
+      buildCats(); save(); toast("ลบหมวดแล้ว"); render();
+    });
+  });
+};
+
+/* ============================================================
+   6) หน่วยงาน
+   ============================================================ */
+function viewOrg(){
+  const fy = FY();
+  let h = '<div class="card"><div class="chead"><div><h2>ข้อมูลหน่วยงาน</h2>'+
+    '<div class="hint">หน่วยงานคือระดับที่ผูกกับงบประมาณจัดสรร (ปีงบ × หน่วยงาน × หมวด)</div></div>'+
+    '<div class="spacer"></div><button class="btn" id="oAdd">+ เพิ่มหน่วยงาน</button></div>';
+  if(!DB.orgs.length){ h += '<div class="empty"><span class="big">🏢</span>ยังไม่มีหน่วยงาน</div></div>'; return h; }
+  h += '<div class="tblwrap"><table class="rt"><thead><tr><th>รหัส</th><th>ชื่อหน่วยงาน</th><th class="r">งบจัดสรร (ปี '+fy+')</th>'+
+    '<th class="r">เบิกจ่าย</th><th class="r">คงเหลือ</th><th class="r">%</th><th></th></tr></thead><tbody>';
+  DB.orgs.forEach(o=>{
+    const b=budgetTotal(fy,null,o.id), s=spentOf(fy,null,o.id), r=b-s;
+    const lv = b>0? levelOf(pct(r,b)) : "ok";
+    h += '<tr><td data-l="รหัส">'+esc(o.code||"-")+'</td>'+
+      '<td data-l="ชื่อหน่วยงาน"><b>'+esc(o.name)+'</b>'+(o.note?'<br><span class="hint">'+esc(o.note)+'</span>':'')+
+        (b>0?' <span class="chip '+LEVEL_META[lv].chip+'">'+LEVEL_META[lv].txt+'</span>':'')+'</td>'+
+      '<td class="r" data-l="งบจัดสรร">'+money(b)+'</td><td class="r" data-l="เบิกจ่าย">'+money(s)+'</td>'+
+      '<td class="r" data-l="คงเหลือ"'+(r<0?' style="color:var(--red)"':'')+'>'+money(r)+'</td>'+
+      '<td class="r" data-l="%">'+pct(s,b).toFixed(1)+'%</td>'+
+      '<td class="acts"><button data-obud="'+o.id+'">ตั้งงบ</button><button data-oedit="'+o.id+'">แก้ไข</button>'+
+      '<button class="del" data-odel="'+o.id+'">ลบ</button></td></tr>';
+  });
+  h += '</tbody><tfoot><tr><td colspan="2" data-l="รวม">รวม</td><td class="r" data-l="งบจัดสรร">'+money(budgetTotal(fy))+'</td>'+
+    '<td class="r" data-l="เบิกจ่าย">'+money(spentOf(fy))+'</td><td class="r" data-l="คงเหลือ">'+money(budgetTotal(fy)-spentOf(fy))+'</td>'+
+    '<td class="r" data-l="%">'+pct(spentOf(fy),budgetTotal(fy)).toFixed(1)+'%</td><td></td></tr></tfoot></table></div></div>';
+  return h;
+}
+function orgForm(og){
+  const o = og || {code:"", name:"", note:""};
+  const body =
+    '<div class="grid2">'+
+      '<div class="field"><label class="f">รหัส/ตัวย่อ</label><input type="text" id="o_code" value="'+esc(o.code)+'" placeholder="เช่น ฝศย."></div>'+
+      '<div class="field"><label class="f">ชื่อหน่วยงาน *</label><input type="text" id="o_name" value="'+esc(o.name)+'"></div>'+
+    '</div>'+
+    '<div class="field"><label class="f">หมายเหตุ</label><textarea id="o_note" rows="2">'+esc(o.note)+'</textarea></div>';
+  openModal(og? "แก้ไขหน่วยงาน":"เพิ่มหน่วยงาน", body, null, ()=>{
+    const name=$("#o_name").value.trim();
+    if(!name){ toast("กรุณากรอกชื่อหน่วยงาน",1); return false; }
+    const rec={id: og? og.id : uid(), code:$("#o_code").value.trim(), name:name, note:$("#o_note").value.trim()};
+    if(og){ const i=DB.orgs.findIndex(x=>x.id===og.id); DB.orgs[i]=rec; toast("แก้ไขหน่วยงานแล้ว"); }
+    else { DB.orgs.push(rec); toast("เพิ่มหน่วยงานแล้ว"); }
+    save(); render(); return true;
+  });
+}
+afterRender.org = ()=>{
+  if($("#oAdd")) $("#oAdd").onclick=()=>orgForm(null);
+  document.querySelectorAll("[data-oedit]").forEach(b=> b.onclick=()=> orgForm(orgById(b.dataset.oedit)));
+  document.querySelectorAll("[data-obud]").forEach(b=> b.onclick=()=>{ BUDGET_ORG=b.dataset.obud; go("budget"); });
+  document.querySelectorAll("[data-odel]").forEach(b=> b.onclick=()=>{
+    const o=orgById(b.dataset.odel); if(!o) return;
+    const ne=DB.expenses.filter(e=>e.orgId===o.id).length, nb=DB.budgets.filter(x=>x.orgId===o.id).length;
+    if(DB.orgs.length<=1){ toast("ต้องมีหน่วยงานอย่างน้อย 1 หน่วยงาน",1); return; }
+    confirmBox("ยืนยันการลบหน่วยงาน","ลบ <b>"+esc(o.name)+"</b>?<br>จะลบงบจัดสรร "+nb+" รายการ และรายการค่าใช้จ่าย "+ne+" รายการที่ผูกอยู่ทั้งหมด<br>การลบไม่สามารถย้อนกลับได้",
+      "ลบหน่วยงานและข้อมูลที่ผูกอยู่", ()=>{
+        DB.orgs=DB.orgs.filter(x=>x.id!==o.id);
+        DB.budgets=DB.budgets.filter(x=>x.orgId!==o.id);
+        DB.expenses=DB.expenses.filter(x=>x.orgId!==o.id);
+        save(); toast("ลบหน่วยงานแล้ว"); render();
+      });
+  });
+};
+
+/* ============================================================
+   7) CSV เข้า/ออก
+   ============================================================ */
+function csvCell(v){
+  v = v==null? "" : String(v);
+  return /[",\n\r]/.test(v)? '"'+v.replace(/"/g,'""')+'"' : v;
+}
+const csvLine = arr=> arr.map(csvCell).join(",");
+function parseCSV(text){
+  text = text.replace(/^﻿/,"").replace(/\r\n?/g,"\n");
+  const rows=[]; let row=[], cur="", q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(q){
+      if(c==='"'){ if(text[i+1]==='"'){ cur+='"'; i++; } else q=false; }
+      else cur+=c;
+    } else if(c==='"') q=true;
+    else if(c===","){ row.push(cur); cur=""; }
+    else if(c==="\n"){ row.push(cur); rows.push(row); row=[]; cur=""; }
+    else cur+=c;
+  }
+  if(cur!=="" || row.length){ row.push(cur); rows.push(row); }
+  return rows.filter(r=> r.some(x=>String(x).trim()!==""));
+}
+const EXP_HEAD = ["วันที่","หน่วยงาน","รหัสหมวด","ชื่อหมวด","จำนวนเงิน","เลขที่เอกสาร","หมายเหตุ"];
+const BUD_HEAD = ["ปีงบ","หน่วยงาน","รหัสหมวด","ชื่อหมวด","วงเงิน"];
+function exportExpensesCSV(){
+  const rows = filteredExpenses();
+  if(!rows.length){ toast("ไม่มีรายการให้ส่งออก",1); return; }
+  const out = [csvLine(EXP_HEAD)].concat(rows.map(e=> csvLine([
+    e.date, orgName(e.orgId), e.catId, catName(e.catId),
+    (+e.amount||0).toFixed(2), e.docNo||"", e.note||""])));
+  download("ค่าใช้จ่าย49(1)_ปีงบ"+FY()+".csv", out.join("\n"));
+  toast("ส่งออก "+rows.length+" รายการแล้ว");
+}
+function exportBudgetCSV(){
+  const fy=FY();
+  const out=[csvLine(BUD_HEAD)];
+  DB.orgs.forEach(o=> LEAF.forEach(c=>{ const b=budgetOf(fy,c.id,o.id);
+    if(b>0) out.push(csvLine([fy, orgName(o.id), c.id, c.name, b.toFixed(2)])); }));
+  if(out.length===1){ toast("ยังไม่มีงบจัดสรรให้ส่งออก",1); return; }
+  download("งบจัดสรร49(1)_ปีงบ"+fy+".csv", out.join("\n")); toast("ส่งออกงบจัดสรรแล้ว");
+}
+function templateExpense(){
+  const o = DB.orgs[0]? orgName(DB.orgs[0].id) : "ฝศย. ฝ่ายเศรษฐกิจยาง";
+  const d = new Date().toISOString().slice(0,10);
+  download("แม่แบบ_ค่าใช้จ่าย.csv",[csvLine(EXP_HEAD),
+    csvLine([d, o, "A01", "ค่าใช้จ่ายเดินทาง", "1500.00", "บก.001/2569", "ตัวอย่างแถวข้อมูล"]),
+    csvLine([d, o, "B01", "ค่าไฟฟ้า", "8200.50", "", ""])].join("\n"));
+}
+function templateBudget(){
+  const o = DB.orgs[0]? orgName(DB.orgs[0].id) : "ฝศย. ฝ่ายเศรษฐกิจยาง";
+  download("แม่แบบ_งบจัดสรร.csv",[csvLine(BUD_HEAD),
+    csvLine([FY(), o, "A01", "ค่าใช้จ่ายเดินทาง", "50000.00"]),
+    csvLine([FY(), o, "A03-1", "ค่าจ้างเหมาบริการรักษาความปลอดภัย", "240000.00"])].join("\n"));
+}
+/* จับคู่หมวด: รับทั้งรหัสและชื่อ */
+const normalize = s=> String(s||"").replace(/\s+/g,"").replace(/[่้๊๋็]/g,"").toLowerCase();
+function findCat(code, name){
+  const a = CAT_LOOKUP[normalize(code)]; if(a) return a;
+  const b = CAT_LOOKUP[normalize(name)]; if(b) return b;
+  const n = normalize(name);
+  if(n){ const hit = LEAF.find(c=> normalize(c.name).indexOf(n)>=0 || n.indexOf(normalize(c.name))>=0); if(hit) return hit.id; }
+  return null;
+}
+function findOrg(txt){
+  const n = normalize(txt); if(!n) return null;
+  return (DB.orgs.find(o=> normalize(o.code)===n || normalize(o.name)===n ||
+    normalize((o.code||"")+" "+o.name)===n) || null);
+}
+function parseAmount(s){ const v=parseFloat(String(s||"").replace(/[, ฿]/g,"")); return isNaN(v)? NaN : v; }
+function parseDateCell(s){
+  s = String(s||"").trim(); if(!s) return null;
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if(m){ let y=+m[1]; if(y>2400) y-=543; return y+"-"+String(+m[2]).padStart(2,"0")+"-"+String(+m[3]).padStart(2,"0"); }
+  m = s.match(/^(\d{1,2})[\/\.](\d{1,2})[\/\.](\d{4})$/);
+  if(m){ let y=+m[3]; if(y>2400) y-=543; return y+"-"+String(+m[2]).padStart(2,"0")+"-"+String(+m[1]).padStart(2,"0"); }
+  return null;
+}
+/* จับคอลัมน์จากหัวตาราง เพื่อให้ไฟล์รูปแบบเก่า (มีคอลัมน์โครงการ) ยังนำเข้าได้ */
+const HEAD_ALIAS = {
+  date:["วันที่"], org:["หน่วยงาน"], code:["รหัสหมวด","รหัส"], cat:["ชื่อหมวด","หมวด","หมวดรายจ่าย"],
+  amount:["จำนวนเงิน","วงเงิน","งบจัดสรร","จำนวน"], doc:["เลขที่เอกสาร","เลขที่"],
+  note:["หมายเหตุ"], fy:["ปีงบ","ปีงบประมาณ"]
+};
+function headIndex(head, fallback){
+  const idx = {};
+  Object.keys(HEAD_ALIAS).forEach(k=>{
+    idx[k] = head.findIndex(h=> HEAD_ALIAS[k].some(a=> normalize(h)===normalize(a)));
+  });
+  Object.keys(fallback).forEach(k=>{ if(idx[k]<0) idx[k]=fallback[k]; });
+  return idx;
+}
+function importCSV(kind, text){
+  const rows = parseCSV(text);
+  if(rows.length<2){ toast("ไฟล์ CSV ไม่มีข้อมูล",1); return; }
+  const head = rows[0].map(h=>String(h).trim());
+  const body = rows.slice(1);
+  const IX = kind==="expense"
+    ? headIndex(head, {date:0, org:1, code:2, cat:3, amount:4, doc:5, note:6})
+    : headIndex(head, {fy:0, org:1, code:2, cat:3, amount:4});
+  const at = (r,k)=> IX[k]>=0? r[IX[k]] : "";
+  const ok=[], bad=[], newOrgs=new Set();
+  body.forEach((r,idx)=>{
+    const line = idx+2;
+    if(kind==="expense"){
+      const date=parseDateCell(at(r,"date")), orgTxt=String(at(r,"org")||"").trim();
+      const cat=findCat(at(r,"code"), at(r,"cat")), amt=parseAmount(at(r,"amount"));
+      const errs=[];
+      if(!date) errs.push("วันที่ไม่ถูกต้อง");
+      if(!orgTxt) errs.push("ไม่ระบุหน่วยงาน");
+      if(!cat) errs.push("ไม่รู้จักหมวด “"+(at(r,"code")||at(r,"cat")||"")+"”");
+      if(isNaN(amt)||amt<=0) errs.push("จำนวนเงินไม่ถูกต้อง");
+      if(errs.length){ bad.push({line:line, why:errs.join(" · ")}); return; }
+      if(!findOrg(orgTxt)) newOrgs.add(orgTxt);
+      const doc=String(at(r,"doc")||"").trim();
+      const dup = DB.expenses.some(e=> e.date===date && e.catId===cat && Math.abs((+e.amount||0)-amt)<0.005 &&
+        normalize(e.docNo)===normalize(doc));
+      ok.push({date:date, orgTxt:orgTxt, catId:cat, amount:Math.round(amt*100)/100, docNo:doc,
+        note:String(at(r,"note")||"").trim(), dup:dup, line:line});
+    } else {
+      const fy=parseInt(String(at(r,"fy")).trim(),10), orgTxt=String(at(r,"org")||"").trim();
+      const cat=findCat(at(r,"code"),at(r,"cat")), amt=parseAmount(at(r,"amount"));
+      const errs=[];
+      if(!(fy>2500&&fy<2700)) errs.push("ปีงบไม่ถูกต้อง");
+      if(!orgTxt) errs.push("ไม่ระบุหน่วยงาน");
+      if(!cat) errs.push("ไม่รู้จักหมวด “"+(at(r,"code")||at(r,"cat")||"")+"”");
+      if(isNaN(amt)) errs.push("วงเงินไม่ถูกต้อง");
+      if(errs.length){ bad.push({line:line, why:errs.join(" · ")}); return; }
+      if(!findOrg(orgTxt)) newOrgs.add(orgTxt);
+      ok.push({fy:fy, orgTxt:orgTxt, catId:cat, amount:Math.round(amt*100)/100, line:line});
+    }
+  });
+  const dupN = ok.filter(x=>x.dup).length;
+  let body2 = '<div class="'+(ok.length?"okbox":"warnbox")+'"><b>ตรวจไฟล์แล้ว</b><br>'+
+    'นำเข้าได้ <b>'+ok.length+'</b> แถว'+(bad.length? ' · ผิดพลาด <b>'+bad.length+'</b> แถว':'')+
+    (dupN? ' · ซ้ำกับข้อมูลเดิม <b>'+dupN+'</b> แถว':'')+
+    '<br><span style="color:var(--muted)">หัวตาราง: '+esc(head.join(" | "))+'</span></div>';
+  if(newOrgs.size) body2 += '<div class="warnbox">จะสร้างหน่วยงานใหม่ '+newOrgs.size+' รายการ: <b>'+esc([...newOrgs].join(", "))+'</b></div>';
+  if(bad.length) body2 += '<div class="tblwrap" style="max-height:180px;overflow:auto"><table><thead><tr><th>บรรทัด</th><th>เหตุผลที่ข้าม</th></tr></thead><tbody>'+
+    bad.slice(0,60).map(b=>'<tr><td>'+b.line+'</td><td>'+esc(b.why)+'</td></tr>').join("")+'</tbody></table></div>';
+  if(dupN) body2 += '<div class="field" style="margin-top:10px"><label><input type="checkbox" id="imSkipDup" checked style="width:auto"> ข้ามแถวที่ซ้ำกับข้อมูลเดิม ('+dupN+' แถว)</label></div>';
+  if(ok.length && kind==="expense") body2 += '<div class="hint">ตัวอย่าง 5 แถวแรก: '+
+    ok.slice(0,5).map(x=> esc(thDate(x.date)+" · "+catName(x.catId)+" · "+money(x.amount))).join("<br>")+'</div>';
+
+  openModal("ตรวจก่อนนำเข้า "+(kind==="expense"?"ค่าใช้จ่าย":"งบจัดสรร"), body2,
+    '<button class="btn ghost" data-close="1">ยกเลิก</button>'+(ok.length? '<button class="btn" data-ok="1">นำเข้า '+ok.length+' แถว</button>':''),
+    ()=>{
+      if(!ok.length) return true;
+      const skipDup = $("#imSkipDup")? $("#imSkipDup").checked : true;
+      const orgIdOf = txt=>{ let o=findOrg(txt); if(!o){ o={id:uid(), code:"", name:txt, note:"นำเข้าจาก CSV"}; DB.orgs.push(o); } return o.id; };
+      let n=0;
+      ok.forEach(x=>{
+        if(kind==="expense"){
+          if(x.dup && skipDup) return;
+          DB.expenses.push({id:uid(), date:x.date, orgId:orgIdOf(x.orgTxt),
+            catId:x.catId, amount:x.amount, docNo:x.docNo, note:x.note}); n++;
+        } else { setBudget(x.fy, x.catId, orgIdOf(x.orgTxt), x.amount); n++; }
+      });
+      save(); toast("นำเข้าสำเร็จ "+n+" แถว"); render(); return true;
+    });
+}
+function pickFile(accept, cb){
+  const inp=document.createElement("input"); inp.type="file"; inp.accept=accept;
+  inp.onchange=()=>{ const f=inp.files[0]; if(!f) return;
+    const r=new FileReader(); r.onload=()=>cb(String(r.result), f.name); r.readAsText(f,"utf-8"); };
+  inp.click();
+}
+
+/* ============================================================
+   8) ตั้งค่า
+   ============================================================ */
+function viewSetting(){
+  const t=DB.settings.thresholds;
+  let h = '<div class="card"><h2>เกณฑ์สีสถานะงบคงเหลือ</h2>'+
+    '<div class="hint" style="margin-bottom:12px">ใช้ระบายสีช่อง “สถานะ” และแถบความคืบหน้าในหน้าภาพรวม งบประมาณ และรายเดือน '+
+    'ตาม % ของงบคงเหลือในหมวด × หน่วยงาน</div>'+
+    '<div class="grid3">'+
+      '<div class="field"><label class="f">🔴 วิกฤต — คงเหลือน้อยกว่า (%)</label><input type="number" id="t_crit" value="'+t.crit+'" min="0" max="100"></div>'+
+      '<div class="field"><label class="f">🟠 เตือน — คงเหลือน้อยกว่า (%)</label><input type="number" id="t_warn" value="'+t.warn+'" min="0" max="100"></div>'+
+      '<div class="field"><label class="f">🟡 เฝ้าระวัง — คงเหลือน้อยกว่า (%)</label><input type="number" id="t_watch" value="'+t.watch+'" min="0" max="100"></div>'+
+    '</div><button class="btn" id="tSave">บันทึกเกณฑ์</button></div>';
+
+  h += '<div class="card"><h2>นำเข้า / ส่งออก CSV</h2>'+
+    '<div class="hint" style="margin-bottom:12px">ไฟล์เป็น UTF-8 เปิดด้วย Excel ได้ · ส่งออกไปแก้แล้วนำเข้ากลับได้ด้วยรูปแบบเดียวกัน</div>'+
+    '<div class="grid2">'+
+      '<div><div style="font-weight:600;margin-bottom:6px">🧾 รายการค่าใช้จ่าย</div>'+
+        '<div class="hint" style="margin-bottom:8px">คอลัมน์: '+EXP_HEAD.join(" | ")+'</div>'+
+        '<button class="btn ghost sm" id="csTplE">⬇ ดาวน์โหลดแม่แบบ</button> '+
+        '<button class="btn sm" id="csImpE">⬆ นำเข้า CSV</button> '+
+        '<button class="btn ghost sm" id="csExpE">⬇ ส่งออกปีงบ '+FY()+'</button></div>'+
+      '<div><div style="font-weight:600;margin-bottom:6px">💰 งบประมาณจัดสรร</div>'+
+        '<div class="hint" style="margin-bottom:8px">คอลัมน์: '+BUD_HEAD.join(" | ")+'</div>'+
+        '<button class="btn ghost sm" id="csTplB">⬇ ดาวน์โหลดแม่แบบ</button> '+
+        '<button class="btn sm" id="csImpB">⬆ นำเข้า CSV</button> '+
+        '<button class="btn ghost sm" id="csExpB">⬇ ส่งออกปีงบ '+FY()+'</button></div>'+
+    '</div>'+
+    '<div class="hint" style="margin-top:12px">📌 ช่อง <b>รหัสหมวด</b> ใส่ได้ทั้งรหัส (เช่น A03-1) หรือชื่อหมวดเต็ม · วันที่รับทั้ง 2569-10-15 และ 15/10/2569</div></div>';
+
+  h += '<div class="card"><h2>สำรอง / กู้คืนข้อมูลทั้งหมด</h2>'+
+    '<div class="hint" style="margin-bottom:12px">ข้อมูลเก็บอยู่ในเครื่องนี้เท่านั้น (localStorage) แนะนำให้สำรองเป็นไฟล์ JSON เป็นระยะ</div>'+
+    '<button class="btn" id="bkSave">⬇ สำรองข้อมูล (JSON)</button> '+
+    '<button class="btn ghost" id="bkLoad">⬆ กู้คืนจากไฟล์</button> '+
+    '<button class="btn ghost danger" id="bkReset" style="color:var(--red)">🗑 ล้างข้อมูลทั้งหมด</button></div>';
+
+  const fy=FY();
+  h += '<div class="card"><h2>สรุปข้อมูลในระบบ</h2><div class="tblwrap" style="margin-top:8px"><table class="rt"><tbody>'+
+    '<tr><td data-l="หน่วยงาน">หน่วยงาน</td><td class="r">'+DB.orgs.length+' หน่วยงาน</td></tr>'+
+    '<tr><td data-l="หมวด">หมวดรายจ่าย</td><td class="r">'+LEAF.length+' หมวดที่บันทึกเงินได้ · '+GROUPS.length+' หมวดใหญ่</td></tr>'+
+    '<tr><td data-l="ค่าใช้จ่าย">รายการค่าใช้จ่ายทั้งหมด</td><td class="r">'+DB.expenses.length+' รายการ</td></tr>'+
+    '<tr><td data-l="ปีงบ">ปีงบที่มีข้อมูล</td><td class="r">'+fyList().join(", ")+'</td></tr>'+
+    '<tr><td data-l="งบปีนี้">งบจัดสรรปี '+fy+'</td><td class="r">'+money(budgetTotal(fy))+' บาท</td></tr>'+
+    '<tr><td data-l="เบิกจ่ายปีนี้">เบิกจ่ายปี '+fy+'</td><td class="r">'+money(spentOf(fy))+' บาท</td></tr>'+
+    '</tbody></table></div>'+
+    '<div class="hint" style="margin-top:10px">เวอร์ชันข้อมูล v'+DB.v+' · แก้ไขหมวดรายจ่ายได้ที่เมนู “หมวด”</div></div>';
+  return h;
+}
+afterRender.setting = ()=>{
+  $("#tSave").onclick=()=>{
+    const c=+$("#t_crit").value, w=+$("#t_warn").value, wa=+$("#t_watch").value;
+    if(!(c>=0&&w>=0&&wa>=0)){ toast("กรอกตัวเลข 0–100",1); return; }
+    if(!(c<=w && w<=wa)){ toast("ต้องเรียง วิกฤต ≤ เตือน ≤ เฝ้าระวัง",1); return; }
+    DB.settings.thresholds={crit:c,warn:w,watch:wa}; save(); toast("บันทึกเกณฑ์แล้ว"); render();
+  };
+  $("#csTplE").onclick=templateExpense;
+  $("#csTplB").onclick=templateBudget;
+  $("#csExpE").onclick=exportExpensesCSV;
+  $("#csExpB").onclick=exportBudgetCSV;
+  $("#csImpE").onclick=()=> pickFile(".csv,text/csv", txt=> importCSV("expense", txt));
+  $("#csImpB").onclick=()=> pickFile(".csv,text/csv", txt=> importCSV("budget", txt));
+  $("#bkSave").onclick=()=>{
+    download("สำรองข้อมูล49(1)_"+new Date().toISOString().slice(0,10)+".json", JSON.stringify(DB,null,1), "application/json");
+    toast("สำรองข้อมูลแล้ว");
+  };
+  $("#bkLoad").onclick=()=> pickFile(".json,application/json", txt=>{
+    let d; try{ d=JSON.parse(txt); }catch(e){ toast("ไฟล์ JSON ไม่ถูกต้อง",1); return; }
+    if(!d || !Array.isArray(d.expenses)){ toast("ไฟล์นี้ไม่ใช่ไฟล์สำรองของระบบ",1); return; }
+    confirmBox("กู้คืนข้อมูล","ข้อมูลปัจจุบันทั้งหมดจะถูกแทนที่ด้วยไฟล์สำรอง<br>"+
+      "(หน่วยงาน "+(d.orgs||[]).length+" · ค่าใช้จ่าย "+d.expenses.length+" รายการ)",
+      "กู้คืนข้อมูล", ()=>{ DB=Object.assign(blankDB(),d); localStorage.setItem(KEY,JSON.stringify(DB)); load(); toast("กู้คืนข้อมูลแล้ว"); render(); });
+  });
+  $("#bkReset").onclick=()=> confirmBox("ล้างข้อมูลทั้งหมด",
+    "ลบข้อมูลทุกอย่างในเครื่องนี้ (หน่วยงาน โครงการ งบประมาณ แผน และค่าใช้จ่าย "+DB.expenses.length+" รายการ)<br><b>ไม่สามารถย้อนกลับได้</b> — แนะนำให้สำรองข้อมูลก่อน",
+    "ล้างข้อมูลทั้งหมด", ()=>{ localStorage.removeItem(KEY); load(); seedOrgs(); toast("ล้างข้อมูลแล้ว"); go("dash"); });
+};
+
+/* ============================================================
+   เริ่มระบบ
+   ============================================================ */
+/* ---------- ปีงบประมาณ ---------- */
+function addFyForm(){
+  const suggest = Math.max.apply(null, fyList().concat([FY_NOW])) + 1;
+  openModal("เพิ่มปีงบประมาณ",
+    '<div class="field"><label class="f">ปีงบประมาณ (พ.ศ.) *</label>'+
+    '<input type="number" id="fy_new" value="'+suggest+'" min="2500" max="2699"></div>'+
+    '<div class="hint">ปีงบ '+suggest+' นับตั้งแต่ 1 ต.ค. '+(suggest-1)+' ถึง 30 ก.ย. '+suggest+'</div>',
+    null, ()=>{
+      const y = parseInt($("#fy_new").value,10);
+      if(!(y>2500 && y<2700)){ toast("กรอกปี พ.ศ. ระหว่าง 2501–2699",1); return false; }
+      if(fyList().indexOf(y)>=0){ DB.settings.fy=y; save(); render(); toast("มีปีงบ "+y+" อยู่แล้ว — สลับไปที่ปีนี้ให้"); return true; }
+      DB.settings.years.push(y); DB.settings.fy = y; save(); render();
+      toast("เพิ่มปีงบ "+y+" แล้ว"); return true;
+    });
+}
+/* ---------- ซ่อน/แสดงแถบเมนู ---------- */
+function applyNav(){ document.body.classList[DB.settings.navHidden? "add":"remove"]("navhide"); }
+function toggleNav(){ DB.settings.navHidden = !DB.settings.navHidden; applyNav(); save(); }
+/* ---------- โหมดมืด / สว่าง ---------- */
+function applyTheme(){ document.body.classList[DB.settings.dark? "add":"remove"]("dark"); }
+function toggleTheme(){
+  DB.settings.dark = !DB.settings.dark; applyTheme(); save(); render();
+  toast(DB.settings.dark? "โหมดมืด" : "โหมดสว่าง");
+}
+
+document.addEventListener("click", e=>{
+  const nav = e.target.closest("#nav button");
+  if(nav){ go(nav.dataset.v); return; }
+  if(e.target.closest("#navToggle") || e.target.closest("#navHide")){ toggleNav(); return; }
+  if(e.target.closest("#themeBtn")){ toggleTheme(); return; }
+  if(e.target.closest("#fyAdd")){ addFyForm(); return; }
+  const g = e.target.closest("[data-go]");
+  if(g){ go(g.dataset.go); return; }
+});
+document.addEventListener("change", e=>{
+  if(e.target.id==="fysel"){ DB.settings.fy = +e.target.value; save(); render(); }
+});
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && $("#ovl").classList.contains("on")) closeModal(); });
+
+/* ============================================================
+   ข้อมูลจากไฟล์ ข้อมูล/49(1) ฝศย..xlsx (ปีงบ 2566-2569)
+   อ่านจากเซลล์ระดับรายการ ไม่ใช้แถวยอดรวมในไฟล์ซึ่งค้างอยู่
+   นำเข้าอัตโนมัติครั้งเดียว แล้วจำไว้ว่านำเข้าแล้วด้วย settings.imported49
+   ============================================================ */
+const IMPORT49 = {
+  stamp: "xlsx-2569",
+  org: "ฝศย.",
+  cats: [{id:"A03-10",parent:"A03",name:"ค่าจ้างเหมาบริการทำความสะอาดถังพัก"}],
+  budgets: [[2566,"A01",30000],[2566,"A02",42860],[2566,"A04",20000],[2566,"A06",20000],[2566,"A07",30000],[2566,"A08",20000],[2566,"A09",20000],[2566,"A10",5000],[2566,"A11",10000],[2566,"A13",3000],[2566,"A15",228400],[2566,"A16",545880],[2566,"A17",70500],[2566,"B01",250000],[2566,"B02",15000],[2566,"B04",20000],[2566,"A03-1",492000],[2566,"A03-2",30000],[2566,"A03-3",12000],[2566,"A03-4",20000],[2566,"A03-5",5000],[2566,"A03-10",3000],[2566,"A03-7",1440],[2566,"A03-8",19910],[2566,"A03-9",12000],[2567,"A01",30000],[2567,"A02",42860],[2567,"A04",20000],[2567,"A06",20000],[2567,"A07",30000],[2567,"A08",40000],[2567,"A09",30000],[2567,"A10",10000],[2567,"A11",8000],[2567,"A12",7000],[2567,"A13",3000],[2567,"A14",11000],[2567,"A15",228400],[2567,"A16",545880],[2567,"A17",70500],[2567,"B01",300000],[2567,"B02",15000],[2567,"B03",5000],[2567,"B04",20000],[2567,"A03-1",525600],[2567,"A03-2",30000],[2567,"A03-3",12000],[2567,"A03-4",20000],[2567,"A03-5",8600],[2567,"A03-10",3000],[2567,"A03-7",1440],[2567,"A03-8",16371],[2567,"A03-9",12000],[2568,"A01",20000],[2568,"A02",42860],[2568,"A04",20000],[2568,"A06",20000],[2568,"A07",20000],[2568,"A08",30000],[2568,"A09",30000],[2568,"A10",10000],[2568,"A11",10000],[2568,"A12",7000],[2568,"A13",3000],[2568,"A14",11000],[2568,"A15",280000],[2568,"A16",596000],[2568,"A17",70500],[2568,"B01",300000],[2568,"B02",10000],[2568,"B03",5000],[2568,"B04",15000],[2568,"A03-1",540000],[2568,"A03-2",30000],[2568,"A03-3",12000],[2568,"A03-4",20000],[2568,"A03-5",13500],[2568,"A03-7",1440],[2568,"A03-8",19474],[2568,"A03-9",12000],[2569,"A01",35000],[2569,"A04",10000],[2569,"A05",10000],[2569,"A06",10000],[2569,"A07",20000],[2569,"A08",20000],[2569,"A09",30000],[2569,"A10",10000],[2569,"A11",10000],[2569,"A12",7000],[2569,"A13",3000],[2569,"A14",11000],[2569,"A15",280000],[2569,"A16",596000],[2569,"A17",70500],[2569,"B01",200000],[2569,"B02",15000],[2569,"B03",2000],[2569,"B04",15000],[2569,"A03-1",554400],[2569,"A03-2",30000],[2569,"A03-3",12000],[2569,"A03-4",20000],[2569,"A03-5",13500],[2569,"A03-6",144000],[2569,"A03-7",1440],[2569,"A03-8",20000],[2569,"A03-9",12000]],
+  expenses: [["2022-11-30","A01",4140],["2023-05-31","A01",20000],["2023-01-31","A04",2514.5],["2023-09-30","A04",513.6],["2022-10-31","A07",2000],["2022-11-30","A07",2000],["2022-12-31","A07",1000],["2023-01-31","A07",1000],["2023-02-28","A07",2000],["2023-03-31","A07",1000],["2023-04-30","A07",1000],["2023-05-31","A07",10000],["2023-06-30","A07",1000],["2023-07-31","A07",1000],["2023-08-31","A07",1000],["2023-09-30","A07",1000],["2022-11-30","A08",6401.81],["2023-04-30","A08",12800],["2023-04-30","A09",4964.8],["2023-05-31","A09",5000],["2022-11-30","A10",3843.44],["2022-11-30","A11",9993.8],["2023-05-31","A13",1000],["2023-04-30","A16",545878],["2022-12-31","A17",12590],["2023-01-31","A17",8642.28],["2023-04-30","A17",1050],["2023-05-31","A17",20000],["2022-10-31","B04",856],["2022-11-30","B04",893.61],["2022-12-31","B04",864.13],["2023-01-31","B04",863.12],["2023-02-28","B04",856],["2023-03-31","B04",856],["2023-04-30","B04",856],["2023-05-31","B04",6856],["2023-06-30","B04",813.2],["2022-10-31","A03-1",41000],["2022-11-30","A03-1",41000],["2022-12-31","A03-1",41000],["2023-01-31","A03-1",41000],["2023-02-28","A03-1",41000],["2023-03-31","A03-1",41000],["2023-04-30","A03-1",41000],["2023-05-31","A03-1",41000],["2023-06-30","A03-1",41000],["2023-07-31","A03-1",41000],["2023-08-31","A03-1",41000],["2022-10-31","A03-2",2500],["2022-11-30","A03-2",2500],["2022-12-31","A03-2",2500],["2023-01-31","A03-2",2500],["2023-02-28","A03-2",2500],["2023-03-31","A03-2",2500],["2023-04-30","A03-2",2500],["2023-05-31","A03-2",2500],["2023-06-30","A03-2",2500],["2023-07-31","A03-2",2500],["2023-08-31","A03-2",2500],["2023-03-31","A03-3",6000],["2023-09-30","A03-3",6000],["2023-07-31","A03-5",8600],["2022-11-30","A03-8",6687.5],["2022-12-31","A03-8",11235],["2022-10-31","A03-9",1000],["2022-11-30","A03-9",1000],["2022-12-31","A03-9",1000],["2023-01-31","A03-9",1000],["2023-02-28","A03-9",1000],["2023-03-31","A03-9",1000],["2023-04-30","A03-9",1000],["2023-05-31","A03-9",1000],["2023-06-30","A03-9",1000],["2023-07-31","A03-9",1000],["2023-08-31","A03-9",1000],["2023-10-31","A07",1000],["2023-11-30","A07",1000],["2023-12-31","A07",1000],["2024-01-31","A07",3000],["2024-02-29","A07",1000],["2024-03-31","A07",1000],["2024-04-30","A07",1000],["2024-05-31","A07",1000],["2024-02-29","A09",4066],["2024-03-31","A09",16355],["2024-01-31","A11",7986.48],["2024-05-31","A15",278609.11],["2023-11-30","A17",1042.75],["2024-01-31","A17",5000],["2023-10-31","B04",406.6],["2023-11-30","B04",406.6],["2023-12-31","B04",409.65],["2024-01-31","B04",406.6],["2024-02-29","B04",422.86],["2024-03-31","B04",408.63],["2023-10-31","A03-1",43800],["2023-11-30","A03-1",43800],["2023-12-31","A03-1",43800],["2024-01-31","A03-1",43800],["2024-02-29","A03-1",43800],["2024-03-31","A03-1",43800],["2024-04-30","A03-1",43800],["2023-10-31","A03-2",2500],["2023-11-30","A03-2",2500],["2023-12-31","A03-2",2500],["2024-01-31","A03-2",2500],["2024-02-29","A03-2",2500],["2024-03-31","A03-2",2500],["2024-04-30","A03-2",2500],["2024-04-30","A03-3",6000],["2023-10-31","A03-9",1000],["2023-11-30","A03-9",1000],["2023-12-31","A03-9",1000],["2024-01-31","A03-9",1000],["2024-02-29","A03-9",1000],["2024-03-31","A03-9",1000],["2024-04-30","A03-9",1000],["2024-10-31","A01",10820],["2024-11-30","A01",5194],["2024-10-31","A07",2000],["2024-11-30","A07",1000],["2024-12-31","A07",1000],["2025-01-31","A07",1000],["2025-02-28","A07",2000],["2025-03-31","A07",1000],["2025-04-30","A07",1340],["2025-05-31","A07",1000],["2025-06-30","A07",1000],["2025-07-31","A07",1000],["2024-10-31","A08",6000],["2025-02-28","A08",4426],["2025-06-30","A08",2675],["2024-11-30","A09",4643.8],["2025-01-31","A09",7490],["2025-02-28","A09",3852],["2024-11-30","A11",9984.17],["2024-10-31","A12",6002],["2025-07-31","A17",3810],["2024-10-31","B01",3193],["2024-11-30","B01",3423],["2024-12-31","B01",2951],["2025-01-31","B01",2766],["2025-02-28","B01",2239],["2025-03-31","B01",2239],["2025-04-30","B01",3033],["2025-05-31","B01",3298],["2025-06-30","B01",4145],["2025-07-31","B01",3515],["2025-08-31","B01",3929],["2025-09-30","B01",3616],["2024-10-31","B02",63],["2024-11-30","B02",46],["2024-12-31","B02",47],["2025-01-31","B02",45],["2025-02-28","B02",87],["2025-03-31","B02",107],["2025-04-30","B02",146],["2025-05-31","B02",146],["2025-06-30","B02",111],["2025-07-31","B02",131],["2025-08-31","B02",129],["2025-09-30","B02",140],["2024-10-31","B04",409.65],["2024-11-30","B04",424.9],["2024-12-31","B04",410.67],["2025-01-31","B04",428.96],["2025-02-28","B04",406.6],["2025-03-31","B04",406.6],["2025-04-30","B04",412.7],["2025-05-31","B04",415.75],["2025-06-30","B04",408.63],["2025-07-31","B04",410.67],["2024-10-31","A03-1",45000],["2024-11-30","A03-1",45000],["2024-12-31","A03-1",45000],["2025-01-31","A03-1",45000],["2025-02-28","A03-1",45000],["2025-03-31","A03-1",45000],["2025-04-30","A03-1",45000],["2025-05-31","A03-1",45000],["2025-06-30","A03-1",45000],["2025-07-31","A03-1",45000],["2025-08-31","A03-1",45000],["2025-09-30","A03-1",45000],["2024-10-31","A03-2",2500],["2024-11-30","A03-2",2500],["2024-12-31","A03-2",2500],["2025-01-31","A03-2",2500],["2025-02-28","A03-2",2500],["2025-03-31","A03-2",2500],["2025-04-30","A03-2",2500],["2025-05-31","A03-2",2500],["2025-06-30","A03-2",2500],["2025-07-31","A03-2",2500],["2025-08-31","A03-2",2500],["2025-09-30","A03-2",2500],["2025-03-31","A03-3",6000],["2025-09-30","A03-3",6000],["2024-10-31","A03-9",1000],["2024-11-30","A03-9",1000],["2024-12-31","A03-9",1000],["2025-01-31","A03-9",1000],["2025-02-28","A03-9",1000],["2025-03-31","A03-9",1000],["2025-04-30","A03-9",1000],["2025-05-31","A03-9",1000],["2025-06-30","A03-9",1000],["2025-07-31","A03-9",1000],["2025-08-31","A03-9",1000],["2025-09-30","A03-9",1000],["2025-10-31","A01",14122.5],["2025-11-30","A01",560],["2025-11-30","A04",5980],["2026-08-31","A05",10000],["2025-10-31","A09",2824],["2025-10-31","A11",9416],["2025-10-31","A14",1997],["2025-10-31","A16",545878],["2025-11-30","A17",5000],["2026-06-30","A17",5000],["2026-09-30","A17",3240],["2025-10-31","A03-1",46200],["2025-11-30","A03-1",46200],["2025-12-31","A03-1",46200],["2026-01-31","A03-1",46200],["2026-02-28","A03-1",46200],["2026-03-31","A03-1",46200],["2026-04-30","A03-1",46200],["2026-05-31","A03-1",46200],["2026-06-30","A03-1",46200],["2026-07-31","A03-1",46200],["2026-08-31","A03-1",46200],["2025-10-31","A03-2",2500],["2025-11-30","A03-2",2500],["2025-12-31","A03-2",2500],["2026-01-31","A03-2",2500],["2026-02-28","A03-2",2500],["2026-03-31","A03-2",2500],["2026-04-30","A03-2",2500],["2026-05-31","A03-2",2500],["2026-06-30","A03-2",2500],["2026-07-31","A03-2",2500],["2026-08-31","A03-2",2500],["2026-03-31","A03-3",6000],["2026-08-31","A03-8",20000],["2025-10-31","A03-9",1000],["2025-11-30","A03-9",1000],["2025-12-31","A03-9",1000],["2026-01-31","A03-9",1000],["2026-02-28","A03-9",1000],["2026-03-31","A03-9",1000],["2026-04-30","A03-9",1000],["2026-05-31","A03-9",1000],["2026-06-30","A03-9",1000],["2026-07-31","A03-9",1000],["2026-08-31","A03-9",1000]]
+};
+function runImport49(){
+  if(DB.settings.imported49 === IMPORT49.stamp) return;
+  const org = (DB.orgs.find(o=> normalize(o.code)===normalize(IMPORT49.org)) || DB.orgs[0] || {}).id;
+  if(!org){ return; }
+  /* 1) หมวดที่ยังไม่มี */
+  let nCat=0;
+  IMPORT49.cats.forEach(c=>{
+    if(DB.cats.some(x=>x.id===c.id)) return;
+    const last = DB.cats.reduce((k,x,idx)=> x.parent===c.parent? idx : k, -1);
+    DB.cats.splice(last>=0? last+1 : DB.cats.length, 0, {id:c.id, parent:c.parent, name:c.name});
+    nCat++;
+  });
+  if(nCat) buildCats();
+  /* 2) งบจัดสรร (ทับของเดิมที่ปีงบ+หน่วยงาน+หมวดเดียวกัน) */
+  let nBud=0;
+  IMPORT49.budgets.forEach(b=>{ if(CATMAP[b[1]]){ setBudget(b[0], b[1], org, b[2]); nBud++; } });
+  /* 3) ค่าใช้จ่าย (ข้ามรายการที่ซ้ำกันพอดี) */
+  let nExp=0;
+  IMPORT49.expenses.forEach(e=>{
+    if(!CATMAP[e[1]]) return;
+    const dup = DB.expenses.some(x=> x.date===e[0] && x.catId===e[1] && x.orgId===org &&
+                                     Math.abs((+x.amount||0)-e[2])<0.005);
+    if(dup) return;
+    DB.expenses.push({id:uid(), date:e[0], orgId:org, catId:e[1], amount:e[2], docNo:"",
+      note:"นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือน"+MONTHS_FULL[fmOf(e[0])]});
+    nExp++;
+  });
+  DB.settings.imported49 = IMPORT49.stamp;
+  save();
+  if(nBud||nExp||nCat) setTimeout(()=> toast("นำเข้าข้อมูลจากไฟล์ 49(1) แล้ว: งบ "+nBud+" · ค่าใช้จ่าย "+nExp+" รายการ"), 400);
+}
+
+load();
+seedOrgs();
+runImport49();
+applyNav();
+applyTheme();
+render();
+</script>
+</body>
+</html>

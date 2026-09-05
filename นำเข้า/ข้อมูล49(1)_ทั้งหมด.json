@@ -1,0 +1,3277 @@
+{
+ "v": 2,
+ "settings": {
+  "fy": 2569,
+  "thresholds": {
+   "crit": 10,
+   "warn": 25,
+   "watch": 50
+  },
+  "seededOrgs": true,
+  "years": [
+   2566,
+   2567,
+   2568,
+   2569
+  ],
+  "navHidden": false,
+  "dark": false
+ },
+ "orgs": [
+  {
+   "id": "xmtop89uq0",
+   "code": "ฝศย.",
+   "name": "ฝ่ายเศรษฐกิจยาง",
+   "note": ""
+  },
+  {
+   "id": "xmtop89uq1",
+   "code": "กพย.",
+   "name": "กพย.",
+   "note": ""
+  },
+  {
+   "id": "xmtop89uq2",
+   "code": "กรย.",
+   "name": "กรย.",
+   "note": ""
+  },
+  {
+   "id": "xmtop89uq3",
+   "code": "กวย.",
+   "name": "กวย.",
+   "note": ""
+  }
+ ],
+ "cats": [
+  {
+   "id": "A",
+   "parent": "",
+   "name": "หมวดค่าตอบแทนใช้สอยและวัสดุ"
+  },
+  {
+   "id": "A01",
+   "parent": "A",
+   "name": "ค่าใช้จ่ายเดินทาง"
+  },
+  {
+   "id": "A02",
+   "parent": "A",
+   "name": "ค่าใช้จ่ายเครื่องถ่ายเอกสาร/ปริ้น"
+  },
+  {
+   "id": "A03",
+   "parent": "A",
+   "name": "ค่าจ้างเหมาบริการ"
+  },
+  {
+   "id": "A03-1",
+   "parent": "A03",
+   "name": "ค่าจ้างเหมาบริการรักษาความปลอดภัย"
+  },
+  {
+   "id": "A03-2",
+   "parent": "A03",
+   "name": "ค่าจ้างเหมาบริการตัดหญ้า"
+  },
+  {
+   "id": "A03-3",
+   "parent": "A03",
+   "name": "ค่าจ้างเหมาบริการกำจัดปลวก"
+  },
+  {
+   "id": "A03-4",
+   "parent": "A03",
+   "name": "ค่าจ้างเหมากำจัดสิ่งปฏิกูล"
+  },
+  {
+   "id": "A03-5",
+   "parent": "A03",
+   "name": "ค่าจ้างเหมาตัดแต่งกิ่งไม้"
+  },
+  {
+   "id": "A03-6",
+   "parent": "A03",
+   "name": "ค่าจ้างเหมาตำแหน่งพนักงานบริการ ฝศย."
+  },
+  {
+   "id": "A03-7",
+   "parent": "A03",
+   "name": "ค่าจ้างเหมาเก็บขยะมูลฝอย"
+  },
+  {
+   "id": "A03-8",
+   "parent": "A03",
+   "name": "ค่าจ้างเหมาบริการบำรุงรักษาแอร์"
+  },
+  {
+   "id": "A03-9",
+   "parent": "A03",
+   "name": "ค่าจ้างเหมาทำความสะอาดรอบอาคาร"
+  },
+  {
+   "id": "A03-10",
+   "parent": "A03",
+   "name": "ค่าจ้างเหมาบริการทำความสะอาดถังพัก"
+  },
+  {
+   "id": "A04",
+   "parent": "A",
+   "name": "ค่าซ่อมแซมครุภัณฑ์"
+  },
+  {
+   "id": "A05",
+   "parent": "A",
+   "name": "ค่าซ่อมแซมเครื่องปรับอากาศ"
+  },
+  {
+   "id": "A06",
+   "parent": "A",
+   "name": "ค่าซ่อมแซมสิ่งก่อสร้าง"
+  },
+  {
+   "id": "A07",
+   "parent": "A",
+   "name": "ค่าวัสดุเชื้อเพลิง"
+  },
+  {
+   "id": "A08",
+   "parent": "A",
+   "name": "ค่าวัสดุซ่อมแซมยานพาหนะ"
+  },
+  {
+   "id": "A09",
+   "parent": "A",
+   "name": "ค่าวัสดุสำนักงาน"
+  },
+  {
+   "id": "A10",
+   "parent": "A",
+   "name": "ค่าวัสดุไฟฟ้า"
+  },
+  {
+   "id": "A11",
+   "parent": "A",
+   "name": "ค่าวัสดุงานบ้านและงานครัว"
+  },
+  {
+   "id": "A12",
+   "parent": "A",
+   "name": "ค่าเบี้ยประกันภัยต่างๆ"
+  },
+  {
+   "id": "A13",
+   "parent": "A",
+   "name": "ค่าพิธีการและพวงมาลา"
+  },
+  {
+   "id": "A14",
+   "parent": "A",
+   "name": "ค่าภาษีรถยนต์และรถจักรยานยนต์"
+  },
+  {
+   "id": "A15",
+   "parent": "A",
+   "name": "ค่าภาษีโรงเรือนและที่ดิน"
+  },
+  {
+   "id": "A16",
+   "parent": "A",
+   "name": "ค่าเช่าที่ดิน/ที่ราชพัสดุ"
+  },
+  {
+   "id": "A17",
+   "parent": "A",
+   "name": "ค่ารับรอง"
+  },
+  {
+   "id": "B",
+   "parent": "",
+   "name": "หมวดค่าสาธารณูปโภค"
+  },
+  {
+   "id": "B01",
+   "parent": "B",
+   "name": "ค่าไฟฟ้า"
+  },
+  {
+   "id": "B02",
+   "parent": "B",
+   "name": "ค่าประปา"
+  },
+  {
+   "id": "B03",
+   "parent": "B",
+   "name": "ค่าไปรษณีย์"
+  },
+  {
+   "id": "B04",
+   "parent": "B",
+   "name": "ค่าโทรศัพท์และโทรสาร"
+  }
+ ],
+ "budgets": [
+  {
+   "id": "xmtop89ur4",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A01",
+   "amount": 30000
+  },
+  {
+   "id": "xmtop89ur5",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A02",
+   "amount": 42860
+  },
+  {
+   "id": "xmtop89ur6",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A04",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ur7",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A06",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ur8",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 30000
+  },
+  {
+   "id": "xmtop89ur9",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A08",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ura",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A09",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89urb",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A10",
+   "amount": 5000
+  },
+  {
+   "id": "xmtop89urc",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A11",
+   "amount": 10000
+  },
+  {
+   "id": "xmtop89urd",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A13",
+   "amount": 3000
+  },
+  {
+   "id": "xmtop89ure",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A15",
+   "amount": 228400
+  },
+  {
+   "id": "xmtop89urf",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A16",
+   "amount": 545880
+  },
+  {
+   "id": "xmtop89urg",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 70500
+  },
+  {
+   "id": "xmtop89urh",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 250000
+  },
+  {
+   "id": "xmtop89uri",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 15000
+  },
+  {
+   "id": "xmtop89urj",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89urk",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 492000
+  },
+  {
+   "id": "xmtop89url",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 30000
+  },
+  {
+   "id": "xmtop89urm",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-3",
+   "amount": 12000
+  },
+  {
+   "id": "xmtop89urn",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-4",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89uro",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-5",
+   "amount": 5000
+  },
+  {
+   "id": "xmtop89urp",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-10",
+   "amount": 3000
+  },
+  {
+   "id": "xmtop89urq",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-7",
+   "amount": 1440
+  },
+  {
+   "id": "xmtop89urr",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-8",
+   "amount": 19910
+  },
+  {
+   "id": "xmtop89urs",
+   "fy": 2566,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 12000
+  },
+  {
+   "id": "xmtop89urt",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A01",
+   "amount": 30000
+  },
+  {
+   "id": "xmtop89uru",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A02",
+   "amount": 42860
+  },
+  {
+   "id": "xmtop89urv",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A04",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89urw",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A06",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89urx",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 30000
+  },
+  {
+   "id": "xmtop89ury",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A08",
+   "amount": 40000
+  },
+  {
+   "id": "xmtop89urz",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A09",
+   "amount": 30000
+  },
+  {
+   "id": "xmtop89ur10",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A10",
+   "amount": 10000
+  },
+  {
+   "id": "xmtop89ur11",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A11",
+   "amount": 8000
+  },
+  {
+   "id": "xmtop89ur12",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A12",
+   "amount": 7000
+  },
+  {
+   "id": "xmtop89ur13",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A13",
+   "amount": 3000
+  },
+  {
+   "id": "xmtop89ur14",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A14",
+   "amount": 11000
+  },
+  {
+   "id": "xmtop89ur15",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A15",
+   "amount": 228400
+  },
+  {
+   "id": "xmtop89ur16",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A16",
+   "amount": 545880
+  },
+  {
+   "id": "xmtop89ur17",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 70500
+  },
+  {
+   "id": "xmtop89ur18",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 300000
+  },
+  {
+   "id": "xmtop89ur19",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 15000
+  },
+  {
+   "id": "xmtop89ur1a",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "B03",
+   "amount": 5000
+  },
+  {
+   "id": "xmtop89ur1b",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ur1c",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 525600
+  },
+  {
+   "id": "xmtop89ur1d",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 30000
+  },
+  {
+   "id": "xmtop89ur1e",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-3",
+   "amount": 12000
+  },
+  {
+   "id": "xmtop89ur1f",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-4",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ur1g",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-5",
+   "amount": 8600
+  },
+  {
+   "id": "xmtop89ur1h",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-10",
+   "amount": 3000
+  },
+  {
+   "id": "xmtop89ur1i",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-7",
+   "amount": 1440
+  },
+  {
+   "id": "xmtop89ur1j",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-8",
+   "amount": 16371
+  },
+  {
+   "id": "xmtop89ur1k",
+   "fy": 2567,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 12000
+  },
+  {
+   "id": "xmtop89ur1l",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A01",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ur1m",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A02",
+   "amount": 42860
+  },
+  {
+   "id": "xmtop89ur1n",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A04",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ur1o",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A06",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ur1p",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ur1q",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A08",
+   "amount": 30000
+  },
+  {
+   "id": "xmtop89ur1r",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A09",
+   "amount": 30000
+  },
+  {
+   "id": "xmtop89ur1s",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A10",
+   "amount": 10000
+  },
+  {
+   "id": "xmtop89ur1t",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A11",
+   "amount": 10000
+  },
+  {
+   "id": "xmtop89ur1u",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A12",
+   "amount": 7000
+  },
+  {
+   "id": "xmtop89ur1v",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A13",
+   "amount": 3000
+  },
+  {
+   "id": "xmtop89ur1w",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A14",
+   "amount": 11000
+  },
+  {
+   "id": "xmtop89ur1x",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A15",
+   "amount": 280000
+  },
+  {
+   "id": "xmtop89ur1y",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A16",
+   "amount": 596000
+  },
+  {
+   "id": "xmtop89ur1z",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 70500
+  },
+  {
+   "id": "xmtop89ur20",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 300000
+  },
+  {
+   "id": "xmtop89ur21",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 10000
+  },
+  {
+   "id": "xmtop89ur22",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "B03",
+   "amount": 5000
+  },
+  {
+   "id": "xmtop89ur23",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 15000
+  },
+  {
+   "id": "xmtop89ur24",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 540000
+  },
+  {
+   "id": "xmtop89ur25",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 30000
+  },
+  {
+   "id": "xmtop89ur26",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-3",
+   "amount": 12000
+  },
+  {
+   "id": "xmtop89ur27",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-4",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ur28",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-5",
+   "amount": 13500
+  },
+  {
+   "id": "xmtop89ur29",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-7",
+   "amount": 1440
+  },
+  {
+   "id": "xmtop89ur2a",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-8",
+   "amount": 19474
+  },
+  {
+   "id": "xmtop89ur2b",
+   "fy": 2568,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 12000
+  },
+  {
+   "id": "xmtop89ur2c",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A01",
+   "amount": 35000
+  },
+  {
+   "id": "xmtop89ur2d",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A04",
+   "amount": 10000
+  },
+  {
+   "id": "xmtop89ur2e",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A05",
+   "amount": 10000
+  },
+  {
+   "id": "xmtop89ur2f",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A06",
+   "amount": 10000
+  },
+  {
+   "id": "xmtop89ur2g",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ur2h",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A08",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ur2i",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A09",
+   "amount": 30000
+  },
+  {
+   "id": "xmtop89ur2j",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A10",
+   "amount": 10000
+  },
+  {
+   "id": "xmtop89ur2k",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A11",
+   "amount": 10000
+  },
+  {
+   "id": "xmtop89ur2l",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A12",
+   "amount": 7000
+  },
+  {
+   "id": "xmtop89ur2m",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A13",
+   "amount": 3000
+  },
+  {
+   "id": "xmtop89ur2n",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A14",
+   "amount": 11000
+  },
+  {
+   "id": "xmtop89ur2o",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A15",
+   "amount": 280000
+  },
+  {
+   "id": "xmtop89ur2p",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A16",
+   "amount": 596000
+  },
+  {
+   "id": "xmtop89ur2q",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 70500
+  },
+  {
+   "id": "xmtop89ur2r",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 200000
+  },
+  {
+   "id": "xmtop89ur2s",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 15000
+  },
+  {
+   "id": "xmtop89ur2t",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "B03",
+   "amount": 2000
+  },
+  {
+   "id": "xmtop89ur2u",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 15000
+  },
+  {
+   "id": "xmtop89ur2v",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 554400
+  },
+  {
+   "id": "xmtop89ur2w",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 30000
+  },
+  {
+   "id": "xmtop89ur2x",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-3",
+   "amount": 12000
+  },
+  {
+   "id": "xmtop89ur2y",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-4",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ur2z",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-5",
+   "amount": 13500
+  },
+  {
+   "id": "xmtop89ur30",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-6",
+   "amount": 144000
+  },
+  {
+   "id": "xmtop89ur31",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-7",
+   "amount": 1440
+  },
+  {
+   "id": "xmtop89ur32",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-8",
+   "amount": 20000
+  },
+  {
+   "id": "xmtop89ur33",
+   "fy": 2569,
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 12000
+  }
+ ],
+ "expenses": [
+  {
+   "id": "xmtop89ur34",
+   "date": "2022-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A01",
+   "amount": 4140,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur35",
+   "date": "2023-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A01",
+   "amount": 20000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur36",
+   "date": "2023-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A04",
+   "amount": 2514.5,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur37",
+   "date": "2023-09-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A04",
+   "amount": 513.6,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกันยายน"
+  },
+  {
+   "id": "xmtop89ur38",
+   "date": "2022-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 2000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur39",
+   "date": "2022-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 2000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur3a",
+   "date": "2022-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur3b",
+   "date": "2023-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur3c",
+   "date": "2023-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 2000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur3d",
+   "date": "2023-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur3e",
+   "date": "2023-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur3f",
+   "date": "2023-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 10000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur3g",
+   "date": "2023-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur3h",
+   "date": "2023-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur3i",
+   "date": "2023-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  },
+  {
+   "id": "xmtop89ur3j",
+   "date": "2023-09-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกันยายน"
+  },
+  {
+   "id": "xmtop89ur3k",
+   "date": "2022-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A08",
+   "amount": 6401.81,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur3l",
+   "date": "2023-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A08",
+   "amount": 12800,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur3m",
+   "date": "2023-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A09",
+   "amount": 4964.8,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur3n",
+   "date": "2023-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A09",
+   "amount": 5000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur3o",
+   "date": "2022-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A10",
+   "amount": 3843.44,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur3p",
+   "date": "2022-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A11",
+   "amount": 9993.8,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur3q",
+   "date": "2023-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A13",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur3r",
+   "date": "2023-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A16",
+   "amount": 545878,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur3s",
+   "date": "2022-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 12590,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur3t",
+   "date": "2023-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 8642.28,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur3u",
+   "date": "2023-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 1050,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur3v",
+   "date": "2023-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 20000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur3w",
+   "date": "2022-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 856,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur3x",
+   "date": "2022-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 893.61,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur3y",
+   "date": "2022-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 864.13,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur3z",
+   "date": "2023-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 863.12,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur40",
+   "date": "2023-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 856,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur41",
+   "date": "2023-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 856,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur42",
+   "date": "2023-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 856,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur43",
+   "date": "2023-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 6856,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur44",
+   "date": "2023-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 813.2,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur45",
+   "date": "2022-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 41000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur46",
+   "date": "2022-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 41000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur47",
+   "date": "2022-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 41000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur48",
+   "date": "2023-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 41000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur49",
+   "date": "2023-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 41000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur4a",
+   "date": "2023-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 41000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur4b",
+   "date": "2023-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 41000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur4c",
+   "date": "2023-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 41000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur4d",
+   "date": "2023-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 41000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur4e",
+   "date": "2023-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 41000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur4f",
+   "date": "2023-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 41000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  },
+  {
+   "id": "xmtop89ur4g",
+   "date": "2022-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur4h",
+   "date": "2022-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur4i",
+   "date": "2022-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur4j",
+   "date": "2023-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur4k",
+   "date": "2023-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur4l",
+   "date": "2023-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur4m",
+   "date": "2023-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur4n",
+   "date": "2023-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur4o",
+   "date": "2023-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur4p",
+   "date": "2023-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur4q",
+   "date": "2023-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  },
+  {
+   "id": "xmtop89ur4r",
+   "date": "2023-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-3",
+   "amount": 6000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur4s",
+   "date": "2023-09-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-3",
+   "amount": 6000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกันยายน"
+  },
+  {
+   "id": "xmtop89ur4t",
+   "date": "2023-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-5",
+   "amount": 8600,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur4u",
+   "date": "2022-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-8",
+   "amount": 6687.5,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur4v",
+   "date": "2022-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-8",
+   "amount": 11235,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur4w",
+   "date": "2022-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur4x",
+   "date": "2022-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur4y",
+   "date": "2022-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur4z",
+   "date": "2023-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur50",
+   "date": "2023-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur51",
+   "date": "2023-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur52",
+   "date": "2023-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur53",
+   "date": "2023-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur54",
+   "date": "2023-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur55",
+   "date": "2023-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur56",
+   "date": "2023-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  },
+  {
+   "id": "xmtop89ur57",
+   "date": "2023-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur58",
+   "date": "2023-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur59",
+   "date": "2023-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur5a",
+   "date": "2024-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 3000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur5b",
+   "date": "2024-02-29",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur5c",
+   "date": "2024-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur5d",
+   "date": "2024-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur5e",
+   "date": "2024-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur5f",
+   "date": "2024-02-29",
+   "orgId": "xmtop89uq0",
+   "catId": "A09",
+   "amount": 4066,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur5g",
+   "date": "2024-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A09",
+   "amount": 16355,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur5h",
+   "date": "2024-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A11",
+   "amount": 7986.48,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur5i",
+   "date": "2024-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A15",
+   "amount": 278609.11,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur5j",
+   "date": "2023-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 1042.75,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur5k",
+   "date": "2024-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 5000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur5l",
+   "date": "2023-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 406.6,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur5m",
+   "date": "2023-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 406.6,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur5n",
+   "date": "2023-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 409.65,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur5o",
+   "date": "2024-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 406.6,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur5p",
+   "date": "2024-02-29",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 422.86,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur5q",
+   "date": "2024-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 408.63,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur5r",
+   "date": "2023-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 43800,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur5s",
+   "date": "2023-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 43800,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur5t",
+   "date": "2023-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 43800,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur5u",
+   "date": "2024-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 43800,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur5v",
+   "date": "2024-02-29",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 43800,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur5w",
+   "date": "2024-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 43800,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur5x",
+   "date": "2024-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 43800,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur5y",
+   "date": "2023-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur5z",
+   "date": "2023-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur60",
+   "date": "2023-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur61",
+   "date": "2024-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur62",
+   "date": "2024-02-29",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur63",
+   "date": "2024-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur64",
+   "date": "2024-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur65",
+   "date": "2024-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-3",
+   "amount": 6000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur66",
+   "date": "2023-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur67",
+   "date": "2023-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur68",
+   "date": "2023-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur69",
+   "date": "2024-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur6a",
+   "date": "2024-02-29",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur6b",
+   "date": "2024-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur6c",
+   "date": "2024-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur6d",
+   "date": "2024-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A01",
+   "amount": 10820,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur6e",
+   "date": "2024-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A01",
+   "amount": 5194,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur6f",
+   "date": "2024-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 2000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur6g",
+   "date": "2024-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur6h",
+   "date": "2024-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur6i",
+   "date": "2025-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur6j",
+   "date": "2025-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 2000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur6k",
+   "date": "2025-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur6l",
+   "date": "2025-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1340,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur6m",
+   "date": "2025-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur6n",
+   "date": "2025-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur6o",
+   "date": "2025-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A07",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur6p",
+   "date": "2024-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A08",
+   "amount": 6000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur6q",
+   "date": "2025-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "A08",
+   "amount": 4426,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur6r",
+   "date": "2025-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A08",
+   "amount": 2675,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur6s",
+   "date": "2024-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A09",
+   "amount": 4643.8,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur6t",
+   "date": "2025-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A09",
+   "amount": 7490,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur6u",
+   "date": "2025-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "A09",
+   "amount": 3852,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur6v",
+   "date": "2024-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A11",
+   "amount": 9984.17,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur6w",
+   "date": "2024-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A12",
+   "amount": 6002,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur6x",
+   "date": "2025-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 3810,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur6y",
+   "date": "2024-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 3193,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur6z",
+   "date": "2024-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 3423,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur70",
+   "date": "2024-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 2951,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur71",
+   "date": "2025-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 2766,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur72",
+   "date": "2025-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 2239,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur73",
+   "date": "2025-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 2239,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur74",
+   "date": "2025-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 3033,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur75",
+   "date": "2025-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 3298,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur76",
+   "date": "2025-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 4145,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur77",
+   "date": "2025-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 3515,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur78",
+   "date": "2025-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 3929,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  },
+  {
+   "id": "xmtop89ur79",
+   "date": "2025-09-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B01",
+   "amount": 3616,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกันยายน"
+  },
+  {
+   "id": "xmtop89ur7a",
+   "date": "2024-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 63,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur7b",
+   "date": "2024-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 46,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur7c",
+   "date": "2024-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 47,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur7d",
+   "date": "2025-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 45,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur7e",
+   "date": "2025-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 87,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur7f",
+   "date": "2025-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 107,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur7g",
+   "date": "2025-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 146,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur7h",
+   "date": "2025-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 146,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur7i",
+   "date": "2025-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 111,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur7j",
+   "date": "2025-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 131,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur7k",
+   "date": "2025-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 129,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  },
+  {
+   "id": "xmtop89ur7l",
+   "date": "2025-09-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B02",
+   "amount": 140,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกันยายน"
+  },
+  {
+   "id": "xmtop89ur7m",
+   "date": "2024-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 409.65,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur7n",
+   "date": "2024-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 424.9,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur7o",
+   "date": "2024-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 410.67,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur7p",
+   "date": "2025-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 428.96,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur7q",
+   "date": "2025-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 406.6,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur7r",
+   "date": "2025-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 406.6,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur7s",
+   "date": "2025-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 412.7,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur7t",
+   "date": "2025-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 415.75,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur7u",
+   "date": "2025-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 408.63,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur7v",
+   "date": "2025-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "B04",
+   "amount": 410.67,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur7w",
+   "date": "2024-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 45000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur7x",
+   "date": "2024-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 45000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur7y",
+   "date": "2024-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 45000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur7z",
+   "date": "2025-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 45000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur80",
+   "date": "2025-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 45000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur81",
+   "date": "2025-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 45000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur82",
+   "date": "2025-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 45000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur83",
+   "date": "2025-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 45000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur84",
+   "date": "2025-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 45000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur85",
+   "date": "2025-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 45000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur86",
+   "date": "2025-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 45000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  },
+  {
+   "id": "xmtop89ur87",
+   "date": "2025-09-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 45000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกันยายน"
+  },
+  {
+   "id": "xmtop89ur88",
+   "date": "2024-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur89",
+   "date": "2024-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur8a",
+   "date": "2024-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur8b",
+   "date": "2025-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur8c",
+   "date": "2025-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur8d",
+   "date": "2025-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur8e",
+   "date": "2025-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur8f",
+   "date": "2025-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur8g",
+   "date": "2025-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur8h",
+   "date": "2025-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur8i",
+   "date": "2025-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  },
+  {
+   "id": "xmtop89ur8j",
+   "date": "2025-09-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกันยายน"
+  },
+  {
+   "id": "xmtop89ur8k",
+   "date": "2025-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-3",
+   "amount": 6000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur8l",
+   "date": "2025-09-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-3",
+   "amount": 6000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกันยายน"
+  },
+  {
+   "id": "xmtop89ur8m",
+   "date": "2024-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur8n",
+   "date": "2024-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur8o",
+   "date": "2024-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur8p",
+   "date": "2025-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur8q",
+   "date": "2025-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur8r",
+   "date": "2025-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur8s",
+   "date": "2025-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur8t",
+   "date": "2025-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur8u",
+   "date": "2025-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur8v",
+   "date": "2025-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur8w",
+   "date": "2025-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  },
+  {
+   "id": "xmtop89ur8x",
+   "date": "2025-09-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกันยายน"
+  },
+  {
+   "id": "xmtop89ur8y",
+   "date": "2025-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A01",
+   "amount": 14122.5,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur8z",
+   "date": "2025-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A01",
+   "amount": 560,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur90",
+   "date": "2025-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A04",
+   "amount": 5980,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur91",
+   "date": "2026-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A05",
+   "amount": 10000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  },
+  {
+   "id": "xmtop89ur92",
+   "date": "2025-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A09",
+   "amount": 2824,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur93",
+   "date": "2025-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A11",
+   "amount": 9416,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur94",
+   "date": "2025-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A14",
+   "amount": 1997,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur95",
+   "date": "2025-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A16",
+   "amount": 545878,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur96",
+   "date": "2025-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 5000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur97",
+   "date": "2026-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 5000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur98",
+   "date": "2026-09-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A17",
+   "amount": 3240,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกันยายน"
+  },
+  {
+   "id": "xmtop89ur99",
+   "date": "2025-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 46200,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur9a",
+   "date": "2025-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 46200,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur9b",
+   "date": "2025-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 46200,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur9c",
+   "date": "2026-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 46200,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur9d",
+   "date": "2026-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 46200,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur9e",
+   "date": "2026-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 46200,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur9f",
+   "date": "2026-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 46200,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur9g",
+   "date": "2026-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 46200,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur9h",
+   "date": "2026-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 46200,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur9i",
+   "date": "2026-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 46200,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur9j",
+   "date": "2026-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-1",
+   "amount": 46200,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  },
+  {
+   "id": "xmtop89ur9k",
+   "date": "2025-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur9l",
+   "date": "2025-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur9m",
+   "date": "2025-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ur9n",
+   "date": "2026-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ur9o",
+   "date": "2026-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ur9p",
+   "date": "2026-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur9q",
+   "date": "2026-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ur9r",
+   "date": "2026-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ur9s",
+   "date": "2026-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ur9t",
+   "date": "2026-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ur9u",
+   "date": "2026-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-2",
+   "amount": 2500,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  },
+  {
+   "id": "xmtop89ur9v",
+   "date": "2026-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-3",
+   "amount": 6000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ur9w",
+   "date": "2026-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-8",
+   "amount": 20000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  },
+  {
+   "id": "xmtop89ur9x",
+   "date": "2025-10-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนตุลาคม"
+  },
+  {
+   "id": "xmtop89ur9y",
+   "date": "2025-11-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤศจิกายน"
+  },
+  {
+   "id": "xmtop89ur9z",
+   "date": "2025-12-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนธันวาคม"
+  },
+  {
+   "id": "xmtop89ura0",
+   "date": "2026-01-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมกราคม"
+  },
+  {
+   "id": "xmtop89ura1",
+   "date": "2026-02-28",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกุมภาพันธ์"
+  },
+  {
+   "id": "xmtop89ura2",
+   "date": "2026-03-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมีนาคม"
+  },
+  {
+   "id": "xmtop89ura3",
+   "date": "2026-04-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนเมษายน"
+  },
+  {
+   "id": "xmtop89ura4",
+   "date": "2026-05-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนพฤษภาคม"
+  },
+  {
+   "id": "xmtop89ura5",
+   "date": "2026-06-30",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนมิถุนายน"
+  },
+  {
+   "id": "xmtop89ura6",
+   "date": "2026-07-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนกรกฎาคม"
+  },
+  {
+   "id": "xmtop89ura7",
+   "date": "2026-08-31",
+   "orgId": "xmtop89uq0",
+   "catId": "A03-9",
+   "amount": 1000,
+   "docNo": "",
+   "note": "นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือนสิงหาคม"
+  }
+ ]
+}
