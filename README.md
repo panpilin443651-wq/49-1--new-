@@ -17,7 +17,8 @@
 index.html            หน้าเว็บทั้งหมด (ไม่ใช้เฟรมเวิร์ก ไม่ต้อง build)
 api/auth.js           เข้าสู่ระบบด้วยรหัสผ่านร่วม (คุกกี้ HttpOnly)
 api/data.js           อ่าน/เขียนข้อมูลกลาง
-api/_lib.js           ตัวช่วยต่อ Upstash Redis + ตรวจรหัสผ่าน
+api/_lib.js           ตัวช่วยต่อ Supabase (REST) + ตรวจรหัสผ่าน
+supabase.sql          สคริปต์สร้างตาราง รันครั้งเดียวใน SQL Editor
 ข้อมูล/                ไฟล์ต้นฉบับ 49(1) ฝศย..xlsx (ไม่ขึ้นเว็บ)
 นำเข้า/                ข้อมูลที่แปลงแล้ว JSON/CSV (ไม่ขึ้นเว็บ)
 ```
@@ -28,13 +29,23 @@ api/_lib.js           ตัวช่วยต่อ Upstash Redis + ตรว�
 แต่ละรายการเก็บเป็นคนละช่องในฐานข้อมูล เวลาสองคนบันทึกคนละรายการพร้อมกันจึงไม่ทับกัน
 และหน้าเว็บจะส่งขึ้นเซิร์ฟเวอร์เฉพาะรายการที่เปลี่ยนจริงเท่านั้น
 
-## ติดตั้งบน Vercel
+## ติดตั้ง
 
-1. Import repo นี้ที่ vercel.com (Framework Preset: **Other**, ไม่ต้องใส่ Build Command)
-2. **Storage → Create Database → Upstash for Redis** แล้ว Connect เข้ากับโปรเจกต์
-   (จะได้ตัวแปร `KV_REST_API_URL` และ `KV_REST_API_TOKEN` อัตโนมัติ)
-3. **Redeploy** หนึ่งครั้ง
-4. เปิดเว็บ ใส่ชื่อผู้ใช้และรหัสผ่าน — ครั้งแรกระบบจะย้ายข้อมูลปีงบ 2566–2569 ขึ้นเซิร์ฟเวอร์ให้เอง
+**1. สร้างตารางบน Supabase** — เปิดโปรเจกต์ที่ supabase.com → SQL Editor → New query
+วางเนื้อหาไฟล์ `supabase.sql` ทั้งไฟล์ → Run (สร้าง 3 ตารางพร้อมสิทธิ์ให้ anon key)
+
+**2. ตั้งตัวแปรที่ Vercel** — Settings → Environment Variables (ติ๊กครบทั้ง Production / Preview / Development)
+
+| ตัวแปร | ค่า | หาได้จาก |
+|---|---|---|
+| `SUPABASE_URL` | https://xxxx.supabase.co | Supabase → Project Settings → Data API → Project URL |
+| `SUPABASE_ANON_KEY` | eyJhbG… | หน้าเดียวกัน หัวข้อ Project API keys → anon public |
+
+**3. Redeploy** หนึ่งครั้ง แล้วเปิดเว็บ ใส่ชื่อผู้ใช้/รหัสผ่าน — ครั้งแรกระบบจะย้ายข้อมูลปีงบ 2566–2569 ขึ้นฐานข้อมูลให้เอง
+
+ตรวจว่าพร้อมหรือยัง: เปิด `/api/auth` ต้องได้ `"ready":true`
+
+anon key ถูกเก็บไว้ที่เซิร์ฟเวอร์ Vercel เท่านั้น ไม่ได้ถูกส่งลงไปในหน้าเว็บ
 
 ## ชื่อผู้ใช้ / รหัสผ่าน
 

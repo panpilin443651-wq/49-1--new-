@@ -1,46 +1,58 @@
-/* ตัวช่วยฝั่งเซิร์ฟเวอร์: คุยกับ Upstash Redis ผ่าน REST + ตรวจรหัสผ่าน
-   ไม่มี dependency ใด ๆ ใช้ fetch กับ node:crypto ที่มีอยู่แล้ว */
+/* ตัวช่วยฝั่งเซิร์ฟเวอร์: คุยกับ Supabase ผ่าน REST (PostgREST) + ตรวจรหัสผ่าน
+   ไม่มี dependency ใด ๆ ใช้ fetch กับ node:crypto ที่มีอยู่แล้ว
+   anon key ถูกเก็บไว้ที่เซิร์ฟเวอร์เท่านั้น ไม่ถูกส่งลงไปในหน้าเว็บ */
 import crypto from "node:crypto";
 
-const RURL  = process.env.KV_REST_API_URL   || process.env.UPSTASH_REDIS_REST_URL   || "";
-const RTOK  = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || "";
+const SB_URL = (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "").replace(/\/$/,"");
+const SB_KEY = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+               process.env.SUPABASE_KEY || "";
 /* ชื่อผู้ใช้/รหัสผ่านร่วม — เปลี่ยนได้โดยตั้งตัวแปร APP_USER / APP_PASSWORD ที่ Vercel แล้ว Redeploy */
 const USER  = process.env.APP_USER || "raot";
 const PW    = process.env.APP_PASSWORD || "1234";
-export const hasDB = !!(RURL && RTOK);
+export const hasDB = !!(SB_URL && SB_KEY);
 export const hasPW = !!(USER && PW);
 
-/* คอลเลกชันที่เก็บเป็น Redis hash (field = id ของรายการ) */
+export const T_ITEMS = "b491_items", T_META = "b491_meta", T_LOG = "b491_log";
 export const COLLS = ["orgs", "cats", "budgets", "expenses"];
-const K = { orgs:"b491:orgs", cats:"b491:cats", budgets:"b491:budgets",
-            expenses:"b491:expenses", config:"b491:config", log:"b491:log" };
-export const keyOf = c=> K[c];
 
-/* ---------- Redis REST (แบบ pipeline หลายคำสั่งในครั้งเดียว) ---------- */
-export async function redis(cmds){
-  if(!hasDB) throw new Error("ยังไม่ได้เชื่อมฐานข้อมูล (ไม่พบ KV_REST_API_URL / KV_REST_API_TOKEN)");
-  const res = await fetch(RURL.replace(/\/$/,"") + "/pipeline", {
-    method:"POST",
-    headers:{ Authorization:"Bearer "+RTOK, "Content-Type":"application/json" },
-    body: JSON.stringify(cmds)
+/* ---------- Supabase REST ---------- */
+async function sb(path, opts){
+  if(!hasDB) throw new Error("ยังไม่ได้เชื่อมฐานข้อมูล (ไม่พบ SUPABASE_URL / SUPABASE_ANON_KEY)");
+  const o = opts || {};
+  const res = await fetch(SB_URL+"/rest/v1/"+path, {
+    method: o.method || "GET",
+    headers: Object.assign({
+      apikey: SB_KEY,
+      Authorization: "Bearer "+SB_KEY,
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    }, o.headers || {}),
+    body: o.body
   });
   const txt = await res.text();
-  if(!res.ok) throw new Error("ฐานข้อมูลตอบกลับ "+res.status+": "+txt.slice(0,300));
-  let out; try{ out = JSON.parse(txt); }catch(e){ throw new Error("อ่านคำตอบจากฐานข้อมูลไม่ได้"); }
-  if(!Array.isArray(out)) out = [out];
-  const bad = out.find(x=> x && x.error);
-  if(bad) throw new Error("คำสั่งฐานข้อมูลผิดพลาด: "+bad.error);
-  return out.map(x=> x? x.result : null);
+  if(!res.ok){
+    let msg = txt.slice(0,400);
+    try{ const j=JSON.parse(txt); msg = j.message || j.hint || j.details || msg;
+      if(/relation .* does not exist|Could not find the table/i.test(msg))
+        msg = "ยังไม่ได้สร้างตารางในฐานข้อมูล — ให้รันไฟล์ supabase.sql ใน SQL Editor ของ Supabase ก่อน";
+      else if(res.status===401 || res.status===403)
+        msg = "Supabase ปฏิเสธการเข้าถึง — ตรวจ anon key และสิทธิ์ (RLS policy) ของตาราง";
+    }catch(e){}
+    throw new Error("ฐานข้อมูลตอบกลับ "+res.status+": "+msg);
+  }
+  if(!txt) return [];
+  try{ return JSON.parse(txt); }catch(e){ return []; }
 }
-/* HGETALL คืนมาเป็น array [field,value,field,value,...] หรือ object แล้วแต่เวอร์ชัน */
-export function hashToArray(raw){
-  const out=[];
-  if(!raw) return out;
-  const push = v=>{ try{ const o=JSON.parse(v); if(o && typeof o==="object") out.push(o); }catch(e){} };
-  if(Array.isArray(raw)){ for(let i=1;i<raw.length;i+=2) push(raw[i]); }
-  else if(typeof raw==="object"){ Object.keys(raw).forEach(k=> push(raw[k])); }
-  return out;
-}
+export const sbSelect = path=> sb(path);
+/* เขียนทับรายการเดิมถ้ามีคีย์ซ้ำ (upsert) */
+export const sbUpsert = (table, rows)=> sb(table+"?on_conflict="+(table===T_META? "k":"coll,id"), {
+  method:"POST", headers:{ Prefer:"resolution=merge-duplicates,return=minimal" }, body: JSON.stringify(rows) });
+export const sbInsert = (table, rows)=> sb(table, {
+  method:"POST", headers:{ Prefer:"return=minimal" }, body: JSON.stringify(rows) });
+export const sbDelete = (table, query)=> sb(table+"?"+query, {
+  method:"DELETE", headers:{ Prefer:"return=minimal" } });
+/* ค่าที่ใส่ใน in.(...) ต้องครอบด้วยเครื่องหมายคำพูดและ escape */
+export const inList = ids=> "in.("+ids.map(x=>'"'+String(x).replace(/"/g,'\\"')+'"').join(",")+")";
 
 /* ---------- รหัสผ่านร่วม ---------- */
 export const COOKIE = "b491s";
@@ -59,8 +71,7 @@ export function isAuthed(req){
   if(!hasPW) return false;
   const c = readCookie(req, COOKIE);
   if(!c) return false;
-  const want = sessionToken();
-  const a = Buffer.from(c), b = Buffer.from(want);
+  const a = Buffer.from(c), b = Buffer.from(sessionToken());
   return a.length===b.length && crypto.timingSafeEqual(a,b);
 }
 const sameSecret = (a,b)=>{
@@ -92,7 +103,7 @@ export async function readBody(req){
 }
 export function guard(req,res){
   if(!hasPW){ json(res,500,{error:"ยังไม่ได้ตั้งรหัสผ่าน (ตัวแปร APP_PASSWORD) ที่ Vercel"}); return false; }
-  if(!hasDB){ json(res,500,{error:"ยังไม่ได้เชื่อมฐานข้อมูล Upstash Redis กับโปรเจกต์นี้"}); return false; }
+  if(!hasDB){ json(res,500,{error:"ยังไม่ได้เชื่อมฐานข้อมูล Supabase กับโปรเจกต์นี้"}); return false; }
   if(!isAuthed(req)){ json(res,401,{error:"ยังไม่ได้เข้าสู่ระบบ"}); return false; }
   return true;
 }
