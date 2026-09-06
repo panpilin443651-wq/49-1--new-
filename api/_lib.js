@@ -4,9 +4,11 @@ import crypto from "node:crypto";
 
 const RURL  = process.env.KV_REST_API_URL   || process.env.UPSTASH_REDIS_REST_URL   || "";
 const RTOK  = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || "";
-const PW    = process.env.APP_PASSWORD || "";
+/* ชื่อผู้ใช้/รหัสผ่านร่วม — เปลี่ยนได้โดยตั้งตัวแปร APP_USER / APP_PASSWORD ที่ Vercel แล้ว Redeploy */
+const USER  = process.env.APP_USER || "raot";
+const PW    = process.env.APP_PASSWORD || "1234";
 export const hasDB = !!(RURL && RTOK);
-export const hasPW = !!PW;
+export const hasPW = !!(USER && PW);
 
 /* คอลเลกชันที่เก็บเป็น Redis hash (field = id ของรายการ) */
 export const COLLS = ["orgs", "cats", "budgets", "expenses"];
@@ -43,7 +45,7 @@ export function hashToArray(raw){
 /* ---------- รหัสผ่านร่วม ---------- */
 export const COOKIE = "b491s";
 export function sessionToken(){
-  return crypto.createHmac("sha256", PW + "|b491").update("session-v1").digest("hex").slice(0,40);
+  return crypto.createHmac("sha256", USER+":"+PW+"|b491").update("session-v2").digest("hex").slice(0,40);
 }
 export function readCookie(req, name){
   const raw = req.headers.cookie || "";
@@ -61,11 +63,16 @@ export function isAuthed(req){
   const a = Buffer.from(c), b = Buffer.from(want);
   return a.length===b.length && crypto.timingSafeEqual(a,b);
 }
-export function checkPassword(input){
-  if(!hasPW || typeof input!=="string") return false;
-  const a = Buffer.from(crypto.createHash("sha256").update(input).digest());
-  const b = Buffer.from(crypto.createHash("sha256").update(PW).digest());
-  return crypto.timingSafeEqual(a,b);
+const sameSecret = (a,b)=>{
+  const x = Buffer.from(crypto.createHash("sha256").update(String(a)).digest());
+  const y = Buffer.from(crypto.createHash("sha256").update(String(b)).digest());
+  return crypto.timingSafeEqual(x,y);
+};
+/* ชื่อผู้ใช้ไม่สนตัวพิมพ์ใหญ่เล็กและช่องว่างหัวท้าย ส่วนรหัสผ่านตรงตัว */
+export function checkLogin(username, password){
+  if(!hasPW || typeof password!=="string") return false;
+  const u = String(username==null? "" : username).trim().toLowerCase();
+  return sameSecret(u, USER.trim().toLowerCase()) && sameSecret(password, PW);
 }
 
 /* ---------- ตัวช่วยตอบกลับ ---------- */

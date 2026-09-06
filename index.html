@@ -155,6 +155,11 @@ body.locked .side{display:none}
 .logincard h2{margin-top:10px}
 .loginlogo{width:56px;height:56px;border-radius:16px;margin:4px auto 0;display:grid;place-items:center;
   background:linear-gradient(135deg,var(--purple),var(--pastel));color:#fff;font-weight:700;font-size:15px;box-shadow:var(--sh)}
+.pwwrap{position:relative}
+.pwwrap input{padding-right:44px}
+.pweye{position:absolute;top:0;right:0;height:100%;width:40px;display:grid;place-items:center;
+  font-size:16px;border-radius:0 10px 10px 0;color:var(--muted);line-height:1}
+.pweye:hover{background:var(--lav)}
 .syncbox{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);
   background:var(--card);border:1px solid var(--border);border-radius:10px;padding:5px 10px;white-space:nowrap}
 .syncbox.err{color:#A94848;border-color:#F3D5D5;background:#FDEFEF}
@@ -403,7 +408,7 @@ const DEFAULT_ORGS = [
   {code:"กรย.", name:"กรย."},
   {code:"กวย.", name:"กวย."}
 ];
-let PREF = {fy:FY_NOW, dark:false, navHidden:false, name:""};
+let PREF = {fy:FY_NOW, dark:false, navHidden:false, name:"", user:""};
 function loadPref(){
   try{ const r=localStorage.getItem(PREF_KEY); if(r) PREF=Object.assign(PREF, JSON.parse(r)||{}); }catch(e){}
   if(!(PREF.fy>2500&&PREF.fy<2700)) PREF.fy=FY_NOW;
@@ -1768,19 +1773,25 @@ function needLogin(msg){
   lockUI(true);
   bigCard(brandHead+
     (msg? '<div class="warnbox" style="margin-top:14px">'+esc(msg)+'</div>':'')+
-    '<div class="field" style="margin-top:14px"><label class="f">ชื่อผู้บันทึก (ใช้แสดงว่าใครแก้ข้อมูล)</label>'+
-      '<input type="text" id="lgName" value="'+esc(PREF.name||"")+'" placeholder="เช่น สมชาย"></div>'+
-    '<div class="field"><label class="f">รหัสผ่านร่วม *</label>'+
-      '<input type="password" id="lgPw" placeholder="รหัสที่ได้รับจากผู้ดูแลระบบ"></div>'+
+    '<div class="field" style="margin-top:14px"><label class="f">ชื่อผู้ใช้ *</label>'+
+      '<input type="text" id="lgUser" value="'+esc(PREF.user||"")+'" placeholder="ชื่อผู้ใช้" autocomplete="username"></div>'+
+    '<div class="field"><label class="f">รหัสผ่าน *</label>'+
+      '<div class="pwwrap"><input type="password" id="lgPw" placeholder="รหัสผ่าน" autocomplete="current-password">'+
+      '<button type="button" class="pweye" id="lgEye" title="ดูรหัสผ่าน" aria-label="ดูรหัสผ่าน">👁</button></div></div>'+
     '<div id="lgErr"></div>'+
-    '<button class="btn" id="lgGo" style="width:100%;justify-content:center">เข้าใช้งาน</button>');
+    '<button class="btn" id="lgGo" style="width:100%;justify-content:center">เข้าใช้งาน</button>'+
+    '<div class="hint" style="margin-top:10px">ชื่อผู้ใช้จะถูกใช้เป็นชื่อผู้บันทึกในประวัติการแก้ไข '+
+    '(เปลี่ยนได้ที่หน้าตั้งค่า)</div>');
   const go = async ()=>{
-    const pw = $("#lgPw").value, nm = $("#lgName").value.trim();
+    const user = ($("#lgUser").value||"").trim(), pw = $("#lgPw").value;
+    if(!user){ $("#lgErr").innerHTML='<div class="warnbox">กรุณากรอกชื่อผู้ใช้</div>'; return; }
     if(!pw){ $("#lgErr").innerHTML='<div class="warnbox">กรุณากรอกรหัสผ่าน</div>'; return; }
     $("#lgGo").textContent = "กำลังตรวจสอบ…";
     try{
-      await api("/api/auth", {method:"POST", body:JSON.stringify({password:pw})});
-      PREF.name = nm; savePref();
+      await api("/api/auth", {method:"POST", body:JSON.stringify({username:user, password:pw})});
+      PREF.user = user;
+      if(!PREF.name) PREF.name = user;
+      savePref();
       await afterLogin();
     }catch(e){
       $("#lgErr").innerHTML = '<div class="warnbox">'+esc(e.message)+'</div>';
@@ -1789,8 +1800,21 @@ function needLogin(msg){
     }
   };
   const g=$("#lgGo"); if(g) g.onclick=go;
-  const p=$("#lgPw");
-  if(p){ p.addEventListener("keydown", e=>{ if(e.key==="Enter") go(); }); if(p.focus) p.focus(); }
+  const eye=$("#lgEye");
+  if(eye) eye.onclick=()=>{
+    const p=$("#lgPw"); if(!p) return;
+    const show = p.type==="password";
+    p.type = show? "text" : "password";
+    eye.textContent = show? "🙈" : "👁";
+    eye.title = show? "ซ่อนรหัสผ่าน" : "ดูรหัสผ่าน";
+    if(p.focus) p.focus();
+  };
+  const p=$("#lgPw"), u=$("#lgUser");
+  const onEnter = e=>{ if(e.key==="Enter") go(); };
+  if(p) p.addEventListener("keydown", onEnter);
+  if(u) u.addEventListener("keydown", onEnter);
+  const first = (PREF.user? p : u);
+  if(first && first.focus) first.focus();
 }
 /* ข้อมูลตั้งต้นจากไฟล์ 49(1) สำหรับย้ายขึ้นเซิร์ฟเวอร์ครั้งแรก */
 function buildSeed(){
