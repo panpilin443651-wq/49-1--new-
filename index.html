@@ -147,6 +147,19 @@ tfoot td{font-weight:700;border-top:2px solid var(--border);border-bottom:none;b
   font-variant-numeric:tabular-nums;min-width:88px}
 .tbl-in:hover{border-color:var(--border)}
 .tbl-in:focus{border-color:var(--pastel)}
+/* หน้าเข้าสู่ระบบ / สถานะเชื่อมต่อ */
+body.locked .side{display:none}
+.loginwrap{min-height:70vh;display:flex;align-items:center;justify-content:center;padding:10px}
+.logincard{max-width:400px;width:100%;text-align:center}
+.logincard .field{text-align:left}
+.logincard h2{margin-top:10px}
+.loginlogo{width:56px;height:56px;border-radius:16px;margin:4px auto 0;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--purple),var(--pastel));color:#fff;font-weight:700;font-size:15px;box-shadow:var(--sh)}
+.syncbox{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);
+  background:var(--card);border:1px solid var(--border);border-radius:10px;padding:5px 10px;white-space:nowrap}
+.syncbox.err{color:#A94848;border-color:#F3D5D5;background:#FDEFEF}
+body.dark .syncbox.err{color:#EC9C9C;border-color:#5A3A3A;background:#3A2A2C}
+.syncbox:empty{display:none}
 .seg{display:inline-flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card)}
 .seg button{padding:6px 12px;font-size:13px;color:var(--muted);border-right:1px solid var(--border)}
 .seg button:last-child{border-right:none}
@@ -353,7 +366,8 @@ function thDate(str){
 
 /* ---------- ตัวช่วยทั่วไป ---------- */
 const $ = (s,r)=> (r||document).querySelector(s);
-const uid = ()=> Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+let _seq = 0;
+const uid = ()=> Date.now().toString(36)+(_seq++).toString(36)+Math.random().toString(36).slice(2,5);
 const nf = new Intl.NumberFormat("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2});
 const nf0 = new Intl.NumberFormat("th-TH",{maximumFractionDigits:0});
 const money = n=> nf.format(Math.round((+n||0)*100)/100);
@@ -374,9 +388,14 @@ function download(name, text, mime){
   document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },100);
 }
 
-/* ---------- ฐานข้อมูล ---------- */
-const KEY = "budget491.v1";
-let DB = null;
+/* ---------- ข้อมูลกลาง ----------
+   ใช้ร่วมกันทุกคน (เก็บบนเซิร์ฟเวอร์): หน่วยงาน · หมวด · งบจัดสรร · ค่าใช้จ่าย · เกณฑ์สี · ปีงบ
+   ส่วนตัวของแต่ละเครื่อง (เก็บใน localStorage): ปีที่กำลังดู · โหมดมืด · ซ่อนเมนู · ชื่อผู้บันทึก */
+const COLLS = ["orgs","cats","budgets","expenses"];
+const PREF_KEY = "b491.pref";
+let DB = null, SNAP = null;
+let SYNC = {state:"ok", msg:"", busy:false, again:false, last:0};
+
 /* หน่วยงานในฝ่ายเศรษฐกิจยาง */
 const DEFAULT_ORGS = [
   {code:"ฝศย.", name:"ฝ่ายเศรษฐกิจยาง"},
@@ -384,45 +403,109 @@ const DEFAULT_ORGS = [
   {code:"กรย.", name:"กรย."},
   {code:"กวย.", name:"กวย."}
 ];
+let PREF = {fy:FY_NOW, dark:false, navHidden:false, name:""};
+function loadPref(){
+  try{ const r=localStorage.getItem(PREF_KEY); if(r) PREF=Object.assign(PREF, JSON.parse(r)||{}); }catch(e){}
+  if(!(PREF.fy>2500&&PREF.fy<2700)) PREF.fy=FY_NOW;
+}
+function savePref(){ try{ localStorage.setItem(PREF_KEY, JSON.stringify(PREF)); }catch(e){} }
+
 function blankDB(){
-  return { v:2, settings:{ fy:FY_NOW, thresholds:{crit:10, warn:25, watch:50}, seededOrgs:true,
-                           years:[], navHidden:false, dark:false },
-           orgs: DEFAULT_ORGS.map(o=>({id:uid(), code:o.code, name:o.name, note:""})),
-           cats: DEFAULT_CATS.map(c=> Object.assign({}, c)),
-           budgets:[], expenses:[] };
+  return { v:3, settings:{ fy:PREF.fy, thresholds:{crit:10, warn:25, watch:50},
+                           years:[], navHidden:PREF.navHidden, dark:PREF.dark },
+           orgs:[], cats:[], budgets:[], expenses:[] };
 }
-/* เติมหน่วยงานมาตรฐานให้ข้อมูลเดิมที่ยังไม่มี (ทำครั้งเดียว) */
-function seedOrgs(){
-  if(DB.settings.seededOrgs) return;
-  DEFAULT_ORGS.forEach(d=>{
-    if(!DB.orgs.some(o=> normalize(o.code)===normalize(d.code) || normalize(o.name)===normalize(d.name)))
-      DB.orgs.push({id:uid(), code:d.code, name:d.name, note:""});
+/* เรียงตามลำดับที่ผู้ใช้จัดไว้ (ฐานข้อมูลไม่รับประกันลำดับ) */
+function applyOrder(){
+  const by = (a,b)=> (+a.ord||0)-(+b.ord||0);
+  DB.cats.sort(by); DB.orgs.sort(by);
+}
+function renumber(){
+  DB.cats.forEach((c,i)=> c.ord=(i+1)*10);
+  DB.orgs.forEach((o,i)=> o.ord=(i+1)*10);
+}
+
+/* ---------- คุยกับเซิร์ฟเวอร์ ---------- */
+async function api(path, opts){
+  const res = await fetch(path, Object.assign({headers:{"Content-Type":"application/json"}, cache:"no-store"}, opts||{}));
+  let body = null;
+  try{ body = await res.json(); }catch(e){}
+  if(!res.ok){
+    const err = new Error((body && body.error) || ("เซิร์ฟเวอร์ตอบกลับ "+res.status));
+    err.status = res.status; throw err;
+  }
+  return body || {};
+}
+function snapshot(){
+  const m = {config: JSON.stringify(sharedConfig())};
+  COLLS.forEach(c=>{ const o={}; (DB[c]||[]).forEach(r=>{ if(r&&r.id) o[r.id]=JSON.stringify(r); }); m[c]=o; });
+  return m;
+}
+const sharedConfig = ()=> ({thresholds:DB.settings.thresholds, years:DB.settings.years||[]});
+function diffOps(){
+  const ops=[];
+  COLLS.forEach(c=>{
+    const now={}; (DB[c]||[]).forEach(r=>{ if(r&&r.id) now[r.id]=JSON.stringify(r); });
+    const was=(SNAP&&SNAP[c])||{};
+    Object.keys(now).forEach(id=>{ if(was[id]!==now[id]) ops.push({coll:c, id:id, type:"put", data:JSON.parse(now[id])}); });
+    Object.keys(was).forEach(id=>{ if(!(id in now)) ops.push({coll:c, id:id, type:"del"}); });
   });
-  DB.settings.seededOrgs = true;
-  save();
+  const cfg = JSON.stringify(sharedConfig());
+  if(!SNAP || cfg!==SNAP.config) ops.push({coll:"config", data:JSON.parse(cfg)});
+  return ops;
 }
-function load(){
-  try{
-    const raw = localStorage.getItem(KEY);
-    if(raw){ const d=JSON.parse(raw); DB = Object.assign(blankDB(), d);
-      DB.settings = Object.assign({fy:FY_NOW, thresholds:{crit:10,warn:25,watch:50}, years:[], navHidden:false, dark:false}, d.settings||{});
-      DB.settings.thresholds = Object.assign({crit:10,warn:25,watch:50}, (d.settings||{}).thresholds||{});
-      if(!Array.isArray(DB.settings.years)) DB.settings.years=[];
-      ["orgs","budgets","expenses"].forEach(k=>{ if(!Array.isArray(DB[k])) DB[k]=[]; });
-      if(!Array.isArray(DB.cats) || !DB.cats.length) DB.cats = DEFAULT_CATS.map(c=> Object.assign({}, c));
-      buildCats();
-      return;
-    }
-  }catch(e){ console.warn("โหลดข้อมูลไม่สำเร็จ",e); }
-  DB = blankDB(); buildCats(); save();
+function setSync(state, msg){ SYNC.state=state; SYNC.msg=msg||""; paintSync(); }
+function paintSync(){
+  const el=$("#syncBox"); if(!el) return;
+  const m = {saving:["⏳","กำลังบันทึก…",""], ok:["✅","บันทึกแล้ว",""], error:["⚠️","บันทึกไม่สำเร็จ","err"]}[SYNC.state] || ["","",""];
+  el.className = "syncbox "+m[2];
+  el.innerHTML = '<span>'+m[0]+'</span><span>'+esc(SYNC.msg||m[1])+'</span>'+
+    (SYNC.state==="error"? ' <button class="btn ghost sm" id="syncRetry">ลองใหม่</button>':'');
+  const r=$("#syncRetry"); if(r) r.onclick=()=> syncNow(true);
 }
-let saveTimer=null;
+let syncTimer=null;
+/* ทุกจุดในแอปยังเรียก save() เหมือนเดิม แต่ตอนนี้แปลว่า "ส่งเฉพาะรายการที่เปลี่ยนขึ้นเซิร์ฟเวอร์" */
 function save(){
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(()=>{
-    try{ localStorage.setItem(KEY, JSON.stringify(DB)); }
-    catch(e){ toast("บันทึกลงเครื่องไม่สำเร็จ: "+e.message, true); }
-  }, 60);
+  PREF.fy = DB.settings.fy; PREF.dark = !!DB.settings.dark; PREF.navHidden = !!DB.settings.navHidden;
+  savePref();
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(()=> syncNow(), 250);
+}
+async function syncNow(force){
+  if(!DB || !SNAP) return true;
+  if(SYNC.busy){ SYNC.again=true; return false; }
+  const ops = diffOps();
+  if(!ops.length && !force){ return true; }
+  if(!ops.length){ setSync("ok",""); return true; }
+  SYNC.busy=true; setSync("saving","กำลังบันทึก "+ops.length+" รายการ…");
+  try{
+    await api("/api/data", {method:"POST", body:JSON.stringify({ops:ops, by:PREF.name||"ไม่ระบุชื่อ"})});
+    SNAP = snapshot(); SYNC.last=Date.now();
+    setSync("ok","บันทึกแล้ว "+new Date().toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"}));
+    return true;
+  }catch(e){
+    if(e.status===401){ SYNC.busy=false; needLogin("หมดเวลาเข้าใช้งาน กรุณาใส่รหัสอีกครั้ง"); return false; }
+    setSync("error", e.message);
+    return false;
+  }finally{
+    SYNC.busy=false;
+    if(SYNC.again){ SYNC.again=false; setTimeout(()=>syncNow(), 300); }
+  }
+}
+/* ดึงข้อมูลล่าสุดจากเซิร์ฟเวอร์ (บันทึกของค้างก่อน) */
+async function pullFromServer(){
+  await syncNow();
+  const r = await api("/api/data");
+  DB = blankDB();
+  COLLS.forEach(c=> DB[c] = Array.isArray(r.data[c])? r.data[c] : []);
+  const cfg = r.config || {};
+  DB.settings.thresholds = Object.assign({crit:10,warn:25,watch:50}, cfg.thresholds||{});
+  DB.settings.years = Array.isArray(cfg.years)? cfg.years : [];
+  if(!DB.cats.length) DB.cats = DEFAULT_CATS.map((c,i)=> Object.assign({ord:(i+1)*10}, c));
+  applyOrder(); buildCats();
+  SNAP = snapshot();
+  SYNC.last = Date.now();
+  return r;
 }
 const FY = ()=> DB.settings.fy;
 function fyList(){
@@ -529,12 +612,16 @@ function render(){
       fys.map(f=>'<option value="'+f+'"'+(f===fy?" selected":"")+'>'+f+'</option>').join("")+
     '</select></div>'+
     '<button class="btn ghost sm" id="fyAdd" title="เพิ่มปีงบประมาณ">+ ปีงบ</button>'+
-    '<button class="btn ghost sm" id="themeBtn" title="'+(DB.settings.dark? "กดเพื่อสลับเป็นโหมดสว่าง":"กดเพื่อสลับเป็นโหมดมืด")+'">'+
-      (DB.settings.dark? "☀️ โหมดสว่าง":"🌙 โหมดมืด")+'</button></div>';
+    '<button class="btn ghost sm" id="themeBtn" title="'+(PREF.dark? "กดเพื่อสลับเป็นโหมดสว่าง":"กดเพื่อสลับเป็นโหมดมืด")+'">'+
+      (PREF.dark? "☀️ โหมดสว่าง":"🌙 โหมดมืด")+'</button>'+
+    '<button class="navbtn" id="refreshBtn" title="ดึงข้อมูลล่าสุดจากเซิร์ฟเวอร์">⟳</button>'+
+    '<div id="syncBox" class="syncbox"></div></div>';
   $("#view").innerHTML = head + ({
     dash:viewDash, budget:viewBudget, monthly:viewMonthly, compare:viewCompare,
     cat:viewCat, org:viewOrg, setting:viewSetting
   })[CUR]();
+  paintSync();
+  const rb=$("#refreshBtn"); if(rb) rb.onclick=()=> maybeRefresh(0, true);
   if(afterRender[CUR]) afterRender[CUR]();
 }
 const afterRender = {};
@@ -1186,6 +1273,7 @@ function catForm(cat, parentId){
     if(dup){ toast("รหัส "+code+" ถูกใช้แล้ว",1); return false; }
     if(isNew){
       DB.cats.push({id:code, parent:p, name:name});
+      renumber();
       toast("เพิ่มหมวดแล้ว");
     } else {
       const old = cat.id;
@@ -1210,7 +1298,7 @@ function moveCat(id, dir){
   if(t<0 || t>=sibs.length){ toast("อยู่ปลายสุดแล้ว",1); return; }
   const i = DB.cats.indexOf(me), j = DB.cats.indexOf(sibs[t]);
   DB.cats[i] = sibs[t]; DB.cats[j] = me;
-  buildCats(); save(); render();
+  renumber(); buildCats(); save(); render();
 }
 afterRender.cat = ()=>{
   if($("#catAddTop")) $("#catAddTop").onclick = ()=> catForm(null, "");
@@ -1232,7 +1320,7 @@ afterRender.cat = ()=>{
       toast("ลบไม่ได้ — มีค่าใช้จ่าย "+u.expenses+" รายการ และงบจัดสรร "+u.budgets+" รายการผูกอยู่",1); return;
     }
     confirmBox("ยืนยันการลบหมวด","ลบหมวด <b>"+esc(catName(id))+"</b> (รหัส "+esc(id)+")?","ลบหมวด",()=>{
-      DB.cats = DB.cats.filter(c=>c.id!==id);
+      DB.cats = DB.cats.filter(c=>c.id!==id); renumber();
       if(FILT.cat===id) FILT.cat="";
       buildCats(); save(); toast("ลบหมวดแล้ว"); render();
     });
@@ -1280,7 +1368,7 @@ function orgForm(og){
     if(!name){ toast("กรุณากรอกชื่อหน่วยงาน",1); return false; }
     const rec={id: og? og.id : uid(), code:$("#o_code").value.trim(), name:name, note:$("#o_note").value.trim()};
     if(og){ const i=DB.orgs.findIndex(x=>x.id===og.id); DB.orgs[i]=rec; toast("แก้ไขหน่วยงานแล้ว"); }
-    else { DB.orgs.push(rec); toast("เพิ่มหน่วยงานแล้ว"); }
+    else { DB.orgs.push(rec); renumber(); toast("เพิ่มหน่วยงานแล้ว"); }
     save(); render(); return true;
   });
 }
@@ -1501,8 +1589,23 @@ function viewSetting(){
     '</div>'+
     '<div class="hint" style="margin-top:12px">📌 ช่อง <b>รหัสหมวด</b> ใส่ได้ทั้งรหัส (เช่น A03-1) หรือชื่อหมวดเต็ม · วันที่รับทั้ง 2569-10-15 และ 15/10/2569</div></div>';
 
+  h += '<div class="card"><h2>ผู้ใช้งาน</h2>'+
+    '<div class="hint" style="margin-bottom:12px">ชื่อนี้จะติดไปกับประวัติการแก้ไข ให้รู้ว่าใครบันทึกอะไร</div>'+
+    '<div class="grid2"><div class="field"><label class="f">ชื่อผู้บันทึก</label>'+
+      '<input type="text" id="myName" value="'+esc(PREF.name||"")+'" placeholder="เช่น สมชาย"></div>'+
+      '<div class="field"><label class="f">&nbsp;</label><button class="btn" id="nameSave">บันทึกชื่อ</button></div></div>'+
+    '<button class="btn ghost danger" id="logoutBtn" style="color:var(--red)">ออกจากระบบ</button></div>';
+
+  h += '<div class="card"><h2>ประวัติการแก้ไขล่าสุด</h2>'+
+    '<div class="hint" style="margin-bottom:8px">บันทึกจากเซิร์ฟเวอร์ (เก็บ 200 รายการล่าสุด)</div>'+
+    (SERVER_LOG.length? SERVER_LOG.map(l=>
+      '<div class="catrow"><div class="nm">'+esc(l.by||"-")+'</div>'+
+      '<div class="amt">'+esc(l.what||"")+' · '+new Date(l.t).toLocaleString("th-TH")+'</div></div>').join("")
+      : '<div class="empty">ยังไม่มีประวัติ</div>')+'</div>';
+
   h += '<div class="card"><h2>สำรอง / กู้คืนข้อมูลทั้งหมด</h2>'+
-    '<div class="hint" style="margin-bottom:12px">ข้อมูลเก็บอยู่ในเครื่องนี้เท่านั้น (localStorage) แนะนำให้สำรองเป็นไฟล์ JSON เป็นระยะ</div>'+
+    '<div class="hint" style="margin-bottom:12px">ข้อมูลอยู่บนเซิร์ฟเวอร์กลาง ทุกคนเห็นชุดเดียวกัน · '+
+    'การกู้คืนหรือล้างข้อมูลจะมีผลกับ<b>ทุกคน</b> ไม่ใช่แค่เครื่องนี้</div>'+
     '<button class="btn" id="bkSave">⬇ สำรองข้อมูล (JSON)</button> '+
     '<button class="btn ghost" id="bkLoad">⬆ กู้คืนจากไฟล์</button> '+
     '<button class="btn ghost danger" id="bkReset" style="color:var(--red)">🗑 ล้างข้อมูลทั้งหมด</button></div>';
@@ -1539,13 +1642,39 @@ afterRender.setting = ()=>{
   $("#bkLoad").onclick=()=> pickFile(".json,application/json", txt=>{
     let d; try{ d=JSON.parse(txt); }catch(e){ toast("ไฟล์ JSON ไม่ถูกต้อง",1); return; }
     if(!d || !Array.isArray(d.expenses)){ toast("ไฟล์นี้ไม่ใช่ไฟล์สำรองของระบบ",1); return; }
-    confirmBox("กู้คืนข้อมูล","ข้อมูลปัจจุบันทั้งหมดจะถูกแทนที่ด้วยไฟล์สำรอง<br>"+
+    confirmBox("กู้คืนข้อมูล","ข้อมูลบนเซิร์ฟเวอร์จะถูกแทนที่ด้วยไฟล์สำรองนี้ <b>มีผลกับทุกคน</b><br>"+
       "(หน่วยงาน "+(d.orgs||[]).length+" · ค่าใช้จ่าย "+d.expenses.length+" รายการ)",
-      "กู้คืนข้อมูล", ()=>{ DB=Object.assign(blankDB(),d); localStorage.setItem(KEY,JSON.stringify(DB)); load(); toast("กู้คืนข้อมูลแล้ว"); render(); });
+      "กู้คืนข้อมูล", async ()=>{
+        COLLS.forEach(c=>{ DB[c] = Array.isArray(d[c])? d[c] : []; });
+        if(d.settings){
+          DB.settings.thresholds = Object.assign({crit:10,warn:25,watch:50}, d.settings.thresholds||{});
+          DB.settings.years = Array.isArray(d.settings.years)? d.settings.years : [];
+        }
+        if(!DB.cats.length) DB.cats = DEFAULT_CATS.map((c,i)=> Object.assign({ord:(i+1)*10}, c));
+        renumber(); applyOrder(); buildCats(); render();
+        if(await syncNow(true)) toast("กู้คืนข้อมูลขึ้นเซิร์ฟเวอร์แล้ว");
+      });
   });
   $("#bkReset").onclick=()=> confirmBox("ล้างข้อมูลทั้งหมด",
-    "ลบข้อมูลทุกอย่างในเครื่องนี้ (หน่วยงาน โครงการ งบประมาณ แผน และค่าใช้จ่าย "+DB.expenses.length+" รายการ)<br><b>ไม่สามารถย้อนกลับได้</b> — แนะนำให้สำรองข้อมูลก่อน",
-    "ล้างข้อมูลทั้งหมด", ()=>{ localStorage.removeItem(KEY); load(); seedOrgs(); toast("ล้างข้อมูลแล้ว"); go("dash"); });
+    "ลบข้อมูลทุกอย่าง<b>บนเซิร์ฟเวอร์</b> (หน่วยงาน หมวด งบประมาณ และค่าใช้จ่าย "+DB.expenses.length+" รายการ)<br>"+
+    "<b>ทุกคนจะไม่เห็นข้อมูลนี้อีก และย้อนกลับไม่ได้</b> — แนะนำให้กดสำรองข้อมูลก่อน",
+    "ล้างข้อมูลทั้งหมด", async ()=>{
+      DB.budgets=[]; DB.expenses=[];
+      DB.orgs = DEFAULT_ORGS.map((o,i)=>({id:uid(), code:o.code, name:o.name, note:"", ord:(i+1)*10}));
+      DB.cats = DEFAULT_CATS.map((c,i)=> Object.assign({ord:(i+1)*10}, c));
+      buildCats();
+      if(await syncNow(true)) toast("ล้างข้อมูลแล้ว");
+      go("dash");
+    });
+  if($("#nameSave")) $("#nameSave").onclick=()=>{
+    PREF.name = $("#myName").value.trim(); savePref(); toast("บันทึกชื่อแล้ว");
+  };
+  if($("#logoutBtn")) $("#logoutBtn").onclick=()=> confirmBox("ออกจากระบบ",
+    "ต้องใส่รหัสผ่านร่วมอีกครั้งเมื่อกลับเข้ามา","ออกจากระบบ", async ()=>{
+      await syncNow();
+      try{ await api("/api/auth",{method:"DELETE"}); }catch(e){}
+      DB=null; SNAP=null; needLogin("ออกจากระบบแล้ว");
+    });
 };
 
 /* ============================================================
@@ -1566,14 +1695,18 @@ function addFyForm(){
       toast("เพิ่มปีงบ "+y+" แล้ว"); return true;
     });
 }
-/* ---------- ซ่อน/แสดงแถบเมนู ---------- */
-function applyNav(){ document.body.classList[DB.settings.navHidden? "add":"remove"]("navhide"); }
-function toggleNav(){ DB.settings.navHidden = !DB.settings.navHidden; applyNav(); save(); }
-/* ---------- โหมดมืด / สว่าง ---------- */
-function applyTheme(){ document.body.classList[DB.settings.dark? "add":"remove"]("dark"); }
+/* ---------- ซ่อน/แสดงแถบเมนู (ค่าส่วนตัวของแต่ละเครื่อง) ---------- */
+function applyNav(){ document.body.classList[PREF.navHidden? "add":"remove"]("navhide"); }
+function toggleNav(){
+  PREF.navHidden = !PREF.navHidden; if(DB) DB.settings.navHidden = PREF.navHidden;
+  applyNav(); savePref();
+}
+/* ---------- โหมดมืด / สว่าง (ค่าส่วนตัวของแต่ละเครื่อง) ---------- */
+function applyTheme(){ document.body.classList[PREF.dark? "add":"remove"]("dark"); }
 function toggleTheme(){
-  DB.settings.dark = !DB.settings.dark; applyTheme(); save(); render();
-  toast(DB.settings.dark? "โหมดมืด" : "โหมดสว่าง");
+  PREF.dark = !PREF.dark; if(DB) DB.settings.dark = PREF.dark;
+  applyTheme(); savePref(); if(DB) render();
+  toast(PREF.dark? "โหมดมืด" : "โหมดสว่าง");
 }
 
 document.addEventListener("click", e=>{
@@ -1593,7 +1726,7 @@ document.addEventListener("keydown", e=>{ if(e.key==="Escape" && $("#ovl").class
 /* ============================================================
    ข้อมูลจากไฟล์ ข้อมูล/49(1) ฝศย..xlsx (ปีงบ 2566-2569)
    อ่านจากเซลล์ระดับรายการ ไม่ใช้แถวยอดรวมในไฟล์ซึ่งค้างอยู่
-   นำเข้าอัตโนมัติครั้งเดียว แล้วจำไว้ว่านำเข้าแล้วด้วย settings.imported49
+   ใช้เป็นข้อมูลตั้งต้นตอนย้ายขึ้นเซิร์ฟเวอร์ครั้งแรก (ดู buildSeed)
    ============================================================ */
 const IMPORT49 = {
   stamp: "xlsx-2569",
@@ -1602,44 +1735,139 @@ const IMPORT49 = {
   budgets: [[2566,"A01",30000],[2566,"A02",42860],[2566,"A04",20000],[2566,"A06",20000],[2566,"A07",30000],[2566,"A08",20000],[2566,"A09",20000],[2566,"A10",5000],[2566,"A11",10000],[2566,"A13",3000],[2566,"A15",228400],[2566,"A16",545880],[2566,"A17",70500],[2566,"B01",250000],[2566,"B02",15000],[2566,"B04",20000],[2566,"A03-1",492000],[2566,"A03-2",30000],[2566,"A03-3",12000],[2566,"A03-4",20000],[2566,"A03-5",5000],[2566,"A03-10",3000],[2566,"A03-7",1440],[2566,"A03-8",19910],[2566,"A03-9",12000],[2567,"A01",30000],[2567,"A02",42860],[2567,"A04",20000],[2567,"A06",20000],[2567,"A07",30000],[2567,"A08",40000],[2567,"A09",30000],[2567,"A10",10000],[2567,"A11",8000],[2567,"A12",7000],[2567,"A13",3000],[2567,"A14",11000],[2567,"A15",228400],[2567,"A16",545880],[2567,"A17",70500],[2567,"B01",300000],[2567,"B02",15000],[2567,"B03",5000],[2567,"B04",20000],[2567,"A03-1",525600],[2567,"A03-2",30000],[2567,"A03-3",12000],[2567,"A03-4",20000],[2567,"A03-5",8600],[2567,"A03-10",3000],[2567,"A03-7",1440],[2567,"A03-8",16371],[2567,"A03-9",12000],[2568,"A01",20000],[2568,"A02",42860],[2568,"A04",20000],[2568,"A06",20000],[2568,"A07",20000],[2568,"A08",30000],[2568,"A09",30000],[2568,"A10",10000],[2568,"A11",10000],[2568,"A12",7000],[2568,"A13",3000],[2568,"A14",11000],[2568,"A15",280000],[2568,"A16",596000],[2568,"A17",70500],[2568,"B01",300000],[2568,"B02",10000],[2568,"B03",5000],[2568,"B04",15000],[2568,"A03-1",540000],[2568,"A03-2",30000],[2568,"A03-3",12000],[2568,"A03-4",20000],[2568,"A03-5",13500],[2568,"A03-7",1440],[2568,"A03-8",19474],[2568,"A03-9",12000],[2569,"A01",35000],[2569,"A04",10000],[2569,"A05",10000],[2569,"A06",10000],[2569,"A07",20000],[2569,"A08",20000],[2569,"A09",30000],[2569,"A10",10000],[2569,"A11",10000],[2569,"A12",7000],[2569,"A13",3000],[2569,"A14",11000],[2569,"A15",280000],[2569,"A16",596000],[2569,"A17",70500],[2569,"B01",200000],[2569,"B02",15000],[2569,"B03",2000],[2569,"B04",15000],[2569,"A03-1",554400],[2569,"A03-2",30000],[2569,"A03-3",12000],[2569,"A03-4",20000],[2569,"A03-5",13500],[2569,"A03-6",144000],[2569,"A03-7",1440],[2569,"A03-8",20000],[2569,"A03-9",12000]],
   expenses: [["2022-11-30","A01",4140],["2023-05-31","A01",20000],["2023-01-31","A04",2514.5],["2023-09-30","A04",513.6],["2022-10-31","A07",2000],["2022-11-30","A07",2000],["2022-12-31","A07",1000],["2023-01-31","A07",1000],["2023-02-28","A07",2000],["2023-03-31","A07",1000],["2023-04-30","A07",1000],["2023-05-31","A07",10000],["2023-06-30","A07",1000],["2023-07-31","A07",1000],["2023-08-31","A07",1000],["2023-09-30","A07",1000],["2022-11-30","A08",6401.81],["2023-04-30","A08",12800],["2023-04-30","A09",4964.8],["2023-05-31","A09",5000],["2022-11-30","A10",3843.44],["2022-11-30","A11",9993.8],["2023-05-31","A13",1000],["2023-04-30","A16",545878],["2022-12-31","A17",12590],["2023-01-31","A17",8642.28],["2023-04-30","A17",1050],["2023-05-31","A17",20000],["2022-10-31","B04",856],["2022-11-30","B04",893.61],["2022-12-31","B04",864.13],["2023-01-31","B04",863.12],["2023-02-28","B04",856],["2023-03-31","B04",856],["2023-04-30","B04",856],["2023-05-31","B04",6856],["2023-06-30","B04",813.2],["2022-10-31","A03-1",41000],["2022-11-30","A03-1",41000],["2022-12-31","A03-1",41000],["2023-01-31","A03-1",41000],["2023-02-28","A03-1",41000],["2023-03-31","A03-1",41000],["2023-04-30","A03-1",41000],["2023-05-31","A03-1",41000],["2023-06-30","A03-1",41000],["2023-07-31","A03-1",41000],["2023-08-31","A03-1",41000],["2022-10-31","A03-2",2500],["2022-11-30","A03-2",2500],["2022-12-31","A03-2",2500],["2023-01-31","A03-2",2500],["2023-02-28","A03-2",2500],["2023-03-31","A03-2",2500],["2023-04-30","A03-2",2500],["2023-05-31","A03-2",2500],["2023-06-30","A03-2",2500],["2023-07-31","A03-2",2500],["2023-08-31","A03-2",2500],["2023-03-31","A03-3",6000],["2023-09-30","A03-3",6000],["2023-07-31","A03-5",8600],["2022-11-30","A03-8",6687.5],["2022-12-31","A03-8",11235],["2022-10-31","A03-9",1000],["2022-11-30","A03-9",1000],["2022-12-31","A03-9",1000],["2023-01-31","A03-9",1000],["2023-02-28","A03-9",1000],["2023-03-31","A03-9",1000],["2023-04-30","A03-9",1000],["2023-05-31","A03-9",1000],["2023-06-30","A03-9",1000],["2023-07-31","A03-9",1000],["2023-08-31","A03-9",1000],["2023-10-31","A07",1000],["2023-11-30","A07",1000],["2023-12-31","A07",1000],["2024-01-31","A07",3000],["2024-02-29","A07",1000],["2024-03-31","A07",1000],["2024-04-30","A07",1000],["2024-05-31","A07",1000],["2024-02-29","A09",4066],["2024-03-31","A09",16355],["2024-01-31","A11",7986.48],["2024-05-31","A15",278609.11],["2023-11-30","A17",1042.75],["2024-01-31","A17",5000],["2023-10-31","B04",406.6],["2023-11-30","B04",406.6],["2023-12-31","B04",409.65],["2024-01-31","B04",406.6],["2024-02-29","B04",422.86],["2024-03-31","B04",408.63],["2023-10-31","A03-1",43800],["2023-11-30","A03-1",43800],["2023-12-31","A03-1",43800],["2024-01-31","A03-1",43800],["2024-02-29","A03-1",43800],["2024-03-31","A03-1",43800],["2024-04-30","A03-1",43800],["2023-10-31","A03-2",2500],["2023-11-30","A03-2",2500],["2023-12-31","A03-2",2500],["2024-01-31","A03-2",2500],["2024-02-29","A03-2",2500],["2024-03-31","A03-2",2500],["2024-04-30","A03-2",2500],["2024-04-30","A03-3",6000],["2023-10-31","A03-9",1000],["2023-11-30","A03-9",1000],["2023-12-31","A03-9",1000],["2024-01-31","A03-9",1000],["2024-02-29","A03-9",1000],["2024-03-31","A03-9",1000],["2024-04-30","A03-9",1000],["2024-10-31","A01",10820],["2024-11-30","A01",5194],["2024-10-31","A07",2000],["2024-11-30","A07",1000],["2024-12-31","A07",1000],["2025-01-31","A07",1000],["2025-02-28","A07",2000],["2025-03-31","A07",1000],["2025-04-30","A07",1340],["2025-05-31","A07",1000],["2025-06-30","A07",1000],["2025-07-31","A07",1000],["2024-10-31","A08",6000],["2025-02-28","A08",4426],["2025-06-30","A08",2675],["2024-11-30","A09",4643.8],["2025-01-31","A09",7490],["2025-02-28","A09",3852],["2024-11-30","A11",9984.17],["2024-10-31","A12",6002],["2025-07-31","A17",3810],["2024-10-31","B01",3193],["2024-11-30","B01",3423],["2024-12-31","B01",2951],["2025-01-31","B01",2766],["2025-02-28","B01",2239],["2025-03-31","B01",2239],["2025-04-30","B01",3033],["2025-05-31","B01",3298],["2025-06-30","B01",4145],["2025-07-31","B01",3515],["2025-08-31","B01",3929],["2025-09-30","B01",3616],["2024-10-31","B02",63],["2024-11-30","B02",46],["2024-12-31","B02",47],["2025-01-31","B02",45],["2025-02-28","B02",87],["2025-03-31","B02",107],["2025-04-30","B02",146],["2025-05-31","B02",146],["2025-06-30","B02",111],["2025-07-31","B02",131],["2025-08-31","B02",129],["2025-09-30","B02",140],["2024-10-31","B04",409.65],["2024-11-30","B04",424.9],["2024-12-31","B04",410.67],["2025-01-31","B04",428.96],["2025-02-28","B04",406.6],["2025-03-31","B04",406.6],["2025-04-30","B04",412.7],["2025-05-31","B04",415.75],["2025-06-30","B04",408.63],["2025-07-31","B04",410.67],["2024-10-31","A03-1",45000],["2024-11-30","A03-1",45000],["2024-12-31","A03-1",45000],["2025-01-31","A03-1",45000],["2025-02-28","A03-1",45000],["2025-03-31","A03-1",45000],["2025-04-30","A03-1",45000],["2025-05-31","A03-1",45000],["2025-06-30","A03-1",45000],["2025-07-31","A03-1",45000],["2025-08-31","A03-1",45000],["2025-09-30","A03-1",45000],["2024-10-31","A03-2",2500],["2024-11-30","A03-2",2500],["2024-12-31","A03-2",2500],["2025-01-31","A03-2",2500],["2025-02-28","A03-2",2500],["2025-03-31","A03-2",2500],["2025-04-30","A03-2",2500],["2025-05-31","A03-2",2500],["2025-06-30","A03-2",2500],["2025-07-31","A03-2",2500],["2025-08-31","A03-2",2500],["2025-09-30","A03-2",2500],["2025-03-31","A03-3",6000],["2025-09-30","A03-3",6000],["2024-10-31","A03-9",1000],["2024-11-30","A03-9",1000],["2024-12-31","A03-9",1000],["2025-01-31","A03-9",1000],["2025-02-28","A03-9",1000],["2025-03-31","A03-9",1000],["2025-04-30","A03-9",1000],["2025-05-31","A03-9",1000],["2025-06-30","A03-9",1000],["2025-07-31","A03-9",1000],["2025-08-31","A03-9",1000],["2025-09-30","A03-9",1000],["2025-10-31","A01",14122.5],["2025-11-30","A01",560],["2025-11-30","A04",5980],["2026-08-31","A05",10000],["2025-10-31","A09",2824],["2025-10-31","A11",9416],["2025-10-31","A14",1997],["2025-10-31","A16",545878],["2025-11-30","A17",5000],["2026-06-30","A17",5000],["2026-09-30","A17",3240],["2025-10-31","A03-1",46200],["2025-11-30","A03-1",46200],["2025-12-31","A03-1",46200],["2026-01-31","A03-1",46200],["2026-02-28","A03-1",46200],["2026-03-31","A03-1",46200],["2026-04-30","A03-1",46200],["2026-05-31","A03-1",46200],["2026-06-30","A03-1",46200],["2026-07-31","A03-1",46200],["2026-08-31","A03-1",46200],["2025-10-31","A03-2",2500],["2025-11-30","A03-2",2500],["2025-12-31","A03-2",2500],["2026-01-31","A03-2",2500],["2026-02-28","A03-2",2500],["2026-03-31","A03-2",2500],["2026-04-30","A03-2",2500],["2026-05-31","A03-2",2500],["2026-06-30","A03-2",2500],["2026-07-31","A03-2",2500],["2026-08-31","A03-2",2500],["2026-03-31","A03-3",6000],["2026-08-31","A03-8",20000],["2025-10-31","A03-9",1000],["2025-11-30","A03-9",1000],["2025-12-31","A03-9",1000],["2026-01-31","A03-9",1000],["2026-02-28","A03-9",1000],["2026-03-31","A03-9",1000],["2026-04-30","A03-9",1000],["2026-05-31","A03-9",1000],["2026-06-30","A03-9",1000],["2026-07-31","A03-9",1000],["2026-08-31","A03-9",1000]]
 };
-function runImport49(){
-  if(DB.settings.imported49 === IMPORT49.stamp) return;
-  const org = (DB.orgs.find(o=> normalize(o.code)===normalize(IMPORT49.org)) || DB.orgs[0] || {}).id;
-  if(!org){ return; }
-  /* 1) หมวดที่ยังไม่มี */
-  let nCat=0;
-  IMPORT49.cats.forEach(c=>{
-    if(DB.cats.some(x=>x.id===c.id)) return;
-    const last = DB.cats.reduce((k,x,idx)=> x.parent===c.parent? idx : k, -1);
-    DB.cats.splice(last>=0? last+1 : DB.cats.length, 0, {id:c.id, parent:c.parent, name:c.name});
-    nCat++;
-  });
-  if(nCat) buildCats();
-  /* 2) งบจัดสรร (ทับของเดิมที่ปีงบ+หน่วยงาน+หมวดเดียวกัน) */
-  let nBud=0;
-  IMPORT49.budgets.forEach(b=>{ if(CATMAP[b[1]]){ setBudget(b[0], b[1], org, b[2]); nBud++; } });
-  /* 3) ค่าใช้จ่าย (ข้ามรายการที่ซ้ำกันพอดี) */
-  let nExp=0;
-  IMPORT49.expenses.forEach(e=>{
-    if(!CATMAP[e[1]]) return;
-    const dup = DB.expenses.some(x=> x.date===e[0] && x.catId===e[1] && x.orgId===org &&
-                                     Math.abs((+x.amount||0)-e[2])<0.005);
-    if(dup) return;
-    DB.expenses.push({id:uid(), date:e[0], orgId:org, catId:e[1], amount:e[2], docNo:"",
-      note:"นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือน"+MONTHS_FULL[fmOf(e[0])]});
-    nExp++;
-  });
-  DB.settings.imported49 = IMPORT49.stamp;
-  save();
-  if(nBud||nExp||nCat) setTimeout(()=> toast("นำเข้าข้อมูลจากไฟล์ 49(1) แล้ว: งบ "+nBud+" · ค่าใช้จ่าย "+nExp+" รายการ"), 400);
-}
 
-load();
-seedOrgs();
-runImport49();
-applyNav();
-applyTheme();
-render();
+/* ============================================================
+   เริ่มระบบ: ตรวจรหัส -> โหลดข้อมูลกลาง -> (ครั้งแรก) ย้ายข้อมูลจากไฟล์ 49(1) ขึ้นเซิร์ฟเวอร์
+   ============================================================ */
+let SERVER_LOG = [];
+function lockUI(on){ document.body.classList[on?"add":"remove"]("locked"); }
+function bigCard(inner){ $("#view").innerHTML = '<div class="loginwrap"><div class="card logincard">'+inner+'</div></div>'; }
+const brandHead = '<div class="loginlogo">49(1)</div><h2>ระบบคุมค่าใช้จ่าย 49(1)</h2>'+
+  '<div class="hint">ฝ่ายเศรษฐกิจยาง · ใช้ข้อมูลชุดเดียวกันทุกคน</div>';
+
+function showFatal(msg, detail){
+  lockUI(true);
+  bigCard(brandHead+'<div class="warnbox" style="margin-top:14px"><b>⚠️ '+esc(msg)+'</b>'+
+    (detail? '<br><span style="color:var(--muted)">'+esc(detail)+'</span>':'')+'</div>'+
+    '<button class="btn" id="tryAgain" style="width:100%;justify-content:center">ลองใหม่</button>');
+  const b=$("#tryAgain"); if(b) b.onclick=()=> boot();
+}
+function showSetup(st){
+  lockUI(true);
+  const items = [];
+  if(st.needPassword) items.push('ตั้งตัวแปร <b>APP_PASSWORD</b> (รหัสผ่านร่วม) ที่ Vercel → Settings → Environment Variables');
+  if(st.needDatabase) items.push('สร้างฐานข้อมูล <b>Upstash Redis</b> ที่ Vercel → Storage แล้วกด Connect กับโปรเจกต์นี้');
+  bigCard(brandHead+
+    '<div class="warnbox" style="margin-top:14px"><b>ยังตั้งค่าเซิร์ฟเวอร์ไม่ครบ</b><ol style="margin:8px 0 0 18px">'+
+    items.map(i=>'<li style="margin-bottom:6px">'+i+'</li>').join("")+
+    '</ol><div style="margin-top:8px;color:var(--muted)">ตั้งค่าเสร็จแล้วต้อง Redeploy หนึ่งครั้ง</div></div>'+
+    '<button class="btn" id="tryAgain" style="width:100%;justify-content:center">ตรวจอีกครั้ง</button>');
+  const b=$("#tryAgain"); if(b) b.onclick=()=> boot();
+}
+function needLogin(msg){
+  lockUI(true);
+  bigCard(brandHead+
+    (msg? '<div class="warnbox" style="margin-top:14px">'+esc(msg)+'</div>':'')+
+    '<div class="field" style="margin-top:14px"><label class="f">ชื่อผู้บันทึก (ใช้แสดงว่าใครแก้ข้อมูล)</label>'+
+      '<input type="text" id="lgName" value="'+esc(PREF.name||"")+'" placeholder="เช่น สมชาย"></div>'+
+    '<div class="field"><label class="f">รหัสผ่านร่วม *</label>'+
+      '<input type="password" id="lgPw" placeholder="รหัสที่ได้รับจากผู้ดูแลระบบ"></div>'+
+    '<div id="lgErr"></div>'+
+    '<button class="btn" id="lgGo" style="width:100%;justify-content:center">เข้าใช้งาน</button>');
+  const go = async ()=>{
+    const pw = $("#lgPw").value, nm = $("#lgName").value.trim();
+    if(!pw){ $("#lgErr").innerHTML='<div class="warnbox">กรุณากรอกรหัสผ่าน</div>'; return; }
+    $("#lgGo").textContent = "กำลังตรวจสอบ…";
+    try{
+      await api("/api/auth", {method:"POST", body:JSON.stringify({password:pw})});
+      PREF.name = nm; savePref();
+      await afterLogin();
+    }catch(e){
+      $("#lgErr").innerHTML = '<div class="warnbox">'+esc(e.message)+'</div>';
+      $("#lgGo").textContent = "เข้าใช้งาน";
+      const p=$("#lgPw"); if(p && p.focus) p.focus();
+    }
+  };
+  const g=$("#lgGo"); if(g) g.onclick=go;
+  const p=$("#lgPw");
+  if(p){ p.addEventListener("keydown", e=>{ if(e.key==="Enter") go(); }); if(p.focus) p.focus(); }
+}
+/* ข้อมูลตั้งต้นจากไฟล์ 49(1) สำหรับย้ายขึ้นเซิร์ฟเวอร์ครั้งแรก */
+function buildSeed(){
+  const orgs = DEFAULT_ORGS.map((o,i)=>({id:uid(), code:o.code, name:o.name, note:"", ord:(i+1)*10}));
+  const cats = DEFAULT_CATS.map(c=> Object.assign({}, c));
+  IMPORT49.cats.forEach(nc=>{
+    if(cats.some(c=>c.id===nc.id)) return;
+    let last=-1; cats.forEach((c,i)=>{ if(c.parent===nc.parent) last=i; });
+    cats.splice(last>=0? last+1 : cats.length, 0, {id:nc.id, parent:nc.parent, name:nc.name});
+  });
+  cats.forEach((c,i)=> c.ord=(i+1)*10);
+  const org = orgs[0].id;
+  const has = {}; cats.forEach(c=> has[c.id]=1);
+  const budgets = IMPORT49.budgets.filter(b=>has[b[1]])
+    .map(b=>({id:uid(), fy:b[0], orgId:org, catId:b[1], amount:b[2]}));
+  const expenses = IMPORT49.expenses.filter(e=>has[e[1]])
+    .map(e=>({id:uid(), date:e[0], orgId:org, catId:e[1], amount:e[2], docNo:"",
+              note:"นำเข้าจากไฟล์ 49(1) · ยอดรวมเดือน"+MONTHS_FULL[fmOf(e[0])]}));
+  return {orgs, cats, budgets, expenses, config:{thresholds:{crit:10,warn:25,watch:50}, years:[]}};
+}
+async function afterLogin(){
+  lockUI(false);
+  bigCard(brandHead+'<div class="okbox" style="margin-top:14px">กำลังโหลดข้อมูล…</div>');
+  try{
+    let r = await pullFromServer();
+    if(r.empty){
+      bigCard(brandHead+'<div class="okbox" style="margin-top:14px">ครั้งแรก — กำลังย้ายข้อมูลปีงบ 2566–2569 ขึ้นเซิร์ฟเวอร์…</div>');
+      const seed = buildSeed();
+      await api("/api/data", {method:"POST", body:JSON.stringify({seed:seed, by:PREF.name||"ระบบ"})});
+      r = await pullFromServer();
+      setTimeout(()=> toast("ย้ายข้อมูลขึ้นเซิร์ฟเวอร์แล้ว "+DB.expenses.length+" รายการ"), 500);
+    }
+    SERVER_LOG = r.log || [];
+  }catch(e){
+    if(e.status===401) return needLogin("กรุณาเข้าสู่ระบบอีกครั้ง");
+    return showFatal("โหลดข้อมูลไม่สำเร็จ", e.message);
+  }
+  lockUI(false);
+  render();
+  startAutoRefresh();
+}
+/* ดึงข้อมูลใหม่เมื่อกลับมาที่แท็บ เพื่อให้เห็นสิ่งที่คนอื่นบันทึก */
+async function maybeRefresh(minAge, loud){
+  if(!DB || SYNC.busy) return;
+  if(!loud && Date.now()-SYNC.last < (minAge||20000)) return;
+  try{
+    const before = JSON.stringify(SNAP);
+    if(loud) setSync("saving","กำลังดึงข้อมูลล่าสุด…");
+    const r = await pullFromServer();
+    SERVER_LOG = r.log || SERVER_LOG;
+    if(JSON.stringify(SNAP)!==before){ render(); if(loud) toast("อัปเดตข้อมูลล่าสุดแล้ว"); }
+    else if(loud) toast("ข้อมูลเป็นปัจจุบันอยู่แล้ว");
+    setSync("ok","");
+  }catch(e){
+    if(e.status===401) return needLogin("หมดเวลาเข้าใช้งาน กรุณาใส่รหัสอีกครั้ง");
+    if(loud) setSync("error", e.message);
+  }
+}
+function startAutoRefresh(){
+  if(startAutoRefresh.on) return; startAutoRefresh.on = true;
+  const hidden = ()=> (typeof document.hidden==="boolean")? document.hidden : false;
+  window.addEventListener("focus", ()=> maybeRefresh(20000));
+  document.addEventListener("visibilitychange", ()=>{ if(!hidden()) maybeRefresh(20000); });
+  setInterval(()=>{ if(!hidden()) maybeRefresh(120000); }, 60000);
+  window.addEventListener("beforeunload", ()=>{ if(diffOps().length) syncNow(); });
+}
+async function boot(){
+  loadPref(); applyNav(); applyTheme(); lockUI(true);
+  bigCard(brandHead+'<div class="okbox" style="margin-top:14px">กำลังเชื่อมต่อเซิร์ฟเวอร์…</div>');
+  let st;
+  try{ st = await api("/api/auth"); }
+  catch(e){ return showFatal("ติดต่อเซิร์ฟเวอร์ไม่ได้", e.message+" — ถ้าเปิดไฟล์นี้จากเครื่องโดยตรง ต้องเปิดผ่านลิงก์เว็บแทน"); }
+  if(!st.ready) return showSetup(st);
+  if(!st.authed) return needLogin("");
+  await afterLogin();
+}
+boot();
 </script>
 </body>
 </html>
