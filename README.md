@@ -17,8 +17,7 @@
 index.html            หน้าเว็บทั้งหมด (ไม่ใช้เฟรมเวิร์ก ไม่ต้อง build)
 api/auth.js           เข้าสู่ระบบด้วยรหัสผ่านร่วม (คุกกี้ HttpOnly)
 api/data.js           อ่าน/เขียนข้อมูลกลาง
-api/_lib.js           ตัวช่วยต่อ Supabase (REST) + ตรวจรหัสผ่าน
-supabase.sql          สคริปต์สร้างตาราง รันครั้งเดียวใน SQL Editor
+api/_lib.js           ตัวช่วยต่อ Upstash Redis (REST) + ตรวจรหัสผ่าน
 ข้อมูล/                ไฟล์ต้นฉบับ 49(1) ฝศย..xlsx (ไม่ขึ้นเว็บ)
 นำเข้า/                ข้อมูลที่แปลงแล้ว JSON/CSV (ไม่ขึ้นเว็บ)
 ```
@@ -29,23 +28,20 @@ supabase.sql          สคริปต์สร้างตาราง รั
 แต่ละรายการเก็บเป็นคนละช่องในฐานข้อมูล เวลาสองคนบันทึกคนละรายการพร้อมกันจึงไม่ทับกัน
 และหน้าเว็บจะส่งขึ้นเซิร์ฟเวอร์เฉพาะรายการที่เปลี่ยนจริงเท่านั้น
 
-## ติดตั้ง
+## ติดตั้งบน Vercel
 
-**1. สร้างตารางบน Supabase** — เปิดโปรเจกต์ที่ supabase.com → SQL Editor → New query
-วางเนื้อหาไฟล์ `supabase.sql` ทั้งไฟล์ → Run (สร้าง 3 ตารางพร้อมสิทธิ์ให้ anon key)
-
-**2. ตั้งตัวแปรที่ Vercel** — Settings → Environment Variables (ติ๊กครบทั้ง Production / Preview / Development)
-
-| ตัวแปร | ค่า | หาได้จาก |
-|---|---|---|
-| `SUPABASE_URL` | https://xxxx.supabase.co | Supabase → Project Settings → Data API → Project URL |
-| `SUPABASE_ANON_KEY` | eyJhbG… | หน้าเดียวกัน หัวข้อ Project API keys → anon public |
-
-**3. Redeploy** หนึ่งครั้ง แล้วเปิดเว็บ ใส่ชื่อผู้ใช้/รหัสผ่าน — ครั้งแรกระบบจะย้ายข้อมูลปีงบ 2566–2569 ขึ้นฐานข้อมูลให้เอง
+1. Import repo นี้ที่ vercel.com (Framework Preset: **Other**, ไม่ต้องใส่ Build Command)
+2. **Storage → Create Database → Upstash · Serverless DB (Redis)** แผน Free, region Singapore
+   แล้วกด **Connect to Project** ติ๊กครบทั้ง Production / Preview / Development
+   (จะได้ตัวแปร `KV_REST_API_URL` และ `KV_REST_API_TOKEN` อัตโนมัติ ไม่ต้องพิมพ์เอง)
+3. **Redeploy** หนึ่งครั้ง — ตัวแปรใหม่ไม่มีผลกับดีพลอยเก่า
+4. เปิดเว็บ ใส่ชื่อผู้ใช้/รหัสผ่าน — ครั้งแรกระบบจะย้ายข้อมูลปีงบ 2566–2569 ขึ้นฐานข้อมูลให้เอง
 
 ตรวจว่าพร้อมหรือยัง: เปิด `/api/auth` ต้องได้ `"ready":true`
 
-anon key ถูกเก็บไว้ที่เซิร์ฟเวอร์ Vercel เท่านั้น ไม่ได้ถูกส่งลงไปในหน้าเว็บ
+ถ้าในหน้า Storage ไม่มี Upstash ให้เลือก: สมัครที่ upstash.com สร้าง Redis database
+แล้วเอา `UPSTASH_REDIS_REST_URL` กับ `UPSTASH_REDIS_REST_TOKEN` จากหัวข้อ REST API
+ไปใส่เองที่ Vercel → Settings → Environment Variables
 
 ## ชื่อผู้ใช้ / รหัสผ่าน
 

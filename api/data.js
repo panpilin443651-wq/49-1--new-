@@ -1,12 +1,10 @@
-/* อ่าน/เขียนข้อมูลกลางบน Supabase
+/* อ่าน/เขียนข้อมูลกลาง
    GET  /api/data          -> ข้อมูลทั้งหมด
-   POST /api/data {ops}    -> บันทึกเฉพาะรายการที่เปลี่ยน (แต่ละรายการเป็นคนละแถว จึงไม่ทับกัน)
+   POST /api/data {ops}    -> บันทึกเฉพาะรายการที่เปลี่ยน (แต่ละรายการเป็นคนละช่อง จึงไม่ทับกัน)
    POST /api/data {seed}   -> ใส่ข้อมูลตั้งต้นครั้งแรก (ทำได้เฉพาะตอนฐานข้อมูลยังว่าง) */
-import { COLLS, T_ITEMS, T_META, T_LOG, sbSelect, sbUpsert, sbInsert, sbDelete, inList,
-         guard, json, readBody } from "./_lib.js";
+import { COLLS, keyOf, redis, hashToArray, guard, json, readBody } from "./_lib.js";
 
-const MAXOPS = 2000, CHUNK = 300;
-const chunk = (a,n)=>{ const out=[]; for(let i=0;i<a.length;i+=n) out.push(a.slice(i,i+n)); return out; };
+const MAXOPS = 2000;
 
 export default async function handler(req, res){
   if(!guard(req,res)) return;
@@ -20,47 +18,44 @@ export default async function handler(req, res){
 }
 
 async function getAll(res){
-  /* ดึงทีละหน้า เผื่อรายการเกินขีดจำกัดของ PostgREST */
-  const items = [];
-  for(let page=0; page<50; page++){
-    const rows = await sbSelect(T_ITEMS+"?select=coll,id,doc&order=coll.asc,id.asc"+
-      "&offset="+(page*1000)+"&limit=1000");
-    items.push(...rows);
-    if(rows.length < 1000) break;
-  }
+  const out = await redis([
+    ...COLLS.map(c=> ["HGETALL", keyOf(c)]),
+    ["GET", keyOf("config")],
+    ["LRANGE", keyOf("log"), 0, 4]
+  ]);
   const data = {};
-  COLLS.forEach(c=> data[c] = []);
-  items.forEach(r=>{ if(data[r.coll] && r.doc && typeof r.doc==="object") data[r.coll].push(r.doc); });
-
-  const meta = await sbSelect(T_META+"?k=eq.config&select=v");
-  const config = (meta[0] && meta[0].v) || {};
-  const logRows = await sbSelect(T_LOG+"?select=at,by,what&order=at.desc&limit=5");
-  const log = logRows.map(l=>({ t: Date.parse(l.at)||Date.now(), by:l.by, what:l.what }));
-
-  return json(res, 200, { data, config, log, empty: items.length===0, serverTime: Date.now() });
+  COLLS.forEach((c,i)=> data[c] = hashToArray(out[i]));
+  let config = {};
+  try{ config = out[COLLS.length]? JSON.parse(out[COLLS.length]) : {}; }catch(e){}
+  const log = (out[COLLS.length+1]||[]).map(s=>{ try{ return JSON.parse(s); }catch(e){ return null; } }).filter(Boolean);
+  const empty = COLLS.every(c=> data[c].length===0);
+  return json(res, 200, { data, config, log, empty, serverTime:Date.now() });
 }
-
-const logLine = (by, what)=> sbInsert(T_LOG, [{by:String(by).slice(0,60), what:String(what).slice(0,200)}]);
 
 async function write(req,res){
   let body; try{ body = await readBody(req); }catch(e){ return json(res,400,{error:e.message}); }
   const by = String(body.by||"ไม่ระบุชื่อ").slice(0,60);
-  const now = new Date().toISOString();
+  const cmds = [];
 
   /* --- ใส่ข้อมูลตั้งต้น: อนุญาตเฉพาะตอนฐานข้อมูลว่างจริง ๆ --- */
   if(body.seed){
-    const some = await sbSelect(T_ITEMS+"?select=id&limit=1");
-    if(some.length) return json(res, 409, {error:"ฐานข้อมูลมีข้อมูลอยู่แล้ว ไม่ใส่ข้อมูลตั้งต้นซ้ำ"});
-    const rows = [];
+    const chk = await redis(COLLS.map(c=> ["HLEN", keyOf(c)]));
+    if(chk.some(n=> Number(n)>0))
+      return json(res, 409, {error:"ฐานข้อมูลมีข้อมูลอยู่แล้ว ไม่ใส่ข้อมูลตั้งต้นซ้ำ"});
+    let n = 0;
     COLLS.forEach(c=>{
-      (Array.isArray(body.seed[c])? body.seed[c] : []).forEach(r=>{
-        if(r && r.id) rows.push({coll:c, id:String(r.id), doc:r, updated_at:now});
-      });
+      const rows = Array.isArray(body.seed[c])? body.seed[c] : [];
+      for(let i=0;i<rows.length;i+=200){
+        const pairs = [];
+        rows.slice(i,i+200).forEach(r=>{ if(r && r.id){ pairs.push(String(r.id), JSON.stringify(r)); n++; } });
+        if(pairs.length) cmds.push(["HSET", keyOf(c), ...pairs]);
+      }
     });
-    for(const part of chunk(rows, CHUNK)) await sbUpsert(T_ITEMS, part);
-    if(body.seed.config) await sbUpsert(T_META, [{k:"config", v:body.seed.config, updated_at:now}]);
-    await logLine(by, "ใส่ข้อมูลตั้งต้น "+rows.length+" รายการ");
-    return json(res, 200, {ok:true, seeded:rows.length});
+    if(body.seed.config) cmds.push(["SET", keyOf("config"), JSON.stringify(body.seed.config)]);
+    cmds.push(["LPUSH", keyOf("log"), JSON.stringify({t:Date.now(), by:by, what:"ใส่ข้อมูลตั้งต้น "+n+" รายการ"})]);
+    cmds.push(["LTRIM", keyOf("log"), 0, 199]);
+    if(cmds.length) await redis(cmds);
+    return json(res, 200, {ok:true, seeded:n});
   }
 
   /* --- บันทึกรายการที่เปลี่ยน --- */
@@ -68,22 +63,32 @@ async function write(req,res){
   if(!ops.length) return json(res, 200, {ok:true, applied:0});
   if(ops.length > MAXOPS) return json(res, 413, {error:"ส่งข้อมูลมามากเกินไปในครั้งเดียว"});
 
-  const puts = [], dels = {};
-  let cfg = null;
+  let applied = 0, cfg = 0;
+  const putBy = {};                       /* รวม HSET ของคอลเลกชันเดียวกันเป็นคำสั่งเดียว */
+  const delBy = {};
   for(const op of ops){
-    if(op && op.coll==="config" && op.data && typeof op.data==="object"){ cfg = op.data; continue; }
+    if(op && op.coll==="config" && op.data && typeof op.data==="object"){
+      cmds.push(["SET", keyOf("config"), JSON.stringify(op.data)]); cfg++; continue;
+    }
     if(!op || COLLS.indexOf(op.coll)<0 || !op.id) continue;
-    if(op.type==="del") (dels[op.coll] = dels[op.coll] || []).push(String(op.id));
-    else if(op.data && typeof op.data==="object")
-      puts.push({coll:op.coll, id:String(op.id), doc:op.data, updated_at:now});
+    if(op.type==="del"){ (delBy[op.coll] = delBy[op.coll] || []).push(String(op.id)); applied++; }
+    else if(op.data && typeof op.data==="object"){
+      (putBy[op.coll] = putBy[op.coll] || []).push(String(op.id), JSON.stringify(op.data)); applied++;
+    }
   }
-  for(const part of chunk(puts, CHUNK)) await sbUpsert(T_ITEMS, part);
-  for(const c of Object.keys(dels))
-    for(const part of chunk(dels[c], 100))
-      await sbDelete(T_ITEMS, "coll=eq."+encodeURIComponent(c)+"&id="+encodeURIComponent(inList(part)));
-  if(cfg) await sbUpsert(T_META, [{k:"config", v:cfg, updated_at:now}]);
-
-  const applied = puts.length + Object.keys(dels).reduce((s,c)=>s+dels[c].length,0);
-  if(applied || cfg) await logLine(by, "แก้ไข "+applied+" รายการ"+(cfg? " · ปรับการตั้งค่า":""));
+  Object.keys(putBy).forEach(c=>{
+    const p = putBy[c];
+    for(let i=0;i<p.length;i+=400) cmds.push(["HSET", keyOf(c), ...p.slice(i,i+400)]);
+  });
+  Object.keys(delBy).forEach(c=>{
+    const d = delBy[c];
+    for(let i=0;i<d.length;i+=200) cmds.push(["HDEL", keyOf(c), ...d.slice(i,i+200)]);
+  });
+  if(applied || cfg){
+    cmds.push(["LPUSH", keyOf("log"), JSON.stringify({t:Date.now(), by:by,
+      what:"แก้ไข "+applied+" รายการ"+(cfg?" · ปรับการตั้งค่า":"")})]);
+    cmds.push(["LTRIM", keyOf("log"), 0, 199]);
+  }
+  if(cmds.length) await redis(cmds);
   return json(res, 200, {ok:true, applied:applied});
 }
